@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <div th:replace="fragments/header"/>
+  <script type="text/javascript" src="../js/admin/food.js"/>
+</head>
+
+<body>
+<nav th:replace="fragments/navbar"></nav>
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-md-2"/>
+    <div class="col-md-8">
+      <div style="overflow: auto; margin-bottom:1em">
+        <h1 style="float: left">Food</h1>
+        <button type="button" class="btn btn-primary" style="float:right" data-toggle="modal" data-target="#foodModal">Add</button>
+      </div>
+      <table id="foodTable" class="table table-striped table-bordered" cellspacing="0" width="100%">
+        <thead>
+        <tr>
+          <th>Id</th>
+          <th>Type</th>
+          <th>Description</th>
+        </tr>
+        </thead>
+        <tbody>
+        </tbody>
+      </table>
+    </div>
+    <div class="col-md-2"/>
+  </div>
+</div>
+<div class="modal fade" id="foodModal" tabindex="-1" role="dialog">
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3>Add Food</h3>
+      </div>
+      <div class="modal-body">
+        <form id="foodModalForm" th:action="@{/admin/food/addFood}" th:object="${food}" method="post">
+          <div class="row">
+            <div class="col-md-8">
+              <div class="input-group">
+                <span class="input-group-addon">Text</span>
+                <input type="text" class="form-control" th:field="*{type}" placeholder="Type"/>
+              </div>
+            </div>
+            <div class="col-md-4">
+              <span class="label label-danger" style="font-size:12px" th:if="${#fields.hasErrors('type')}" th:errors="*{type}">Errors</span>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-md-8">
+              <div class="input-group">
+                <span class="input-group-addon">Text</span>
+                <input type="text" class="form-control" th:field="*{description}" placeholder="Description"/>
+              </div>
+            </div>
+            <div class="col-md-4">
+              <span class="label label-danger" style="font-size:12px" th:if="${#fields.hasErrors('description')}" th:errors="*{description}">Errors</span>
+            </div>
+          </div>
+          <div th:if="${#fields.hasErrors('type')} or ${#fields.hasErrors('description')}">
+            <script>
+              $(document).ready(function () {
+                $('#foodModal').modal('show');
+              });
+            </script>
+          </div>
+        </form>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+      <button type="submit" class="btn btn-primary" form="foodModalForm">Save changes</button>
+    </div>
+  </div>
+</div>
+</body>
+</html>

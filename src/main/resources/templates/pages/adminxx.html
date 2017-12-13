@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <div th:replace="fragments/header"/>
+</head>
+
+<body>
+<nav th:replace="fragments/navbar"></nav>
+<div class="container-fluid">
+    <div class="btn-group btn-group-lg" role="group">
+        <a type="button" class="btn btn-success" th:href="@{/admin/food}">Food</a>
+        <a type="button" class="btn btn-success" th:href="@{/admin/guest}">Guest</a>
+    </div>
+</div>
+</body>
+</html>

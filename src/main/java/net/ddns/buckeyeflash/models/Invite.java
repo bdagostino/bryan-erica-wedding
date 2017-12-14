@@ -16,7 +16,7 @@ public class Invite {
     @OneToMany
     private List<Guest> additionalGuests;
 
-    private Integer maxAdditionalGuets;
+    private Integer maxAdditionalGuests;
 
     public Integer getId() {
         return id;
@@ -42,12 +42,12 @@ public class Invite {
         this.additionalGuests = additionalGuests;
     }
 
-    public Integer getMaxAdditionalGuets() {
-        return maxAdditionalGuets;
+    public Integer getMaxAdditionalGuests() {
+        return maxAdditionalGuests;
     }
 
-    public void setMaxAdditionalGuets(Integer maxAdditionalGuets) {
-        this.maxAdditionalGuets = maxAdditionalGuets;
+    public void setMaxAdditionalGuests(Integer maxAdditionalGuests) {
+        this.maxAdditionalGuests = maxAdditionalGuests;
     }
 
 }

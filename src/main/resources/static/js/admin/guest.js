@@ -21,7 +21,7 @@ $(document).ready(function () {
       {data: "firstName"},
       {data: "lastName"},
       {data: "attendance"},
-      {data: "food.type", defaultContent: ""},
+      {data: "food"},
       {data: "dietaryConcerns"},
       {data: "dietaryComments"}
     ]

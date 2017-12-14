@@ -1,6 +1,7 @@
 package net.ddns.buckeyeflash.controllers;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.module.SimpleModule;
 import net.ddns.buckeyeflash.models.Food;
 import net.ddns.buckeyeflash.models.Guest;
 import net.ddns.buckeyeflash.models.datatable.DatatableRequest;
@@ -9,6 +10,7 @@ import net.ddns.buckeyeflash.models.modal.AjaxError;
 import net.ddns.buckeyeflash.models.modal.AjaxResponse;
 import net.ddns.buckeyeflash.repositories.FoodRepository;
 import net.ddns.buckeyeflash.repositories.GuestRepository;
+import net.ddns.buckeyeflash.serializers.GuestSerializer;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -75,14 +77,19 @@ public class AdminController {
         PageRequest pageRequest = new PageRequest((int) Math.floor(request.getStart() / request.getLength()), request.getLength());
         String searchParameter = request.getSearch().getValue();
         Page<Guest> guests = guestRepository.findByFirstNameStartingWithOrLastNameStartingWith(searchParameter, searchParameter, pageRequest);
+
         ObjectMapper objectMapper = new ObjectMapper();
+        SimpleModule simpleModule = new SimpleModule();
+        simpleModule.addSerializer(new GuestSerializer());
+        objectMapper.registerModule(simpleModule);
         DatatableResponse datatableResponse = new DatatableResponse();
         datatableResponse.setDraw(request.getDraw());
         datatableResponse.setRecordsFiltered((int) guests.getTotalElements());
         datatableResponse.setRecordsTotal((int) guests.getTotalElements());
         datatableResponse.setData(guests.getContent());
         logger.info("Retrieved Guest Data From Database");
-        return objectMapper.writeValueAsString(datatableResponse);
+        String json = objectMapper.writeValueAsString(datatableResponse);
+        return json;
     }
 
     @RequestMapping(value = "/admin/guest/addGuest", method = RequestMethod.POST)

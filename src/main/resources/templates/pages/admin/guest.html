@@ -7,15 +7,13 @@
 
 <body>
 <nav th:replace="fragments/navbar"></nav>
-<div class="container-fluid">
+<div class="container-fluid" style="padding-top: 1em">
   <div class="row">
     <div class="col-md-2"/>
     <div class="col-md-8">
       <div style="overflow: auto; margin-bottom:1em">
         <h1 style="float:left">Guests</h1>
-        <button type="button" class="btn btn-primary" style="float:right" data-toggle="modal" data-target="#guestModal">
-          Add
-        </button>
+        <button type="button" class="btn btn-primary" style="float:right" data-toggle="modal" data-target="#guestModal">Add</button>
       </div>
       <table id="guestTable" class="table table-striped table-bordered" cellspacing="0" width="100%">
         <thead>
@@ -36,49 +34,40 @@
     <div class="col-md-2"/>
   </div>
 </div>
-<div class="modal fade" id="guestModal" tabindex="-1" role="dialog">
+<div class="modal fade" id="guestModal" tabindex="-1" role="dialog" aria-labelledby="guestModal" aria-hidden="true">
   <div class="modal-dialog modal-lg" role="document">
     <div class="modal-content">
       <div class="modal-header">
-        <h3>Add Guest</h3>
+        <h3 class="modal-title">Add Guest</h3>
       </div>
       <div class="modal-body">
-        <form id="guestModalForm" th:action="@{/admin/guest/addGuest}" th:object="${guest}" method="post">
+        <form id="guestModalForm" method="post">
           <div class="row">
-            <div class="col-md-8">
+            <div class="col mb-3">
+              <label for="inputFirstName">First name</label>
               <div class="input-group">
                 <span class="input-group-addon">Text</span>
-                <input type="text" class="form-control" th:field="*{firstName}" placeholder="First Name"/>
+                <input id="inputFirstName" type="text" class="form-control" placeholder="First Name"/>
+                <div id="firstNameFeedback" class="invalid-feedback" style="padding-left: 1em"></div>
               </div>
-            </div>
-            <div class="col-md-4">
-              <span class="label label-danger" style="font-size:12px" th:if="${#fields.hasErrors('firstName')}" th:errors="*{firstName}">Errors</span>
             </div>
           </div>
           <div class="row">
-            <div class="col-md-8">
+            <div class="col mb-3">
+              <label for="inputLastName">Last name</label>
               <div class="input-group">
                 <span class="input-group-addon">Text</span>
-                <input type="text" class="form-control" th:field="*{lastName}" placeholder="Last Name"/>
+                <input id="inputLastName" type="text" class="form-control" placeholder="Last Name"/>
+                <div id="lastNameFeedback" class="invalid-feedback" style="padding-left: 1em"></div>
               </div>
             </div>
-            <div class="col-md-4">
-              <span class="label label-danger" style="font-size:12px" th:if="${#fields.hasErrors('lastName')}" th:errors="*{lastName}">Errors</span>
-            </div>
-          </div>
-          <div th:if="${#fields.hasErrors('firstName')} or ${#fields.hasErrors('lastName')}">
-            <script>
-              $(document).ready(function () {
-                $('#guestModal').modal('show');
-              });
-            </script>
           </div>
         </form>
       </div>
-    </div>
-    <div class="modal-footer">
-      <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-      <button type="submit" class="btn btn-primary" form="guestModalForm">Save changes</button>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        <button type="submit" class="btn btn-primary" form="guestModalForm">Save changes</button>
+      </div>
     </div>
   </div>
 </div>

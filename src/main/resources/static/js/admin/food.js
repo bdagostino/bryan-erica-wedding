@@ -21,4 +21,54 @@ $(document).ready(function () {
       {data:"description"}
     ]
   });
+
+  $('#foodModalForm').submit(function (event) {
+    event.preventDefault();
+    var food = {
+      type: $('#inputType').val(),
+      description: $('#inputDescription').val()
+    };
+
+    $.ajax({
+      type: "POST",
+      contentType: "application/json; charset=utf-8",
+      url: "/admin/food/addFood",
+      data: JSON.stringify(food),
+      success: function () {
+        location.reload(true);
+      },
+      error: function (data) {
+        clearInvalidFeedback();
+        var fieldErrors = data.responseJSON.fieldErrorList;
+        var globalError = data.responseJSON.globalError;
+        if(fieldErrors != null){
+          fieldErrors.forEach(function(error){
+            checkForTypeError(error);
+            checkForDescriptionError(error);
+          });
+        }if(globalError){
+          alert('Unknown Error has Occurred!');
+        }
+      }
+    });
+  });
 });
+
+function clearInvalidFeedback(){
+  $('#inputType').removeClass().addClass('form-control');
+  $('#inputDescription').removeClass().addClass('form-control');
+}
+
+function checkForTypeError(error){
+  if(error.field === 'type'){
+    $('#inputType').addClass('is-invalid');
+    $('#typeFeedback').text(error.message);
+  }
+}
+
+function checkForDescriptionError(error){
+  if(error.field === 'description'){
+    $('#inputDescription').addClass('is-invalid');
+    $('#descriptionFeedback').text(error.message);
+  }
+}

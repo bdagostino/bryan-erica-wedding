@@ -6,6 +6,7 @@ import javax.validation.constraints.Size;
 import org.apache.commons.lang3.StringUtils;
 
 @Entity
+@Table(name = "food")
 public class Food {
 
     private static final int TYPE_LENGTH = 25;
@@ -15,12 +16,12 @@ public class Food {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer id;
 
-    @Column(nullable = false, length = TYPE_LENGTH)
+    @Column(name = "type",nullable = false, length = TYPE_LENGTH)
     @NotNull
     @Size(min = 1, max = TYPE_LENGTH)
     private String type;
 
-    @Column(nullable = false, length = DESCRIPTION_LENGTH)
+    @Column(name = "description", nullable = false, length = DESCRIPTION_LENGTH)
     @NotNull
     @Size(min = 1, max = DESCRIPTION_LENGTH)
     private String description;
@@ -38,7 +39,7 @@ public class Food {
     }
 
     public void setType(String type) {
-        this.type = StringUtils.trim(type);
+        this.type = type;
     }
 
     public String getDescription() {
@@ -46,6 +47,6 @@ public class Food {
     }
 
     public void setDescription(String description) {
-        this.description = StringUtils.trim(description);
+        this.description = description;
     }
 }

@@ -1,31 +1,16 @@
 package net.ddns.buckeyeflash.controllers;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.module.SimpleModule;
-import net.ddns.buckeyeflash.models.Food;
 import net.ddns.buckeyeflash.models.Guest;
-import net.ddns.buckeyeflash.models.datatable.DatatableRequest;
-import net.ddns.buckeyeflash.models.datatable.DatatableResponse;
-import net.ddns.buckeyeflash.models.modal.AjaxError;
-import net.ddns.buckeyeflash.models.modal.AjaxResponse;
-import net.ddns.buckeyeflash.repositories.FoodRepository;
-import net.ddns.buckeyeflash.repositories.GuestRepository;
-import net.ddns.buckeyeflash.serializers.GuestSerializer;
+import net.ddns.buckeyeflash.models.Invite;
+import net.ddns.buckeyeflash.repositories.InviteRepository;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.validation.Errors;
-import org.springframework.validation.FieldError;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import javax.validation.Valid;
+import java.util.Random;
 
 @Controller
 public class AdminController {
@@ -33,10 +18,7 @@ public class AdminController {
     private static final Logger logger = Logger.getLogger(AdminController.class);
 
     @Autowired
-    private FoodRepository foodRepository;
-
-    @Autowired
-    private GuestRepository guestRepository;
+    private InviteRepository inviteRepository;
 
     @RequestMapping(value = "/admin", method = RequestMethod.GET)
     public String home() {
@@ -44,84 +26,51 @@ public class AdminController {
         return "pages/adminxx";
     }
 
-    @RequestMapping(value = "/admin/food", method = RequestMethod.GET)
-    public String food() {
-        logger.info("Admin Food Page Accessed");
-        return "pages/admin/food";
-    }
-
-    @RequestMapping(value = "/admin/guest", method = RequestMethod.GET)
-    public String guest() {
-        logger.info("Admin Guest Page Accessed");
-        return "pages/admin/guest";
-    }
-
-    @RequestMapping(value = "/admin/food/getFoodData", method = RequestMethod.POST)
+    @RequestMapping(value = "/addData", method = RequestMethod.GET)
     public @ResponseBody
-    String getFoodData(@RequestBody DatatableRequest request) throws Exception {
-        PageRequest pageRequest = new PageRequest((int) Math.floor(request.getStart() / request.getLength()), request.getLength());
-        Page<Food> foods = foodRepository.findByTypeStartingWith(request.getSearch().getValue(), pageRequest);
-        ObjectMapper objectMapper = new ObjectMapper();
-        DatatableResponse datatableResponse = new DatatableResponse();
-        datatableResponse.setDraw(request.getDraw());
-        datatableResponse.setRecordsFiltered((int) foods.getTotalElements());
-        datatableResponse.setRecordsTotal((int) foods.getTotalElements());
-        datatableResponse.setData(foods.getContent());
-        logger.info("Retrieved Food Data From Database");
-        return objectMapper.writeValueAsString(datatableResponse);
+    String addData() {
+
+        addInviteLoop("Elizabeth", "Swan", "Jack", "Sparrow");
+        addInviteLoop("Dean", "Martin", "Grace", "Martin");
+        addInviteLoop("Dan", "DAgostino", "Debbie", "DAgostino");
+        addInviteLoop("Karen", "Morgan", "Justin", "Morgan");
+        addInviteLoop("Heather", "Crown", "Some", "Man");
+        addInviteLoop("Amanda", "Panda", "Sam", "Something");
+        addInviteLoop("Y1", "Y1", "Z2", "Z2");
+        addInviteLoop("A1", "B2", "B12", "B2");
+        addInviteLoop("C1", "C1", "D1", "D2");
+        addInviteLoop("E1", "E1", "F1", "F2");
+        addInviteLoop("G1", "G1", "H1", "H2");
+        addInviteLoop("I1", "I1", "J1", "J2");
+        addInviteLoop("K1", "K1", "L1", "L2");
+        addInviteLoop("Dan", "D", "Debbie", "D");
+
+        return "Invites Loaded";
     }
 
-    @RequestMapping(value = "/admin/guest/getGuestData", method = RequestMethod.POST)
-    public @ResponseBody
-    String getGuestData(@RequestBody DatatableRequest request) throws Exception {
-        PageRequest pageRequest = new PageRequest((int) Math.floor(request.getStart() / request.getLength()), request.getLength());
-        String searchParameter = request.getSearch().getValue();
-        Page<Guest> guests = guestRepository.findByFirstNameStartingWithOrLastNameStartingWith(searchParameter, searchParameter, pageRequest);
+    private void addInviteLoop(String g1Fn, String g1Ln, String g2Fn, String g2Ln) {
 
-        ObjectMapper objectMapper = new ObjectMapper();
-        SimpleModule simpleModule = new SimpleModule();
-        simpleModule.addSerializer(new GuestSerializer());
-        objectMapper.registerModule(simpleModule);
-        DatatableResponse datatableResponse = new DatatableResponse();
-        datatableResponse.setDraw(request.getDraw());
-        datatableResponse.setRecordsFiltered((int) guests.getTotalElements());
-        datatableResponse.setRecordsTotal((int) guests.getTotalElements());
-        datatableResponse.setData(guests.getContent());
-        logger.info("Retrieved Guest Data From Database");
-        String json = objectMapper.writeValueAsString(datatableResponse);
-        return json;
+        Random random = new Random();
+        Guest guest1 = new Guest();
+        guest1.setFirstName(g1Fn);
+        guest1.setLastName(g1Ln);
+        guest1.setInvitedPerson(random.nextBoolean());
+
+        Guest guest2 = new Guest();
+        guest2.setFirstName(g2Fn);
+        guest2.setLastName(g2Ln);
+        guest2.setInvitedPerson(random.nextBoolean());
+
+
+        Invite invite = new Invite();
+        guest1.setInvite(invite);
+        guest2.setInvite(invite);
+
+        invite.setMaxAdditionalGuests(3);
+        invite.getGuestList().add(guest1);
+        invite.getGuestList().add(guest2);
+        inviteRepository.save(invite);
     }
 
-    @RequestMapping(value = "/admin/guest/addGuest", method = RequestMethod.POST)
-    public ResponseEntity<AjaxResponse> addGuest(@Valid @RequestBody Guest guest, Errors errors) {
-        if (errors.hasErrors()) {
-            AjaxResponse guestAjaxResponse = new AjaxResponse();
-            processErrors(guestAjaxResponse, errors);
-            return ResponseEntity.badRequest().body(guestAjaxResponse);
-        }
-        guestRepository.save(guest);
-        logger.info("Guest Saved");
-        return ResponseEntity.ok(null);
-    }
 
-    @RequestMapping(value = "/admin/food/addFood", method = RequestMethod.POST)
-    public ResponseEntity<AjaxResponse> addFood(@Valid @RequestBody Food food, Errors errors) {
-        if (errors.hasErrors()) {
-            AjaxResponse foodAjaxResponse = new AjaxResponse();
-            processErrors(foodAjaxResponse, errors);
-            return ResponseEntity.badRequest().body(foodAjaxResponse);
-        }
-        foodRepository.save(food);
-        logger.info("Food Saved");
-        return ResponseEntity.ok(null);
-    }
-
-    private void processErrors(AjaxResponse ajaxResponse, Errors errors) {
-        for (FieldError fieldError : errors.getFieldErrors()) {
-            ajaxResponse.getFieldErrorList().add(new AjaxError(fieldError.getField(), fieldError.getDefaultMessage()));
-        }
-        if (errors.hasGlobalErrors()) {
-            ajaxResponse.setGlobalError(true);
-        }
-    }
 }

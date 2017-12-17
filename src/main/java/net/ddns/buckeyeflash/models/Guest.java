@@ -1,12 +1,11 @@
 package net.ddns.buckeyeflash.models;
 
-import org.apache.commons.lang3.StringUtils;
-
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 @Entity
+@Table(name = "guest")
 public class Guest {
 
     private static final int FIRST_NAME_LENGTH = 50;
@@ -16,24 +15,34 @@ public class Guest {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer id;
 
-    @Column(nullable = false, length = FIRST_NAME_LENGTH)
+    @Column(name = "first_name", nullable = false, length = FIRST_NAME_LENGTH)
     @NotNull
     @Size(min = 1, max = FIRST_NAME_LENGTH)
     private String firstName;
 
-    @Column(nullable = false, length = LAST_NAME_LENGTH)
+    @Column(name = "last_name", nullable = false, length = LAST_NAME_LENGTH)
     @NotNull
     @Size(min = 1, max = LAST_NAME_LENGTH)
     private String lastName;
 
+    @Column(name = "attendance")
     private Boolean attendance;
 
-    @OneToOne
+    @OneToOne(cascade = CascadeType.ALL, targetEntity = Food.class)
+    @JoinColumn(name = "food_id")
     private Food food;
 
+    @Column(name = "dietary_concerns")
     private Boolean dietaryConcerns;
 
+    @Column(name = "dietary_comments")
     private String dietaryComments;
+
+    @ManyToOne(cascade = CascadeType.ALL, targetEntity = Invite.class)
+    @JoinColumn(name = "invite_id", nullable = false)
+    private Invite invite;
+
+    private Boolean invitedPerson;
 
     public Integer getId() {
         return id;
@@ -48,15 +57,23 @@ public class Guest {
     }
 
     public void setFirstName(String firstName) {
-        this.firstName = StringUtils.trim(firstName);
+        this.firstName = firstName;
     }
 
     public String getLastName() {
         return lastName;
     }
 
+    public Boolean getInvitedPerson() {
+        return invitedPerson;
+    }
+
+    public void setInvitedPerson(Boolean invitedPerson) {
+        this.invitedPerson = invitedPerson;
+    }
+
     public void setLastName(String lastName) {
-        this.lastName = StringUtils.trim(lastName);
+        this.lastName = lastName;
     }
 
     public Boolean getAttendance() {
@@ -88,6 +105,14 @@ public class Guest {
     }
 
     public void setDietaryComments(String dietaryComments) {
-        this.dietaryComments = StringUtils.trim(dietaryComments);
+        this.dietaryComments = dietaryComments;
+    }
+
+    public Invite getInvite() {
+        return invite;
+    }
+
+    public void setInvite(Invite invite) {
+        this.invite = invite;
     }
 }

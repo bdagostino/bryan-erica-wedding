@@ -21,9 +21,9 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import javax.validation.Valid;
 
 @Controller
-public class FoodController extends BaseAdminController {
+public class FoodAdminController extends BaseAdminController {
 
-    private static final Logger logger = Logger.getLogger(FoodController.class);
+    private static final Logger logger = Logger.getLogger(FoodAdminController.class);
 
     @Autowired
     private FoodRepository foodRepository;

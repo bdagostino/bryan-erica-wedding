@@ -24,9 +24,9 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import javax.validation.Valid;
 
 @Controller
-public class GuestController extends BaseAdminController {
+public class GuestAdminController extends BaseAdminController {
 
-    private static final Logger logger = Logger.getLogger(GuestController.class);
+    private static final Logger logger = Logger.getLogger(GuestAdminController.class);
 
     @Autowired
     private GuestRepository guestRepository;

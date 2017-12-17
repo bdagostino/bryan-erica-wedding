@@ -19,8 +19,8 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 @Controller
-public class InviteController extends BaseAdminController {
-    private static final Logger logger = Logger.getLogger(InviteController.class);
+public class InviteAdminController extends BaseAdminController {
+    private static final Logger logger = Logger.getLogger(InviteAdminController.class);
 
     @Autowired
     private InviteRepository inviteRepository;

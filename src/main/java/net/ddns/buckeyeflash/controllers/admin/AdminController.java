@@ -1,4 +1,4 @@
-package net.ddns.buckeyeflash.controllers;
+package net.ddns.buckeyeflash.controllers.admin;
 
 import net.ddns.buckeyeflash.models.Guest;
 import net.ddns.buckeyeflash.models.Invite;

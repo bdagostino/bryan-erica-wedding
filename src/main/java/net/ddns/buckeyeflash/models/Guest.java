@@ -38,9 +38,9 @@ public class Guest {
     @Column(name = "dietary_comments")
     private String dietaryComments;
 
-    @ManyToOne(cascade = CascadeType.ALL, targetEntity = Invite.class)
+    @ManyToOne(cascade = CascadeType.ALL, targetEntity = Invitation.class)
     @JoinColumn(name = "invite_id", nullable = false)
-    private Invite invite;
+    private Invitation invitation;
 
     private Boolean invitedPerson;
 
@@ -57,7 +57,7 @@ public class Guest {
     }
 
     public void setFirstName(String firstName) {
-        this.firstName = firstName;
+        this.firstName = firstName.trim();
     }
 
     public String getLastName() {
@@ -73,7 +73,7 @@ public class Guest {
     }
 
     public void setLastName(String lastName) {
-        this.lastName = lastName;
+        this.lastName = lastName.trim();
     }
 
     public Boolean getAttendance() {
@@ -108,11 +108,11 @@ public class Guest {
         this.dietaryComments = dietaryComments;
     }
 
-    public Invite getInvite() {
-        return invite;
+    public Invitation getInvitation() {
+        return invitation;
     }
 
-    public void setInvite(Invite invite) {
-        this.invite = invite;
+    public void setInvitation(Invitation invitation) {
+        this.invitation = invitation;
     }
 }

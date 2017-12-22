@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <div th:replace="fragments/header"/>
+  <script type="text/javascript" src="../js/admin/invitation.js"/>
+</head>
+<body>
+<nav th:replace="fragments/navbar"></nav>
+<div class="container-fluid" style="padding-top: 1em">
+  <div class="row">
+    <div class="col-md-2"/>
+    <div class="col-md-8">
+      <div style="overflow: auto; margin-bottom:1em">
+        <h1 style="float:left">Invitations</h1>
+        <button type="button" class="btn btn-primary" style="float:right" data-toggle="modal"
+                data-target="#invitationModal">Add
+        </button>
+      </div>
+      <table id="invitationTable" class="table table-striped table-bordered" cellspacing="0" width="100%">
+        <thead>
+        <tr>
+          <th>Id</th>
+          <th>Invited Guests</th>
+          <th>Additional Guests</th>
+          <th>Max Additional Guests</th>
+        </tr>
+        </thead>
+        <tbody>
+        </tbody>
+      </table>
+    </div>
+    <div class="col-md-2"/>
+  </div>
+</div>
+
+
+<div class="modal fade" id="invitationModal" tabindex="-1" role="dialog" aria-labelledby="invitationModal"
+     aria-hidden="true">
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3 class="modal-title">Create Invitation</h3>
+      </div>
+      <div class="modal-body">
+        <form id="invitationModalForm" method="post">
+          <div class="form-row">
+            <div class="col mb-3">
+              <label for="inputMaxGuests">Max Guests</label>
+              <div class="input-group">
+                <span class="input-group-addon">Number</span>
+                <input id="inputMaxGuests" type="number" class="form-control" placeholder="Max Guests"/>
+                <div id="maxGuestsFeedback" class="invalid-feedback" style="padding-left: 1em"></div>
+              </div>
+            </div>
+          </div>
+          <div id="addGuestHeader" class="form-row">
+            <h3>Add Guests:</h3>
+          </div>
+          <div class="form-row btn-group">
+            <button id="addGuestButton" type="button" class="btn btn-default" disabled="disabled">Add Next Guest</button>
+            <button id="deleteGuestButton" type="button" class="btn btn-default" disabled="disabled">Remove Last Guest</button>
+          </div>
+          
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        <button id="invitationModalSubmitButton" type="submit" class="btn btn-primary" form="invitationModalForm" disabled="disabled">Save changes</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+</body>
+</html>

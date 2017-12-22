@@ -1,8 +1,8 @@
 package net.ddns.buckeyeflash.controllers.admin;
 
 import net.ddns.buckeyeflash.models.Guest;
-import net.ddns.buckeyeflash.models.Invite;
-import net.ddns.buckeyeflash.repositories.InviteRepository;
+import net.ddns.buckeyeflash.models.Invitation;
+import net.ddns.buckeyeflash.repositories.InvitationRepository;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -18,7 +18,7 @@ public class AdminController {
     private static final Logger logger = Logger.getLogger(AdminController.class);
 
     @Autowired
-    private InviteRepository inviteRepository;
+    private InvitationRepository invitationRepository;
 
     @RequestMapping(value = "/admin", method = RequestMethod.GET)
     public String home() {
@@ -30,25 +30,25 @@ public class AdminController {
     public @ResponseBody
     String addData() {
 
-        addInviteLoop("Elizabeth", "Swan", "Jack", "Sparrow");
-        addInviteLoop("Dean", "Martin", "Grace", "Martin");
-        addInviteLoop("Dan", "DAgostino", "Debbie", "DAgostino");
-        addInviteLoop("Karen", "Morgan", "Justin", "Morgan");
-        addInviteLoop("Heather", "Crown", "Some", "Man");
-        addInviteLoop("Amanda", "Panda", "Sam", "Something");
-        addInviteLoop("Y1", "Y1", "Z2", "Z2");
-        addInviteLoop("A1", "B2", "B12", "B2");
-        addInviteLoop("C1", "C1", "D1", "D2");
-        addInviteLoop("E1", "E1", "F1", "F2");
-        addInviteLoop("G1", "G1", "H1", "H2");
-        addInviteLoop("I1", "I1", "J1", "J2");
-        addInviteLoop("K1", "K1", "L1", "L2");
-        addInviteLoop("Dan", "D", "Debbie", "D");
+        addInvitationLoop("Elizabeth", "Swan", "Jack", "Sparrow");
+        addInvitationLoop("Dean", "Martin", "Grace", "Martin");
+        addInvitationLoop("Dan", "DAgostino", "Debbie", "DAgostino");
+        addInvitationLoop("Karen", "Morgan", "Justin", "Morgan");
+        addInvitationLoop("Heather", "Crown", "Some", "Man");
+        addInvitationLoop("Amanda", "Panda", "Sam", "Something");
+        addInvitationLoop("Y1", "Y1", "Z2", "Z2");
+        addInvitationLoop("A1", "B2", "B12", "B2");
+        addInvitationLoop("C1", "C1", "D1", "D2");
+        addInvitationLoop("E1", "E1", "F1", "F2");
+        addInvitationLoop("G1", "G1", "H1", "H2");
+        addInvitationLoop("I1", "I1", "J1", "J2");
+        addInvitationLoop("K1", "K1", "L1", "L2");
+        addInvitationLoop("Dan", "D", "Debbie", "D");
 
-        return "Invites Loaded";
+        return "Invitation Loaded";
     }
 
-    private void addInviteLoop(String g1Fn, String g1Ln, String g2Fn, String g2Ln) {
+    private void addInvitationLoop(String g1Fn, String g1Ln, String g2Fn, String g2Ln) {
 
         Random random = new Random();
         Guest guest1 = new Guest();
@@ -62,14 +62,14 @@ public class AdminController {
         guest2.setInvitedPerson(random.nextBoolean());
 
 
-        Invite invite = new Invite();
-        guest1.setInvite(invite);
-        guest2.setInvite(invite);
+        Invitation invitation = new Invitation();
+        guest1.setInvitation(invitation);
+        guest2.setInvitation(invitation);
 
-        invite.setMaxAdditionalGuests(3);
-        invite.getGuestList().add(guest1);
-        invite.getGuestList().add(guest2);
-        inviteRepository.save(invite);
+        invitation.setMaxGuests(3);
+        invitation.getGuestList().add(guest1);
+        invitation.getGuestList().add(guest2);
+        invitationRepository.save(invitation);
     }
 
 

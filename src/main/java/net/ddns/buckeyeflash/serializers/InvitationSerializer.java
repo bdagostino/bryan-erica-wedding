@@ -4,7 +4,7 @@ import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.databind.SerializerProvider;
 import com.fasterxml.jackson.databind.ser.std.StdSerializer;
 import net.ddns.buckeyeflash.models.Guest;
-import net.ddns.buckeyeflash.models.Invite;
+import net.ddns.buckeyeflash.models.Invitation;
 import org.apache.commons.lang3.StringUtils;
 
 import java.io.IOException;
@@ -12,19 +12,19 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class InviteSerializer extends StdSerializer<Invite> {
+public class InvitationSerializer extends StdSerializer<Invitation> {
 
-    public InviteSerializer() {
-        super(Invite.class);
+    public InvitationSerializer() {
+        super(Invitation.class);
     }
 
     @Override
-    public void serialize(Invite invite, JsonGenerator jsonGenerator, SerializerProvider serializerProvider) throws IOException {
+    public void serialize(Invitation invitation, JsonGenerator jsonGenerator, SerializerProvider serializerProvider) throws IOException {
         jsonGenerator.writeStartObject();
-        jsonGenerator.writeNumberField("id", invite.getId());
-        jsonGenerator.writeStringField("invitedGuests", filterInvitedGuests(invite.getGuestList()));
-        jsonGenerator.writeStringField("additionalGuests", filterNonInvitedGuests(invite.getGuestList()));
-        jsonGenerator.writeNumberField("maxAdditionalGuests", invite.getMaxAdditionalGuests());
+        jsonGenerator.writeNumberField("id", invitation.getId());
+        jsonGenerator.writeStringField("invitedGuests", filterInvitedGuests(invitation.getGuestList()));
+        jsonGenerator.writeStringField("additionalGuests", filterNonInvitedGuests(invitation.getGuestList()));
+        jsonGenerator.writeNumberField("maxAdditionalGuests", invitation.getMaxGuests());
         jsonGenerator.writeEndObject();
     }
 

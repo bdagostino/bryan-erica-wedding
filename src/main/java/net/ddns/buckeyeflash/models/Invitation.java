@@ -1,23 +1,25 @@
 package net.ddns.buckeyeflash.models;
 
 import javax.persistence.*;
+import javax.validation.Valid;
 import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-@Table(name = "invite")
-public class Invite {
+@Table(name = "invitation")
+public class Invitation {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer id;
 
-    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "invite", targetEntity = Guest.class)
+    @Valid
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "invitation", targetEntity = Guest.class)
     @Column(name = "guest_list")
     private List<Guest> guestList;
 
     @Column(name = "max_guests")
-    private Integer maxAdditionalGuests;
+    private Integer maxGuests;
 
     public Integer getId() {
         return id;
@@ -38,11 +40,11 @@ public class Invite {
         this.guestList = guestList;
     }
 
-    public Integer getMaxAdditionalGuests() {
-        return maxAdditionalGuests;
+    public Integer getMaxGuests() {
+        return maxGuests;
     }
 
-    public void setMaxAdditionalGuests(Integer maxAdditionalGuests) {
-        this.maxAdditionalGuests = maxAdditionalGuests;
+    public void setMaxGuests(Integer maxGuests) {
+        this.maxGuests = maxGuests;
     }
 }

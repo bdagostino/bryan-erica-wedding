@@ -34,7 +34,7 @@ public class InvitationSerializer extends StdSerializer<Invitation> {
     }
 
     private String filterNonInvitedGuests(List<Guest> guests) {
-        List<Guest> filtered = guests.stream().filter(guest -> guest.getInvitedPerson() == false).collect(Collectors.toList());
+        List<Guest> filtered = guests.stream().filter(guest -> !guest.getInvitedPerson()).collect(Collectors.toList());
         return prettyPrintGuests(filtered);
     }
 

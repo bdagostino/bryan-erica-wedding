@@ -134,7 +134,7 @@ $(document).ready(function () {
 });
 
 function addGuestDiv(guestNumber) {
-  var guestDiv = '<div class="guestDiv">\n' +
+  return '<div class="guestDiv">\n' +
       '            <div class="form-row">\n' +
       '              <h4>Guest ' + guestNumber + '</h4>\n' +
       '            </div>\n' +
@@ -159,7 +159,6 @@ function addGuestDiv(guestNumber) {
       '              </div>\n' +
       '            </div>\n' +
       '          </div>';
-  return guestDiv;
 }
 
 function clearInvalidFeedback(){

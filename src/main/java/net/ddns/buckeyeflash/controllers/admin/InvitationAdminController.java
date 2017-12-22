@@ -61,8 +61,7 @@ public class InvitationAdminController extends BaseAdminController {
         datatableResponse.setRecordsTotal((int) invitations.getTotalElements());
         datatableResponse.setData(invitations.getContent());
         logger.info("Retrieved Invitation Data From Database");
-        String json = objectMapper.writeValueAsString(datatableResponse);
-        return json;
+        return objectMapper.writeValueAsString(datatableResponse);
     }
 
     @RequestMapping(value = "/admin/invitation/createInvitation", method = RequestMethod.POST)

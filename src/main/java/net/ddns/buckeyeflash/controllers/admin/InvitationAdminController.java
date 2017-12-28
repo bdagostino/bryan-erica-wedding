@@ -74,7 +74,12 @@ public class InvitationAdminController extends BaseAdminController {
             guest.setInvitedPerson(true);
             guest.setInvitation(invitation);
         }
-        invitationRepository.save(invitation);
+        try {
+            invitationRepository.save(invitation);
+        }catch(Exception e){
+            logger.error(e.getMessage(),e);
+            return "fragments/admin/invitation_fragments :: invitationModalError";
+        }
         logger.info("Invitation Saved");
         return "fragments/admin/invitation_fragments :: invitationModalSuccess";
     }

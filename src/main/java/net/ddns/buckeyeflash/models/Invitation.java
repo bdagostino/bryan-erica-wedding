@@ -2,6 +2,7 @@ package net.ddns.buckeyeflash.models;
 
 import javax.persistence.*;
 import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -19,6 +20,7 @@ public class Invitation {
     private List<Guest> guestList;
 
     @Column(name = "max_guests")
+    @NotNull
     private Integer maxGuests;
 
     public Integer getId() {

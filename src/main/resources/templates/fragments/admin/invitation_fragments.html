@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8"/>
+  <title>Title</title>
+</head>
+<body>
+
+<div class="modal-dialog modal-lg" role="document" th:fragment="invitationModalContent">
+  <div class="modal-content">
+    <div class="modal-header">
+      <h3 class="modal-title">Create Invitation</h3>
+    </div>
+    <div class="modal-body">
+      <form id="invitationModalForm" method="post" th:action="'javascript:submitInvitationForm();'">
+        <div class="form-row">
+          <div class="col mb-3">
+            <label for="inputMaxGuests">Max Guests</label>
+            <div class="input-group">
+              <span class="input-group-addon">Number</span>
+              <input id="inputMaxGuests" type="number" class="form-control" placeholder="Max Guests"
+                     th:field="*{invitation.maxGuests}" th:errorclass="is-invalid"/>
+              <div th:errors="*{invitation.maxGuests}" class="invalid-feedback" style="padding-left: 1em"></div>
+            </div>
+          </div>
+        </div>
+        <div id="addGuestHeader" class="form-row">
+          <h3>Add Guests:</h3>
+        </div>
+        <div class="guestDiv" th:each="row,rowStat : *{invitation.guestList}">
+          <div class="form-row">
+            <h4 th:text="Guest+' '+(${rowStat.index}+1)">Guest</h4>
+          </div>
+          <div class="form-row">
+            <div class="col mb-3">
+              <label th:for="inputGuest+${rowStat.index}+FirstName">First name</label>
+              <div class="input-group">
+                <span class="input-group-addon">Text</span>
+                <input th:id="inputGuest+${rowStat.index}+FirstName" type="text" class="form-control"
+                       placeholder="First Name" th:field="*{invitation.guestList[__${rowStat.index}__].firstName}"
+                       th:errorclass="is-invalid"/>
+                <div th:errors="*{invitation.guestList[__${rowStat.index}__].firstName}" class="invalid-feedback"
+                     style="padding-left: 1em"></div>
+              </div>
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="col mb-3">
+              <label th:for="inputGuest+${rowStat.index}+LastName">Last name</label>
+              
+              <div class="input-group">
+                <span class="input-group-addon">Text</span>
+                <input th:id="inputGuest+${rowStat.index}+LastName" type="text" class="form-control"
+                       placeholder="Last Name" th:field="*{invitation.guestList[__${rowStat.index}__].lastName}"
+                       th:errorclass="is-invalid"/>
+                <div th:errors="*{invitation.guestList[__${rowStat.index}__].lastName}" class="invalid-feedback"
+                     style="padding-left: 1em"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        
+        <div class="form-row btn-group">
+          <button id="addGuestButton" type="button" class="btn btn-default" th:onclick="'javascript:addGuest();'">Add
+            Next Guest
+          </button>
+          <button id="deleteGuestButton" type="button" class="btn btn-default" th:onclick="'javascript:removeGuest();'">
+            Remove Last Guest
+          </button>
+        </div>
+      
+      </form>
+    </div>
+    <div class="modal-footer">
+      <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+      <button id="invitationModalSubmitButton" type="submit" class="btn btn-primary" form="invitationModalForm">Save
+        changes
+      </button>
+    </div>
+  </div>
+</div>
+
+<div class="modal-dialog modal-lg" role="document" th:fragment="invitationModalSuccess">
+  <div class="modal-content">
+    <div class="modal-header">
+      <h3 class="modal-title">Submission Status</h3>
+    </div>
+    <div class="modal-body">
+      <div class="alert alert-success" role="alert">Invitation was Saved Successfully</div>
+    </div>
+    <div class="modal-footer">
+      <button type="button" class="btn btn-default" th:onclick="'window.location.reload()'">Close</button>
+    </div>
+  </div>
+</div>
+
+</body>
+</html>

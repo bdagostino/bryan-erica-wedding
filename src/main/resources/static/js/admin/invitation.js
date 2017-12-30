@@ -1,5 +1,9 @@
+const ADD_GUEST_URL = "/admin/invitation/invitationModal/addGuest";
+const REMOVE_GUEST_URL = "/admin/invitation/invitationModal/removeGuest";
+
+
 $(document).ready(function () {
-  $('#invitationTable').DataTable({
+  var table = $('#invitationTable').DataTable({
     paging: true,
     serverSide: true,
     ordering: false,
@@ -19,16 +23,22 @@ $(document).ready(function () {
       },
       {data: "invitedGuests"},
       {data: "additionalGuests"},
-      {data: "maxAdditionalGuests"}
+      {data: "maxAdditionalGuests"},
+      {data: null, defaultContent: "<button>Edit</button>"}
     ]
+  });
+
+  $('#invitationTable tbody').on('click', 'button', function () {
+    var data = table.row($(this).parents('tr')).data();
+    openInvitationModal(data.id);
   });
 });
 
-function openInvitationModal() {
+function openInvitationModal(invitationId) {
   $.ajax({
     type: "POST",
-    url: "/admin/invitation/invitationModal",
-    data: $("#invitationModalForm").serialize(),
+    url: "/admin/invitation/openInvitationModal",
+    data: {invitationId: invitationId},
     success: function (data) {
       $("#invitationModal").html(data);
       $("#invitationModal").modal('show');
@@ -36,10 +46,10 @@ function openInvitationModal() {
   });
 }
 
-function submitInvitationForm() {
+function submitInvitationForm(action) {
   $.ajax({
     type: "POST",
-    url: "/admin/invitation/createInvitation",
+    url: "/admin/invitation/saveInvitation",
     data: $("#invitationModalForm").serialize(),
     success: function (data) {
       $("#invitationModal").html(data);
@@ -53,7 +63,7 @@ function submitInvitationForm() {
 function addGuest() {
   $.ajax({
     type: "POST",
-    url: "/admin/invitation/invitationModal/addGuest",
+    url: ADD_GUEST_URL,
     data: $("#invitationModalForm").serialize(),
     success: function (data) {
       $("#invitationModal").html(data);
@@ -64,10 +74,11 @@ function addGuest() {
   });
 }
 
-function removeGuest() {
+function removeGuest(removalIndex) {
+  $('#removalIndex').val(removalIndex);
   $.ajax({
     type: "POST",
-    url: "/admin/invitation/invitationModal/removeGuest",
+    url: REMOVE_GUEST_URL,
     data: $("#invitationModalForm").serialize(),
     success: function (data) {
       $("#invitationModal").html(data);

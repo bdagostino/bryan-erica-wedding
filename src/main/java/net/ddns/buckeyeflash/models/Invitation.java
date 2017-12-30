@@ -15,13 +15,16 @@ public class Invitation {
     private Integer id;
 
     @Valid
-    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "invitation", targetEntity = Guest.class)
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "invitation", targetEntity = Guest.class, orphanRemoval = true)
     @Column(name = "guest_list")
     private List<Guest> guestList;
 
     @Column(name = "max_guests")
     @NotNull
     private Integer maxGuests;
+
+    @Transient
+    private Integer removalIndex;
 
     public Integer getId() {
         return id;
@@ -48,5 +51,13 @@ public class Invitation {
 
     public void setMaxGuests(Integer maxGuests) {
         this.maxGuests = maxGuests;
+    }
+
+    public Integer getRemovalIndex() {
+        return removalIndex;
+    }
+
+    public void setRemovalIndex(Integer removalIndex) {
+        this.removalIndex = removalIndex;
     }
 }

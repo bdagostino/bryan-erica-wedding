@@ -6,10 +6,10 @@
 </head>
 <body>
 
-<div class="modal-dialog modal-lg" role="document" th:fragment="invitationModalContent">
+<div class="modal-dialog modal-lg" role="document" th:fragment="invitationModalContent(title)">
   <div class="modal-content">
     <div class="modal-header">
-      <h3 class="modal-title">Create Invitation</h3>
+      <h3 class="modal-title" th:text="${title}">Create Invitation</h3>
     </div>
     <div class="modal-body">
       <form id="invitationModalForm" method="post" th:action="'javascript:submitInvitationForm();'">
@@ -28,7 +28,11 @@
           <h3>Add Guests:</h3>
         </div>
         <div class="guestDiv" th:each="row,rowStat : *{invitation.guestList}">
+          <input hidden="hidden" type="number" th:field="*{invitation.guestList[__${rowStat.index}__].id}"/>
           <div class="form-row">
+            <button type="button" class="btn btn-default btn-sm" th:onclick="'javascript:removeGuest('+${rowStat.index}+');'"  >
+              <i class="fa fa-times" aria-hidden="true"></i>
+            </button>
             <h4 th:text="Guest+' '+(${rowStat.index}+1)">Guest</h4>
           </div>
           <div class="form-row">
@@ -58,18 +62,14 @@
               </div>
             </div>
           </div>
+          <input hidden="hidden" type="number" th:field="*{invitation.id}"/>
+          <input id="removalIndex" hidden="hidden" type="number" th:field="*{invitation.removalIndex}"/>
         </div>
-        
-        
         <div class="form-row btn-group">
           <button id="addGuestButton" type="button" class="btn btn-default" th:onclick="'javascript:addGuest();'">Add
             Next Guest
           </button>
-          <button id="deleteGuestButton" type="button" class="btn btn-default" th:onclick="'javascript:removeGuest();'">
-            Remove Last Guest
-          </button>
         </div>
-      
       </form>
     </div>
     <div class="modal-footer">

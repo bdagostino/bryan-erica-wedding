@@ -54,6 +54,4 @@ public class InvitationSerializer extends StdSerializer<Invitation> {
         }
         return stringBuilder.toString();
     }
-
-
 }

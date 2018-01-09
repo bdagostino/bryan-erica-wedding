@@ -46,7 +46,7 @@ function openInvitationModal(invitationId) {
   });
 }
 
-function submitInvitationForm(action) {
+function submitInvitationForm() {
   $.ajax({
     type: "POST",
     url: "/admin/invitation/saveInvitation",

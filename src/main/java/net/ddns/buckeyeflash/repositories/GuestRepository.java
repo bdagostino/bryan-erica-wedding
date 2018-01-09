@@ -10,4 +10,6 @@ public interface GuestRepository extends PagingAndSortingRepository<Guest, Long>
     Page<Guest> findByFirstNameStartingWithOrLastNameStartingWith(String firstName, String lastName, Pageable pageable);
 
     Page<Guest> findByFirstNameStartingWithAndLastNameStartingWithOrFirstNameStartingWithAndLastNameStartingWith(String firstName1, String lastName1, String lastName2, String firstName2, Pageable pageable);
+
+    Guest findById(Integer id);
 }

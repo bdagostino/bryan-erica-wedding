@@ -2,6 +2,7 @@ package net.ddns.buckeyeflash.controllers.admin;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.module.SimpleModule;
+import net.ddns.buckeyeflash.models.CommonConstants;
 import net.ddns.buckeyeflash.models.Guest;
 import net.ddns.buckeyeflash.models.Invitation;
 import net.ddns.buckeyeflash.models.datatable.DatatableRequest;
@@ -25,7 +26,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Controller
-public class InvitationAdminController extends BaseAdminController {
+public class InvitationAdminController extends BaseAdminController implements CommonConstants {
     private static final Logger logger = Logger.getLogger(InvitationAdminController.class);
     private static final String INVITATION_ATTRIBUTE_NAME = "invitation";
     private static final String CREATE_INVITATION_MODAL_TITLE = "Create Invitation";
@@ -110,12 +111,13 @@ public class InvitationAdminController extends BaseAdminController {
             }
             if (storedInvitation.getGuestList().size() != pendingGuestList.size()) {
                 logger.error("List Sizes Do Not Match...");
+                return String.format(MODAL_ERROR_FRAGMENT_TEMPLATE, "Invitation");
             }
             try {
                 invitationRepository.save(storedInvitation);
             } catch (Exception e) {
                 logger.error(e.getMessage(), e);
-                return "fragments/admin/invitation_fragments :: invitationModalError";
+                return String.format(MODAL_ERROR_FRAGMENT_TEMPLATE, "Invitation");
             }
 
         } else {
@@ -128,12 +130,12 @@ public class InvitationAdminController extends BaseAdminController {
                 invitationRepository.save(invitation);
             } catch (Exception e) {
                 logger.error(e.getMessage(), e);
-                return "fragments/admin/invitation_fragments :: invitationModalError";
+                return String.format(MODAL_ERROR_FRAGMENT_TEMPLATE, "Invitation");
             }
         }
 
         logger.info("Invitation Saved");
-        return "fragments/admin/invitation_fragments :: invitationModalSuccess";
+        return String.format(MODAL_SUCCESS_FRAGMENT_TEMPLATE, "Invitation");
     }
 
     @RequestMapping(value = "/admin/invitation/openInvitationModal", method = RequestMethod.POST)

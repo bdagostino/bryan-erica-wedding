@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8"/>
+  <title>Title</title>
+</head>
+<body>
+
+<div class="modal-dialog modal-lg" role="document" th:fragment="guestModalContent">
+  <div class="modal-content">
+    <div class="modal-header">
+      <h3 class="modal-title">Update Guest</h3>
+    </div>
+    <div class="modal-body">
+      <form id="guestModalForm" method="post" th:action="'javascript:submitGuestForm();'">
+        <input th:field="${guest.id}" hidden="hidden"/>
+        <div class="form-row">
+          <div class="col mb-3">
+            <label for="inputFirstName">First Name</label>
+            <div class="input-group">
+              <input id="inputFirstName" type="text" class="form-control" readonly="readonly"
+                     th:field="*{guest.firstName}"/>
+            </div>
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="col mb-3">
+            <label for="inputLastName">Last Name</label>
+            <div class="input-group">
+              <input id="inputLastName" type="text" class="form-control" readonly="readonly"
+                     th:field="*{guest.lastName}"/>
+            </div>
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="col mb-3">
+            <label for="attendanceRadioDiv">Attendance</label>
+            <div class="form-check" id="attendanceRadioDiv">
+              <label class="form-check-label" for="attendanceRadio1">
+                <input class="form-check-input" type="radio" id="attendanceRadio1"
+                       th:field="*{guest.attendance}" th:value="true"/>Yes</label>
+            </div>
+            <div class="form-check">
+              <label class="form-check-label" for="attendanceRadio2">
+                <input class="form-check-input" type="radio" id="attendanceRadio2"
+                       th:field="*{guest.attendance}" th:value="false"/>No</label>
+            </div>
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="exampleFormControlSelect1">Example select</label>
+          <select class="form-control" id="exampleFormControlSelect1" th:field="*{guest.food.id}">
+            <option th:each="food : ${foodList}" th:text="${food.type}" th:value="${food.id}"></option>
+          </select>
+        </div>
+        <div class="form-row">
+          <div class="col mb-3">
+            <label for="dietaryConcernRadioDiv">Dietary Concern</label>
+            <div class="form-check" id="dietaryConcernRadioDiv">
+              <label class="form-check-label" for="dietaryConcernRadio1">
+                <input class="form-check-input" type="radio" id="dietaryConcernRadio1"
+                       th:field="*{guest.dietaryConcerns}" th:value="true"/>Yes</label>
+            </div>
+            <div class="form-check">
+              <label class="form-check-label" for="dietaryConcernRadio2">
+                <input class="form-check-input" type="radio" id="dietaryConcernRadio2"
+                       th:field="*{guest.dietaryConcerns}" th:value="false"/>No</label>
+            </div>
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="col mb-3">
+            <label for="inputDietaryComments">Dietary Comments</label>
+            <div class="input-group">
+              <input id="inputDietaryComments" type="text" class="form-control" th:field="*{guest.dietaryComments}"/>
+            </div>
+          </div>
+        </div>
+      </form>
+    </div>
+    <div class="modal-footer">
+      <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+      <button id="guestModalSubmitButton" type="submit" class="btn btn-primary" form="guestModalForm">Save
+        changes
+      </button>
+    </div>
+  </div>
+</div>
+</body>
+</html>

@@ -11,4 +11,5 @@ public interface FoodRepository extends PagingAndSortingRepository<Food, Long> {
 
     Page<Food> findByTypeStartingWith(String type,Pageable pageable);
 
+    Food findById(Integer id);
 }

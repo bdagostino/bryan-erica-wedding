@@ -1,8 +1,8 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
-  <div th:replace="fragments/header"/>
-  <script type="text/javascript" src="../js/admin/guest.js"/>
+  <meta th:replace="fragments/header" />
+  <script type="text/javascript" th:src="@{/js/admin/guest.js}"></script>
 </head>
 
 <body>
@@ -34,6 +34,7 @@
     <div class="col-md-2"/>
   </div>
 </div>
+<input id="canAdminEdit" type="text" th:value="*{canAdminEdit}" hidden="hidden"/>
 <div class="modal fade" id="guestModal" tabindex="-1" role="dialog" aria-labelledby="guestModal" aria-hidden="true"></div>
 </body>
 </html>

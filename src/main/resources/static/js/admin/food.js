@@ -6,6 +6,7 @@ $(document).ready(function () {
     ajax: {
       url: "/admin/food/getFoodData",
       type: "POST",
+      headers:getCsrfRequestHeader(),
       contentType: "application/json; charset=utf-8",
       data: function (d) {
         return JSON.stringify(d);
@@ -31,6 +32,7 @@ $(document).ready(function () {
 
     $.ajax({
       type: "POST",
+      headers:getCsrfRequestHeader(),
       contentType: "application/json; charset=utf-8",
       url: "/admin/food/addFood",
       data: JSON.stringify(food),

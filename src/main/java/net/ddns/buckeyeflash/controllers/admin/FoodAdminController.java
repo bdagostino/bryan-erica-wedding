@@ -11,7 +11,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestWrapper;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.ModelMap;
 import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -28,12 +31,15 @@ public class FoodAdminController extends BaseAdminController {
     @Autowired
     private FoodRepository foodRepository;
 
+    @PreAuthorize("hasAnyRole('ADMIN_EDIT','ADMIN_READ')")
     @RequestMapping(value = "/admin/food", method = RequestMethod.GET)
-    public String food() {
+    public String food(ModelMap modelMap, SecurityContextHolderAwareRequestWrapper securityContextHolderAwareRequestWrapper) {
+        modelMap.put("canAdminEdit", securityContextHolderAwareRequestWrapper.isUserInRole("ADMIN_EDIT"));
         logger.info("Admin Food Page Accessed");
         return "pages/admin/food";
     }
 
+    @PreAuthorize("hasAnyRole('ADMIN_EDIT','ADMIN_READ')")
     @RequestMapping(value = "/admin/food/getFoodData", method = RequestMethod.POST)
     public @ResponseBody
     String getFoodData(@RequestBody DatatableRequest request) throws Exception {
@@ -49,6 +55,7 @@ public class FoodAdminController extends BaseAdminController {
         return objectMapper.writeValueAsString(datatableResponse);
     }
 
+    @PreAuthorize("hasRole('ADMIN_EDIT')")
     @RequestMapping(value = "/admin/food/addFood", method = RequestMethod.POST)
     public ResponseEntity<AjaxResponse> addFood(@Valid @RequestBody Food food, Errors errors) {
         if (errors.hasErrors()) {

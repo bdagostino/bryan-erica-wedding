@@ -1,6 +1,8 @@
 <title>Bryan&amp;Erica</title>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
+<meta name="_csrf" th:content="${_csrf.token}"/>
+<meta name="_csrf_header" th:content="${_csrf.headerName}"/>
 
 <link th:href="@{/webjars/bootstrap/4.0.0-beta.2/css/bootstrap.min.css}" rel="stylesheet"/>
 <link th:href="@{/webjars/datatables/1.10.16/css/dataTables.bootstrap4.min.css}" rel="stylesheet"/>
@@ -11,5 +13,5 @@
 <script type="text/javascript" th:src="@{/webjars/bootstrap/4.0.0-beta.2/js/bootstrap.min.js}"></script>
 <script type="text/javascript" th:src="@{/webjars/datatables/1.10.16/js/jquery.dataTables.min.js}"></script>
 <script type="text/javascript" th:src="@{/webjars/datatables/1.10.16/js/dataTables.bootstrap4.min.js}"></script>
-<script type="text/javascript" th:src="@{/js/custom.js}"></script>
+<script type="text/javascript" th:src="@{/js/global.js}"></script>
 

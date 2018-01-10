@@ -17,6 +17,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestWrapper;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.Errors;
@@ -38,12 +40,15 @@ public class GuestAdminController extends BaseAdminController implements CommonC
     @Autowired
     private FoodRepository foodRepository;
 
+    @PreAuthorize("hasAnyRole('ADMIN_EDIT','ADMIN_READ')")
     @RequestMapping(value = "/admin/guest", method = RequestMethod.GET)
-    public String guest() {
+    public String guest(ModelMap modelMap,SecurityContextHolderAwareRequestWrapper securityContextHolderAwareRequestWrapper) {
+        modelMap.put("canAdminEdit", securityContextHolderAwareRequestWrapper.isUserInRole("ADMIN_EDIT"));
         logger.info("Admin Guest Page Accessed");
         return "pages/admin/guest";
     }
 
+    @PreAuthorize("hasAnyRole('ADMIN_EDIT','ADMIN_READ')")
     @RequestMapping(value = "/admin/guest/getGuestData", method = RequestMethod.POST)
     public @ResponseBody
     String getGuestData(@RequestBody DatatableRequest request) throws Exception {
@@ -70,6 +75,7 @@ public class GuestAdminController extends BaseAdminController implements CommonC
         return objectMapper.writeValueAsString(datatableResponse);
     }
 
+    @PreAuthorize("hasRole('ADMIN_EDIT')")
     @RequestMapping(value = "/admin/guest/openGuestModal", method = RequestMethod.POST)
     public String openGuestnModal(String guestId, ModelMap modelMap) {
         modelMap.clear();
@@ -87,6 +93,7 @@ public class GuestAdminController extends BaseAdminController implements CommonC
         return GUEST_MODAL_CONTENT_FRAGMENT;
     }
 
+    @PreAuthorize("hasRole('ADMIN_EDIT')")
     @RequestMapping(value = "/admin/guest/saveGuest", method = RequestMethod.POST)
     public String saveGuest(@Valid @ModelAttribute Guest guest, Errors errors) {
         if (errors.hasErrors()) {
@@ -115,6 +122,7 @@ public class GuestAdminController extends BaseAdminController implements CommonC
         return String.format(MODAL_SUCCESS_FRAGMENT_TEMPLATE, "Guest");
     }
 
+    @PreAuthorize("hasRole('ADMIN_EDIT')")
     @RequestMapping(value = "/admin/guest/addGuest", method = RequestMethod.POST)
     public ResponseEntity<AjaxResponse> addGuest(@Valid @RequestBody Guest guest, Errors errors) {
         if (errors.hasErrors()) {

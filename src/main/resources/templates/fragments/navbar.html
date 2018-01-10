@@ -1,4 +1,4 @@
-<nav class="navbar navbar-expand-md navbar-fixed-top navbar-dark bg-dark " xmlns:th="http://www.thymeleaf.org">
+<nav class="navbar navbar-expand-md navbar-fixed-top navbar-dark bg-dark " xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
   <a class="navbar-brand" th:href="@{/}">DAgostino Wedding</a>
   <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#mainNavBar"
           aria-controls="mainNavBar" aria-expanded="false" aria-label="Toggle navigation">
@@ -11,7 +11,8 @@
       <li class="nav-item"><a class="nav-link" href="#">Location</a></li>
       <li class="nav-item"><a class="nav-link" href="#">Hotel/Reservations</a></li>
       <li class="nav-item"><a class="nav-link" href="#">Registry</a></li>
-      <li class="nav-item"><a class="nav-link" th:href="@{/admin}">Admin</a></li>
+      
+      <li sec:authorize="hasAnyRole('ADMIN_EDIT','ADMIN_READ')" class="nav-item"><a class="nav-link" th:href="@{/admin}">Admin</a></li>
     </ul>
   </div>
 </nav>

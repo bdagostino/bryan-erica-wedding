@@ -1,5 +1,6 @@
 const OPEN_GUEST_MODAL_URL = "/admin/guest/openGuestModal";
 const SAVE_GUEST_URL = "/admin/guest/saveGuest";
+const USER_ROLE =
 
 $(document).ready(function () {
   var table = $('#guestTable').DataTable({
@@ -9,6 +10,7 @@ $(document).ready(function () {
     ajax: {
       url: "/admin/guest/getGuestData",
       type: "POST",
+      headers:getCsrfRequestHeader(),
       contentType: "application/json; charset=utf-8",
       data: function (d) {
         return JSON.stringify(d);
@@ -26,7 +28,7 @@ $(document).ready(function () {
       {data: "food"},
       {data: "dietaryConcerns"},
       {data: "dietaryComments"},
-      {data: null, defaultContent: "<button>Edit</button>"}
+      {data: null, defaultContent: "<button>Edit</button>", visible: ($("#canAdminEdit").val()==='true')}
     ]
   });
 
@@ -40,6 +42,7 @@ $(document).ready(function () {
 function openGuestModal(guestId) {
   $.ajax({
     type: "POST",
+    headers:getCsrfRequestHeader(),
     url: OPEN_GUEST_MODAL_URL,
     data: {guestId: guestId},
     success: function (data) {
@@ -52,6 +55,7 @@ function openGuestModal(guestId) {
 function submitGuestForm(){
   $.ajax({
     type: "POST",
+    headers:getCsrfRequestHeader(),
     url: SAVE_GUEST_URL,
     data: $("#guestModalForm").serialize(),
     success: function (data) {

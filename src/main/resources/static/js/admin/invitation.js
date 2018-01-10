@@ -10,6 +10,7 @@ $(document).ready(function () {
     ajax: {
       url: "/admin/invitation/getInvitationData",
       type: "POST",
+      headers:getCsrfRequestHeader(),
       contentType: "application/json; charset=utf-8",
       data: function (d) {
         return JSON.stringify(d);
@@ -24,7 +25,7 @@ $(document).ready(function () {
       {data: "invitedGuests"},
       {data: "additionalGuests"},
       {data: "maxAdditionalGuests"},
-      {data: null, defaultContent: "<button>Edit</button>"}
+      {data: null, defaultContent: "<button>Edit</button>", visible: ($("#canAdminEdit").val()==='true')}
     ]
   });
 
@@ -35,8 +36,13 @@ $(document).ready(function () {
 });
 
 function openInvitationModal(invitationId) {
+  var token = $("meta[name='_csrf']").attr("content");
+  var header = $("meta[name='_csrf_header']").attr("content");
+  var xhr = {};
+  xhr[header] = token;
   $.ajax({
     type: "POST",
+    headers:getCsrfRequestHeader(),
     url: "/admin/invitation/openInvitationModal",
     data: {invitationId: invitationId},
     success: function (data) {
@@ -49,6 +55,7 @@ function openInvitationModal(invitationId) {
 function submitInvitationForm() {
   $.ajax({
     type: "POST",
+    headers:getCsrfRequestHeader(),
     url: "/admin/invitation/saveInvitation",
     data: $("#invitationModalForm").serialize(),
     success: function (data) {
@@ -64,6 +71,7 @@ function addGuest() {
   $.ajax({
     type: "POST",
     url: ADD_GUEST_URL,
+    headers:getCsrfRequestHeader(),
     data: $("#invitationModalForm").serialize(),
     success: function (data) {
       $("#invitationModal").html(data);
@@ -78,6 +86,7 @@ function removeGuest(removalIndex) {
   $('#removalIndex').val(removalIndex);
   $.ajax({
     type: "POST",
+    headers:getCsrfRequestHeader(),
     url: REMOVE_GUEST_URL,
     data: $("#invitationModalForm").serialize(),
     success: function (data) {

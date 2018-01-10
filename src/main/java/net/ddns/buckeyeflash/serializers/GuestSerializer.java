@@ -23,26 +23,10 @@ public class GuestSerializer extends StdSerializer<Guest> {
         jsonGenerator.writeNumberField("id", guest.getId());
         jsonGenerator.writeStringField("firstName", guest.getFirstName());
         jsonGenerator.writeStringField("lastName", guest.getLastName());
-        jsonGenerator.writeStringField("attendance", convertBoolean(guest.getAttendance()));
-        jsonGenerator.writeStringField("food", convertFood(guest.getFood()));
-        jsonGenerator.writeStringField("dietaryConcerns", convertBoolean(guest.getDietaryConcerns()));
+        jsonGenerator.writeStringField("attendance", SerializerUtils.convertBoolean(guest.getAttendance()));
+        jsonGenerator.writeStringField("food", SerializerUtils.convertFood(guest.getFood()));
+        jsonGenerator.writeStringField("dietaryConcerns", SerializerUtils.convertBoolean(guest.getDietaryConcerns()));
         jsonGenerator.writeStringField("dietaryComments", guest.getDietaryComments());
         jsonGenerator.writeEndObject();
-    }
-
-    private String convertBoolean(Boolean value) {
-        if (BooleanUtils.isTrue(value)) {
-            return "Yes";
-        } else if (BooleanUtils.isFalse(value)) {
-            return "No";
-        }
-        return "";
-    }
-
-    private String convertFood(Food food) {
-        if (food != null) {
-            return food.getType();
-        }
-        return StringUtils.EMPTY;
     }
 }

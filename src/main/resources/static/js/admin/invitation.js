@@ -36,10 +36,6 @@ $(document).ready(function () {
 });
 
 function openInvitationModal(invitationId) {
-  var token = $("meta[name='_csrf']").attr("content");
-  var header = $("meta[name='_csrf_header']").attr("content");
-  var xhr = {};
-  xhr[header] = token;
   $.ajax({
     type: "POST",
     headers:getCsrfRequestHeader(),

@@ -20,13 +20,13 @@ public class GuestSerializer extends StdSerializer<Guest> {
     @Override
     public void serialize(Guest guest, JsonGenerator jsonGenerator, SerializerProvider serializerProvider) throws IOException {
         jsonGenerator.writeStartObject();
-        jsonGenerator.writeNumberField("id",guest.getId());
+        jsonGenerator.writeNumberField("id", guest.getId());
         jsonGenerator.writeStringField("firstName", guest.getFirstName());
         jsonGenerator.writeStringField("lastName", guest.getLastName());
         jsonGenerator.writeStringField("attendance", convertBoolean(guest.getAttendance()));
         jsonGenerator.writeStringField("food", convertFood(guest.getFood()));
-        jsonGenerator.writeStringField("dietaryConcerns",convertBoolean(guest.getDietaryConcerns()));
-        jsonGenerator.writeStringField("dietaryComments",guest.getDietaryComments());
+        jsonGenerator.writeStringField("dietaryConcerns", convertBoolean(guest.getDietaryConcerns()));
+        jsonGenerator.writeStringField("dietaryComments", guest.getDietaryComments());
         jsonGenerator.writeEndObject();
     }
 

@@ -13,7 +13,7 @@
     <div class="col-md-8">
       <div style="overflow: auto; margin-bottom:1em">
         <h1 style="float: left">Food</h1>
-        <button type="button" class="btn btn-primary" style="float:right" data-toggle="modal" data-target="#foodModal">Add</button>
+        <button type="button" class="btn btn-primary" style="float:right" th:onclick="'javascript:openFoodModal();'">Add</button>
       </div>
       <table id="foodTable" class="table table-striped table-bordered" cellspacing="0" width="100%">
         <thead>
@@ -21,6 +21,7 @@
           <th>Id</th>
           <th>Type</th>
           <th>Description</th>
+          <th>Actions</th>
         </tr>
         </thead>
         <tbody>
@@ -30,43 +31,7 @@
     <div class="col-md-2"/>
   </div>
 </div>
-<div class="modal fade" id="foodModal" tabindex="-1" role="dialog" aria-labelledby="foodModal" aria-hidden="true">
-  <div class="modal-dialog modal-lg" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h3 class="modal-title">Add Food</h3>
-      </div>
-      <div class="modal-body">
-        <form id="foodModalForm" method="post">
-          <div class="row">
-            <div class="col mb-3">
-              <label for="inputType">Type</label>
-              <div class="input-group">
-                <span class="input-group-addon">Text</span>
-                <input id="inputType" type="text" class="form-control" placeholder="Type"/>
-                <div id="typeFeedback" class="invalid-feedback" style="padding-left: 1em"></div>
-              </div>
-            </div>
-          </div>
-          <div class="row">
-            <div class="col mb-3">
-              <label for="inputDescription">Description</label>
-              <div class="input-group">
-                <span class="input-group-addon">Text</span>
-                <input id="inputDescription" type="text" class="form-control" placeholder="Description"/>
-                <div id="descriptionFeedback" class="invalid-feedback" style="padding-left: 1em"></div>
-              </div>
-            </div>
-          </div>
-        </form>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-        <button type="submit" class="btn btn-primary" form="foodModalForm">Save changes</button>
-      </div>
-    </div>
-  </div>
-</div>
 <input id="canAdminEdit" type="text" th:value="*{canAdminEdit}" hidden="hidden"/>
+<div class="modal fade" id="foodModal" tabindex="-1" role="dialog" aria-labelledby="foodModal" aria-hidden="true"></div>
 </body>
 </html>

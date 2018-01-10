@@ -6,10 +6,10 @@
 </head>
 <body>
 
-<div class="modal-dialog modal-lg" role="document" th:fragment="foodModalContent">
+<div class="modal-dialog modal-lg" role="document" th:fragment="foodModalContent(title)">
   <div class="modal-content">
     <div class="modal-header">
-      <h3 class="modal-title">Update Food</h3>
+      <h3 class="modal-title" th:text="${title}">Food</h3>
     </div>
     <div class="modal-body">
       <form id="foodModalForm" method="post" th:action="'javascript:submitFoodForm();'">
@@ -34,9 +34,7 @@
     </div>
     <div class="modal-footer">
       <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-      <button id="foodModalSubmitButton" type="submit" class="btn btn-primary" form="foodModalForm">Save
-        changes
-      </button>
+      <button id="foodModalSubmitButton" type="submit" class="btn btn-primary" form="foodModalForm">Save changes</button>
     </div>
   </div>
 </div>

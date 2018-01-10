@@ -1,5 +1,5 @@
 $(document).ready(function () {
-  $('#foodTable').DataTable({
+  var table = $('#foodTable').DataTable({
     paging: true,
     serverSide: true,
     ordering: false,
@@ -19,58 +19,63 @@ $(document).ready(function () {
         visible: false
       },
       {data: "type"},
-      {data:"description"}
+      {data:"description"},
+      {data: null, defaultContent: "<button class='edit-button'>Edit</button><button class='delete-button'>Delete</button>", visible: ($("#canAdminEdit").val()==='true')}
     ]
   });
 
-  $('#foodModalForm').submit(function (event) {
-    event.preventDefault();
-    var food = {
-      type: $('#inputType').val(),
-      description: $('#inputDescription').val()
-    };
+  $('#foodTable tbody').on('click', '.edit-button', function () {
+    var data = table.row($(this).parents('tr')).data();
+    openFoodModal(data.id);
+  });
 
-    $.ajax({
-      type: "POST",
-      headers:getCsrfRequestHeader(),
-      contentType: "application/json; charset=utf-8",
-      url: "/admin/food/addFood",
-      data: JSON.stringify(food),
-      success: function () {
-        location.reload(true);
-      },
-      error: function (data) {
-        clearInvalidFeedback();
-        var fieldErrors = data.responseJSON.fieldErrorList;
-        var globalError = data.responseJSON.globalError;
-        if(fieldErrors != null){
-          fieldErrors.forEach(function(error){
-            checkForTypeError(error);
-            checkForDescriptionError(error);
-          });
-        }if(globalError){
-          alert('Unknown Error has Occurred!');
-        }
-      }
-    });
+  $('#foodTable tbody').on('click', '.delete-button', function () {
+    var data = table.row($(this).parents('tr')).data();
+    deleteFood(data.id);
   });
 });
 
-function clearInvalidFeedback(){
-  $('#inputType').removeClass().addClass('form-control');
-  $('#inputDescription').removeClass().addClass('form-control');
+function openFoodModal(foodId){
+  $.ajax({
+    type: "POST",
+    headers:getCsrfRequestHeader(),
+    url: "/admin/food/openFoodModal",
+    data: {foodId: foodId},
+    success: function (data) {
+      $("#foodModal").html(data);
+      $("#foodModal").modal('show');
+    }
+  });
 }
 
-function checkForTypeError(error){
-  if(error.field === 'type'){
-    $('#inputType').addClass('is-invalid');
-    $('#typeFeedback').text(error.message);
-  }
+function submitFoodForm(){
+  $.ajax({
+    type: "POST",
+    headers:getCsrfRequestHeader(),
+    url: "/admin/food/saveFood",
+    data: $("#foodModalForm").serialize(),
+    success: function (data) {
+      $("#foodModal").html(data);
+    },
+    error: function () {
+      alert("Error Saving Food");
+    }
+  });
 }
 
-function checkForDescriptionError(error){
-  if(error.field === 'description'){
-    $('#inputDescription').addClass('is-invalid');
-    $('#descriptionFeedback').text(error.message);
-  }
+function deleteFood(foodId){
+  $.ajax({
+    type: "POST",
+    headers:getCsrfRequestHeader(),
+    url: "/admin/food/removeFood",
+    data: {foodId: foodId},
+    success: function (data) {
+      $("#foodModal").html(data);
+      $("#foodModal").modal('show');
+    },
+    error: function (data) {
+      alert(data);
+    }
+  });
 }
+

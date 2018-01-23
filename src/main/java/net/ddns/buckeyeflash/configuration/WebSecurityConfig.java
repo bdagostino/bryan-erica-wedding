@@ -27,6 +27,10 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        http.authorizeRequests().anyRequest().permitAll().and().formLogin().and().httpBasic().and().logout();
+        http.authorizeRequests().anyRequest().permitAll()
+                .and().formLogin()
+                .and().httpBasic()
+                .and().logout().invalidateHttpSession(true).deleteCookies("JSESSIONID")
+                .and().sessionManagement().maximumSessions(1).expiredUrl("/");
     }
 }

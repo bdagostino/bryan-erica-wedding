@@ -21,6 +21,8 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 
 @Controller
+@RequestMapping(value = "/admin/food")
+@SessionAttributes("food")
 public class FoodAdminController extends BaseAdminController implements CommonConstants {
 
     private static final Logger logger = Logger.getLogger(FoodAdminController.class);
@@ -34,7 +36,7 @@ public class FoodAdminController extends BaseAdminController implements CommonCo
     private FoodRepository foodRepository;
 
     @PreAuthorize("hasAnyRole('ADMIN_EDIT','ADMIN_READ')")
-    @RequestMapping(value = "/admin/food", method = RequestMethod.GET)
+    @RequestMapping(method = RequestMethod.GET)
     public String food(ModelMap modelMap, SecurityContextHolderAwareRequestWrapper securityContextHolderAwareRequestWrapper) {
         modelMap.put("canAdminEdit", securityContextHolderAwareRequestWrapper.isUserInRole("ADMIN_EDIT"));
         logger.info("Admin Food Page Accessed");
@@ -42,7 +44,7 @@ public class FoodAdminController extends BaseAdminController implements CommonCo
     }
 
     @PreAuthorize("hasAnyRole('ADMIN_EDIT','ADMIN_READ')")
-    @RequestMapping(value = "/admin/food/getFoodData", method = RequestMethod.POST)
+    @RequestMapping(value = "/getFoodData", method = RequestMethod.POST)
     public @ResponseBody
     String getFoodData(@RequestBody DatatableRequest request) throws Exception {
         PageRequest pageRequest = new PageRequest((int) Math.floor(request.getStart() / request.getLength()), request.getLength());
@@ -58,7 +60,7 @@ public class FoodAdminController extends BaseAdminController implements CommonCo
     }
 
     @PreAuthorize("hasRole('ADMIN_EDIT')")
-    @RequestMapping(value = "/admin/food/openFoodModal", method = RequestMethod.POST)
+    @RequestMapping(value = "/openFoodModal", method = RequestMethod.POST)
     public String openInvitationModal(String foodId, ModelMap modelMap) {
         modelMap.clear();
         if (StringUtils.isNotBlank(foodId)) {
@@ -71,7 +73,7 @@ public class FoodAdminController extends BaseAdminController implements CommonCo
     }
 
     @PreAuthorize("hasRole('ADMIN_EDIT')")
-    @RequestMapping(value = "/admin/food/saveFood", method = RequestMethod.POST)
+    @RequestMapping(value = "/saveFood", method = RequestMethod.POST)
     public String saveFood(@Valid @ModelAttribute Food food, Errors errors) {
         if (errors.hasErrors()) {
             return generateFoodModalContentLocator(food.getId());
@@ -99,7 +101,7 @@ public class FoodAdminController extends BaseAdminController implements CommonCo
     }
 
     @PreAuthorize("hasRole('ADMIN_EDIT')")
-    @RequestMapping(value = "/admin/food/removeFood", method = RequestMethod.POST)
+    @RequestMapping(value = "/removeFood", method = RequestMethod.POST)
     public String removeFood(String foodId) {
         if (StringUtils.isNotBlank(foodId)) {
             Food storedFood = foodRepository.findById(Integer.parseInt(foodId));

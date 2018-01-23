@@ -29,7 +29,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Controller
+@RequestMapping(value = "/admin/guest")
+@SessionAttributes("guest")
 public class GuestAdminController extends BaseAdminController implements CommonConstants {
+    private static final String GUEST_ATTRIBUTE_NAME = "guest";
 
     private static final Logger logger = Logger.getLogger(GuestAdminController.class);
     private static final String GUEST_MODAL_CONTENT_FRAGMENT = "fragments/admin/guest_fragments :: guestModalContent";
@@ -41,7 +44,7 @@ public class GuestAdminController extends BaseAdminController implements CommonC
     private FoodRepository foodRepository;
 
     @PreAuthorize("hasAnyRole('ADMIN_EDIT','ADMIN_READ')")
-    @RequestMapping(value = "/admin/guest", method = RequestMethod.GET)
+    @RequestMapping(method = RequestMethod.GET)
     public String guest(ModelMap modelMap,SecurityContextHolderAwareRequestWrapper securityContextHolderAwareRequestWrapper) {
         modelMap.put("canAdminEdit", securityContextHolderAwareRequestWrapper.isUserInRole("ADMIN_EDIT"));
         logger.info("Admin Guest Page Accessed");
@@ -49,7 +52,7 @@ public class GuestAdminController extends BaseAdminController implements CommonC
     }
 
     @PreAuthorize("hasAnyRole('ADMIN_EDIT','ADMIN_READ')")
-    @RequestMapping(value = "/admin/guest/getGuestData", method = RequestMethod.POST)
+    @RequestMapping(value = "/getGuestData", method = RequestMethod.POST)
     public @ResponseBody
     String getGuestData(@RequestBody DatatableRequest request) throws Exception {
         PageRequest pageRequest = new PageRequest((int) Math.floor(request.getStart() / request.getLength()), request.getLength());
@@ -76,7 +79,7 @@ public class GuestAdminController extends BaseAdminController implements CommonC
     }
 
     @PreAuthorize("hasRole('ADMIN_EDIT')")
-    @RequestMapping(value = "/admin/guest/openGuestModal", method = RequestMethod.POST)
+    @RequestMapping(value = "/openGuestModal", method = RequestMethod.POST)
     public String openGuestnModal(String guestId, ModelMap modelMap) {
         modelMap.clear();
         List<Food> foodList = new ArrayList<>();
@@ -84,17 +87,17 @@ public class GuestAdminController extends BaseAdminController implements CommonC
         foodRepository.findAll().forEach(foodList::add);
         if (StringUtils.isNotBlank(guestId)) {
             Guest guest = guestRepository.findById(Integer.parseInt(guestId));
-            modelMap.addAttribute("guest", guest);
+            modelMap.addAttribute(GUEST_ATTRIBUTE_NAME, guest);
 
         } else {
-            modelMap.addAttribute("guest", new Guest());
+            modelMap.addAttribute(GUEST_ATTRIBUTE_NAME, new Guest());
         }
         modelMap.addAttribute("foodList", foodList);
         return GUEST_MODAL_CONTENT_FRAGMENT;
     }
 
     @PreAuthorize("hasRole('ADMIN_EDIT')")
-    @RequestMapping(value = "/admin/guest/saveGuest", method = RequestMethod.POST)
+    @RequestMapping(value = "/saveGuest", method = RequestMethod.POST)
     public String saveGuest(@Valid @ModelAttribute Guest guest, Errors errors) {
         if (errors.hasErrors()) {
             return GUEST_MODAL_CONTENT_FRAGMENT;
@@ -123,7 +126,7 @@ public class GuestAdminController extends BaseAdminController implements CommonC
     }
 
     @PreAuthorize("hasRole('ADMIN_EDIT')")
-    @RequestMapping(value = "/admin/guest/addGuest", method = RequestMethod.POST)
+    @RequestMapping(value = "/addGuest", method = RequestMethod.POST)
     public ResponseEntity<AjaxResponse> addGuest(@Valid @RequestBody Guest guest, Errors errors) {
         if (errors.hasErrors()) {
             AjaxResponse guestAjaxResponse = new AjaxResponse();

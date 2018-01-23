@@ -13,7 +13,6 @@
     </div>
     <div class="modal-body">
       <form id="guestModalForm" method="post" th:action="'javascript:submitGuestForm();'">
-        <input th:field="${guest.id}" hidden="hidden"/>
         <div class="form-row">
           <div class="col mb-3">
             <label for="inputFirstName">First Name</label>
@@ -48,8 +47,8 @@
           </div>
         </div>
         <div class="form-group">
-          <label for="exampleFormControlSelect1">Example select</label>
-          <select class="form-control" id="exampleFormControlSelect1" th:field="*{guest.food.id}">
+          <label for="foodSelect">Food</label>
+          <select class="form-control" id="foodSelect" th:field="*{guest.food.id}">
             <option th:each="food : ${foodList}" th:text="${food.type}" th:value="${food.id}"></option>
           </select>
         </div>

@@ -23,6 +23,10 @@ public class Invitation {
     @NotNull
     private Integer maxGuests;
 
+    @Column(name = "invitation_code")
+    @NotNull
+    private String invitationCode;
+
     @Transient
     private Integer removalIndex;
 
@@ -59,5 +63,13 @@ public class Invitation {
 
     public void setRemovalIndex(Integer removalIndex) {
         this.removalIndex = removalIndex;
+    }
+
+    public String getInvitationCode() {
+        return invitationCode;
+    }
+
+    public void setInvitationCode(String invitationCode) {
+        this.invitationCode = invitationCode;
     }
 }

@@ -9,6 +9,7 @@ import net.ddns.buckeyeflash.models.datatable.DatatableRequest;
 import net.ddns.buckeyeflash.models.datatable.DatatableResponse;
 import net.ddns.buckeyeflash.repositories.InvitationRepository;
 import net.ddns.buckeyeflash.serializers.InvitationSerializer;
+import net.ddns.buckeyeflash.utilities.InvitationUtils;
 import net.ddns.buckeyeflash.validators.InvitationValidator;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
@@ -28,6 +29,8 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Controller
+@RequestMapping(value = "admin/invitation")
+@SessionAttributes("invitation")
 public class InvitationAdminController extends BaseAdminController implements CommonConstants {
     private static final Logger logger = Logger.getLogger(InvitationAdminController.class);
     private static final String INVITATION_ATTRIBUTE_NAME = "invitation";
@@ -42,15 +45,15 @@ public class InvitationAdminController extends BaseAdminController implements Co
     private InvitationValidator invitationValidator;
 
     @PreAuthorize("hasAnyRole('ADMIN_EDIT','ADMIN_READ')")
-    @RequestMapping(value = "/admin/invitation", method = RequestMethod.GET)
-    public String invitation(ModelMap modelMap,SecurityContextHolderAwareRequestWrapper securityContextHolderAwareRequestWrapper) {
+    @RequestMapping(method = RequestMethod.GET)
+    public String invitation(ModelMap modelMap, SecurityContextHolderAwareRequestWrapper securityContextHolderAwareRequestWrapper) {
         logger.info("Admin Invitation Page Accessed");
         modelMap.put("canAdminEdit", securityContextHolderAwareRequestWrapper.isUserInRole("ADMIN_EDIT"));
         return "pages/admin/invitation";
     }
 
     @PreAuthorize("hasAnyRole('ADMIN_EDIT','ROLE_ADMIN_READ')")
-    @RequestMapping(value = "/admin/invitation/getInvitationData", method = RequestMethod.POST)
+    @RequestMapping(value = "/getInvitationData", method = RequestMethod.POST)
     public @ResponseBody
     String getInvitationData(@RequestBody DatatableRequest request) throws Exception {
 
@@ -77,7 +80,7 @@ public class InvitationAdminController extends BaseAdminController implements Co
     }
 
     @PreAuthorize("hasRole('ADMIN_EDIT')")
-    @RequestMapping(value = "/admin/invitation/saveInvitation", method = RequestMethod.POST)
+    @RequestMapping(value = "/saveInvitation", method = RequestMethod.POST)
     public String saveInvitation(@Valid @ModelAttribute Invitation invitation, Errors errors) throws Exception {
         invitationValidator.validate(invitation, errors);
         if (errors.hasErrors()) {
@@ -145,20 +148,22 @@ public class InvitationAdminController extends BaseAdminController implements Co
     }
 
     @PreAuthorize("hasRole('ADMIN_EDIT')")
-    @RequestMapping(value = "/admin/invitation/openInvitationModal", method = RequestMethod.POST)
+    @RequestMapping(value = "/openInvitationModal", method = RequestMethod.POST)
     public String openInvitationModal(String invitationId, ModelMap modelMap) {
         modelMap.clear();
         if (StringUtils.isNotBlank(invitationId)) {
             Invitation invitation = invitationRepository.findById(Integer.parseInt(invitationId));
             modelMap.addAttribute(INVITATION_ATTRIBUTE_NAME, invitation);
         } else {
-            modelMap.addAttribute(INVITATION_ATTRIBUTE_NAME, new Invitation());
+            Invitation invitation = new Invitation();
+            invitation.setInvitationCode(InvitationUtils.generateInvitationCode(invitationRepository));
+            modelMap.addAttribute(INVITATION_ATTRIBUTE_NAME, invitation);
         }
         return generateInvitationModalContentLocator(invitationId);
     }
 
     @PreAuthorize("hasRole('ADMIN_EDIT')")
-    @RequestMapping(value = "/admin/invitation/invitationModal/addGuest", method = RequestMethod.POST)
+    @RequestMapping(value = "/invitationModal/addGuest", method = RequestMethod.POST)
     public String invitationModalAddGuest(@ModelAttribute Invitation invitation) {
         if (invitation.getMaxGuests() != null) {
             if (invitation.getGuestList().size() < invitation.getMaxGuests()) {
@@ -169,7 +174,7 @@ public class InvitationAdminController extends BaseAdminController implements Co
     }
 
     @PreAuthorize("hasRole('ADMIN_EDIT')")
-    @RequestMapping(value = "/admin/invitation/invitationModal/removeGuest", method = RequestMethod.POST)
+    @RequestMapping(value = "/invitationModal/removeGuest", method = RequestMethod.POST)
     public String invitationModalRemoveGuest(@ModelAttribute Invitation invitation) {
         int guestSize = invitation.getGuestList().size();
         if (guestSize > 0 && invitation.getRemovalIndex() != null) {

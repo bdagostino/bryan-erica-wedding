@@ -17,4 +17,6 @@ public interface InvitationRepository extends PagingAndSortingRepository<Invitat
 
     Invitation findById(Integer id);
 
+    Invitation findByInvitationCode(String invitationCode);
+
 }

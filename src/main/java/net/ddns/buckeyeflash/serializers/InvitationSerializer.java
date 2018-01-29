@@ -25,6 +25,7 @@ public class InvitationSerializer extends StdSerializer<Invitation> {
         jsonGenerator.writeStringField("invitedGuests", filterInvitedGuests(invitation.getGuestList()));
         jsonGenerator.writeStringField("additionalGuests", filterNonInvitedGuests(invitation.getGuestList()));
         jsonGenerator.writeNumberField("maxAdditionalGuests", invitation.getMaxGuests());
+        jsonGenerator.writeStringField("invitationCode",invitation.getInvitationCode());
         jsonGenerator.writeEndObject();
     }
 

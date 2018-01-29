@@ -3,20 +3,15 @@ package net.ddns.buckeyeflash.controllers.admin;
 import net.ddns.buckeyeflash.models.Guest;
 import net.ddns.buckeyeflash.models.Invitation;
 import net.ddns.buckeyeflash.repositories.InvitationRepository;
+import net.ddns.buckeyeflash.utilities.InvitationUtils;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestWrapper;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import javax.annotation.security.RolesAllowed;
-import java.util.Collection;
 import java.util.Random;
 
 @Controller
@@ -78,6 +73,7 @@ public class AdminController {
         invitation.setMaxGuests(3);
         invitation.getGuestList().add(guest1);
         invitation.getGuestList().add(guest2);
+        invitation.setInvitationCode(InvitationUtils.generateInvitationCode(invitationRepository));
         invitationRepository.save(invitation);
     }
 

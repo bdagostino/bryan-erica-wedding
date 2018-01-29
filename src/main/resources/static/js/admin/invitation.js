@@ -25,6 +25,7 @@ $(document).ready(function () {
       {data: "invitedGuests"},
       {data: "additionalGuests"},
       {data: "maxAdditionalGuests"},
+      {data: "invitationCode"},
       {data: null, defaultContent: "<button>Edit</button>", visible: ($("#canAdminEdit").val()==='true')}
     ]
   });

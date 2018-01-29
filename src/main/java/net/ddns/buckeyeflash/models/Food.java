@@ -3,7 +3,6 @@ package net.ddns.buckeyeflash.models;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
-import org.apache.commons.lang3.StringUtils;
 
 @Entity
 @Table(name = "food")
@@ -16,7 +15,7 @@ public class Food {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer id;
 
-    @Column(name = "type",nullable = false, length = TYPE_LENGTH)
+    @Column(name = "type", nullable = false, length = TYPE_LENGTH)
     @NotNull
     @Size(min = 1, max = TYPE_LENGTH)
     private String type;

@@ -12,6 +12,7 @@
       <h3 class="modal-title" th:text="${title}">Create Invitation</h3>
     </div>
     <div class="modal-body">
+      <!--TODO: Fix form post action to use thymeleaf instead of javascript-->
       <form id="invitationModalForm" method="post" th:action="'javascript:submitInvitationForm();'">
         <div class="form-row">
           <div class="col mb-3">

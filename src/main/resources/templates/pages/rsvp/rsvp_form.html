@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <div th:replace="fragments/header"/>
+</head>
+
+<body>
+<nav th:replace="fragments/navbar"></nav>
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-2"></div>
+    <div class="col-8">
+      <form id="rsvpForm" method="post" th:action="@{/rsvp/submit}">
+        <!--<input id="rsvpSearchField" type="text" class="form-control" placeholder="Invitation Code" th:field="*{rsvpSearch.invitationCode}" th:errorclass="is-invalid"/>-->
+        <!--<div th:errors="*{rsvpSearch.invitationCode}" class="invalid-feedback" style="padding-left: 1em"></div>-->
+      </form>
+      <button type="submit" class="btn btn-primary" form="rsvpForm">Submit</button>
+      <p>The code can be found on the bottom of your invitation</p>
+    </div>
+    <div class="col-2"></div>
+  </div>
+
+</div>
+</body>
+</html>

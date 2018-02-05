@@ -19,36 +19,6 @@
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <java.version>1.8</java.version>
   </properties>
-
-  <!--<build>-->
-    <!--<plugins>-->
-      <!--<plugin>-->
-        <!--<groupId>org.springframework.boot</groupId>-->
-        <!--<artifactId>spring-boot-maven-plugin</artifactId>-->
-      <!--</plugin>-->
-      <!--<plugin>-->
-        <!--<artifactId>maven-resources-plugin</artifactId>-->
-        <!--<executions>-->
-          <!--<execution>-->
-            <!--<id>copy-js</id>-->
-            <!--<phase>package</phase>-->
-            <!--<goals>-->
-              <!--<goal>copy-resources</goal>-->
-            <!--</goals>-->
-            <!--<configuration>-->
-              <!--<outputDirectory>${basedir}/target/js2</outputDirectory>-->
-              <!--<resources>-->
-                <!--<resource>-->
-                  <!--<directory>C:\Users\Bryan\Downloads\DataTables\DataTables-1.10.16</directory>-->
-                  <!--<filtering>false</filtering>-->
-                <!--</resource>-->
-              <!--</resources>-->
-            <!--</configuration>-->
-          <!--</execution>-->
-        <!--</executions>-->
-      <!--</plugin>-->
-    <!--</plugins>-->
-  <!--</build>-->
   <dependencies>
     <dependency>
       <groupId>org.springframework.boot</groupId>
@@ -68,9 +38,14 @@
       <artifactId>thymeleaf-extras-springsecurity4</artifactId>
     </dependency>
     <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-devtools</artifactId>
+      <optional>true</optional>
+    </dependency>
+    <dependency>
       <groupId>org.webjars</groupId>
       <artifactId>bootstrap</artifactId>
-      <version>4.0.0-beta.2</version>
+      <version>4.0.0</version>
     </dependency>
     <dependency>
       <groupId>org.webjars</groupId>

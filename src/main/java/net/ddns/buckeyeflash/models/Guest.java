@@ -42,7 +42,7 @@ public class Guest {
     @JoinColumn(name = "invite_id", nullable = false)
     private Invitation invitation;
 
-    private Boolean invitedPerson;
+    private Boolean invitedPerson = Boolean.FALSE;
 
     public Integer getId() {
         return id;

@@ -4,17 +4,19 @@
   <div th:replace="fragments/header"/>
 </head>
 
-<body>
+<body style="min-height: 100vh; background:#0C2449">
 <nav th:replace="fragments/navbar"></nav>
-<div class="container-fluid">
+<div class="container-fluid" style="background-image: url('/images/1000625.png'); background-repeat: repeat-x;">
   <div class="row">
     <div class="col-2"></div>
-    <div class="col-8">
-      <form id="rsvpSearchForm" method="post" th:action="@{/rsvp/search}">
+    <div class="col-8" style="min-height: 100vh">
+      <div th:fragment="hello">
+      <form id="rsvpSearchForm" method="post" th:action="@{/rsvp/search}" style="margin-top: 5em">
         <input id="rsvpSearchField" type="text" class="form-control" placeholder="Invitation Code" th:field="*{rsvpSearch.invitationCode}" th:errorclass="is-invalid"/>
         <div th:errors="*{rsvpSearch.invitationCode}" class="invalid-feedback" style="padding-left: 1em"></div>
       </form>
-      <button type="submit" class="btn btn-primary" form="rsvpSearchForm">Next</button>
+      <button type="submit" class="btn btn-primary" form="rsvpSearchForm" style="float: right; margin: 1em auto">Next</button>
+      </div>
       <p>The code can be found on the bottom of your invitation</p>
     </div>
     <div class="col-2"></div>

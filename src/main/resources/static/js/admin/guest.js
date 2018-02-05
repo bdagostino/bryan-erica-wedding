@@ -1,6 +1,5 @@
 const OPEN_GUEST_MODAL_URL = "/admin/guest/openGuestModal";
 const SAVE_GUEST_URL = "/admin/guest/saveGuest";
-const USER_ROLE =
 
 $(document).ready(function () {
   var table = $('#guestTable').DataTable({

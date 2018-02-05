@@ -13,7 +13,7 @@
     <div class="col-md-8">
       <div style="overflow: auto; margin-bottom:1em">
         <h1 style="float: left">Food</h1>
-        <button type="button" class="btn btn-primary" style="float:right" th:onclick="'javascript:openFoodModal();'">Add</button>
+        <button type="button" class="btn btn-primary" style="float:right" th:onclick="'javascript:openFoodModal();'" th:if="${canAdminEdit}">Add</button>
       </div>
       <table id="foodTable" class="table table-striped table-bordered" cellspacing="0" width="100%">
         <thead>
@@ -31,7 +31,7 @@
     <div class="col-md-2"/>
   </div>
 </div>
-<input id="canAdminEdit" type="text" th:value="*{canAdminEdit}" hidden="hidden"/>
+<input id="canAdminEdit" type="text" th:value="${canAdminEdit}" hidden="hidden"/>
 <div class="modal fade" id="foodModal" tabindex="-1" role="dialog" aria-labelledby="foodModal" aria-hidden="true"></div>
 </body>
 </html>

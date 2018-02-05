@@ -1,5 +1,5 @@
 const ADD_GUEST_URL = "/admin/invitation/invitationModal/addGuest";
-const REMOVE_GUEST_URL = "/admin/invitation/invitationModal/removeGuest";
+const REMOVE_GUEST_URL = "/admin/invitation/invitationModal/removeGuest?removalIndex=";
 
 
 $(document).ready(function () {
@@ -80,11 +80,10 @@ function addGuest() {
 }
 
 function removeGuest(removalIndex) {
-  $('#removalIndex').val(removalIndex);
   $.ajax({
     type: "POST",
     headers:getCsrfRequestHeader(),
-    url: REMOVE_GUEST_URL,
+    url: REMOVE_GUEST_URL+removalIndex,
     data: $("#invitationModalForm").serialize(),
     success: function (data) {
       $("#invitationModal").html(data);

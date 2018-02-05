@@ -17,18 +17,17 @@ public class InvitationValidator implements Validator {
     @Override
     public void validate(Object obj, Errors errors) {
         Invitation invitation = (Invitation) obj;
-        if (invitation.getGuestList().size() < 1) {
-            errors.rejectValue("maxGuests", "", "At least One Guest is Required below");
+        if (invitation.getMaxGuests() > 0 && invitation.getGuestList().size() < 1) {
+            errors.rejectValue("maxGuests", "invitation.guestList.min", "At least One Guest is Required below");
         }
 
         if (invitation.getMaxGuests() != null) {
             if (invitation.getGuestList().size() > invitation.getMaxGuests()) {
-                errors.rejectValue("maxGuests", "", "Too many guests below");
-
+                errors.rejectValue("maxGuests", "invitation.guestList.max", "Too many guests below");
             }
         } else {
             if (!invitation.getGuestList().isEmpty()) {
-                errors.rejectValue("maxGuests", "", "Too many guests below");
+                errors.rejectValue("maxGuests", "invitation.guestList.max", "Too many guests below");
             }
         }
     }

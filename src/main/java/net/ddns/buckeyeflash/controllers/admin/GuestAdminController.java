@@ -32,7 +32,7 @@ import java.util.List;
 
 @Controller
 @RequestMapping(value = "/admin/guest")
-@SessionAttributes("guest")
+@SessionAttributes({"guest","canAdminEdit"})
 public class GuestAdminController extends BaseAdminController implements CommonConstants {
     private static final String GUEST_MODAL_TYPE = "Guest";
     private static final String GUEST_ATTRIBUTE_NAME = "guest";

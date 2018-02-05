@@ -1,5 +1,6 @@
 package net.ddns.buckeyeflash.controllers.admin;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.module.SimpleModule;
 import net.ddns.buckeyeflash.models.CommonConstants;
@@ -10,12 +11,12 @@ import net.ddns.buckeyeflash.models.datatable.DatatableResponse;
 import net.ddns.buckeyeflash.repositories.InvitationRepository;
 import net.ddns.buckeyeflash.serializers.InvitationSerializer;
 import net.ddns.buckeyeflash.utilities.InvitationUtils;
+import net.ddns.buckeyeflash.utilities.PageUtils;
 import net.ddns.buckeyeflash.validators.InvitationValidator;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestWrapper;
 import org.springframework.stereotype.Controller;
@@ -30,9 +31,10 @@ import java.util.stream.Collectors;
 
 @Controller
 @RequestMapping(value = "admin/invitation")
-@SessionAttributes("invitation")
+@SessionAttributes({"invitation","canAdminEdit"})
 public class InvitationAdminController extends BaseAdminController implements CommonConstants {
     private static final Logger logger = Logger.getLogger(InvitationAdminController.class);
+    private static final String INVITATION_FORM_TYPE = "Invitation";
     private static final String INVITATION_ATTRIBUTE_NAME = "invitation";
     private static final String CREATE_INVITATION_MODAL_TITLE = "Create Invitation";
     private static final String UPDATE_INVITATION_MODAL_TITLE = "Update Invitation";
@@ -55,16 +57,15 @@ public class InvitationAdminController extends BaseAdminController implements Co
     @PreAuthorize("hasAnyRole('ADMIN_EDIT','ROLE_ADMIN_READ')")
     @RequestMapping(value = "/getInvitationData", method = RequestMethod.POST)
     public @ResponseBody
-    String getInvitationData(@RequestBody DatatableRequest request) throws Exception {
+    String getInvitationData(@RequestBody DatatableRequest request) throws JsonProcessingException {
 
-        PageRequest pageRequest = new PageRequest((int) Math.floor(request.getStart() / request.getLength()), request.getLength());
         String searchParameter = request.getSearch().getValue().trim();
         String[] splitSearch = StringUtils.split(searchParameter, StringUtils.SPACE, 3);
         Page<Invitation> invitations;
         if (splitSearch.length > 1) {
-            invitations = invitationRepository.findByFullName(splitSearch[0], splitSearch[1], pageRequest);
+            invitations = invitationRepository.findByFullName(splitSearch[0], splitSearch[1], PageUtils.getPageRequest(request.getStart(), request.getLength()));
         } else {
-            invitations = invitationRepository.findByGuestName(searchParameter, pageRequest);
+            invitations = invitationRepository.findByGuestName(searchParameter, PageUtils.getPageRequest(request.getStart(), request.getLength()));
         }
         ObjectMapper objectMapper = new ObjectMapper();
         SimpleModule simpleModule = new SimpleModule();
@@ -81,70 +82,31 @@ public class InvitationAdminController extends BaseAdminController implements Co
 
     @PreAuthorize("hasRole('ADMIN_EDIT')")
     @RequestMapping(value = "/saveInvitation", method = RequestMethod.POST)
-    public String saveInvitation(@Valid @ModelAttribute Invitation invitation, Errors errors) throws Exception {
+    public String saveInvitation(@Valid @ModelAttribute Invitation invitation, Errors errors) {
         invitationValidator.validate(invitation, errors);
         if (errors.hasErrors()) {
             return generateInvitationModalContentLocator(invitation.getId());
         }
 
+        Invitation storableInviation;
         if (invitation.getId() != null) {
             //Update Invitation
-            Invitation storedInvitation = invitationRepository.findById(invitation.getId());
-            storedInvitation.setMaxGuests(invitation.getMaxGuests());
-            List<Guest> pendingGuestList = invitation.getGuestList();
-            Iterator<Guest> listIterator = storedInvitation.getGuestList().iterator();
-            while (listIterator.hasNext()) {
-                Guest storedGuest = listIterator.next();
-                List<Guest> filteredGuestList = pendingGuestList.stream().filter(pendingGuest -> storedGuest.getId().equals(pendingGuest.getId())).collect(Collectors.toList());
-                if (filteredGuestList.size() > 0) {
-                    if (filteredGuestList.size() > 1) {
-                        throw new Exception("Too Many Items Found");
-                    } else {
-                        Guest pendingGuest = filteredGuestList.get(0);
-                        storedGuest.setFirstName(pendingGuest.getFirstName());
-                        storedGuest.setLastName(pendingGuest.getLastName());
-                    }
-                } else {
-                    logger.info("Removing Guest");
-                    storedGuest.setInvitation(null);
-                    listIterator.remove();
-                }
-            }
-            List<Guest> unsavedGuests = pendingGuestList.stream().filter(pendingGuest -> pendingGuest.getId() == null).collect(Collectors.toList());
-            if (!unsavedGuests.isEmpty()) {
-                unsavedGuests.stream().forEach(pendingGuest -> {
-                    pendingGuest.setInvitation(storedInvitation);
-                    pendingGuest.setInvitedPerson(true);
-                });
-                storedInvitation.getGuestList().addAll(unsavedGuests);
-            }
-            if (storedInvitation.getGuestList().size() != pendingGuestList.size()) {
-                logger.error("List Sizes Do Not Match...");
-                return String.format(MODAL_ERROR_FRAGMENT_TEMPLATE, "Invitation");
-            }
-            try {
-                invitationRepository.save(storedInvitation);
-            } catch (Exception e) {
-                logger.error(e.getMessage(), e);
-                return String.format(MODAL_ERROR_FRAGMENT_TEMPLATE, "Invitation");
-            }
+            storableInviation = invitationRepository.findById(invitation.getId());
+            storableInviation.setMaxGuests(invitation.getMaxGuests());
 
+            updateExistingGuests(invitation.getGuestList(),storableInviation.getGuestList());
+
+            processUnsavedGuests(invitation.getGuestList(),storableInviation);
+
+            if (storableInviation.getGuestList().size() != invitation.getGuestList().size()) {
+                logger.error("List Sizes Do Not Match...");
+                return String.format(MODAL_ERROR_FRAGMENT_TEMPLATE, INVITATION_FORM_TYPE);
+            }
         } else {
             //Create Invitation
-            for (Guest guest : invitation.getGuestList()) {
-                guest.setInvitedPerson(true);
-                guest.setInvitation(invitation);
-            }
-            try {
-                invitationRepository.save(invitation);
-            } catch (Exception e) {
-                logger.error(e.getMessage(), e);
-                return String.format(MODAL_ERROR_FRAGMENT_TEMPLATE, "Invitation");
-            }
+            storableInviation = createInvitation(invitation);
         }
-
-        logger.info("Invitation Saved");
-        return String.format(MODAL_SUCCESS_FRAGMENT_TEMPLATE, "Invitation");
+        return saveInvitation(storableInviation);
     }
 
     @PreAuthorize("hasRole('ADMIN_EDIT')")
@@ -165,22 +127,19 @@ public class InvitationAdminController extends BaseAdminController implements Co
     @PreAuthorize("hasRole('ADMIN_EDIT')")
     @RequestMapping(value = "/invitationModal/addGuest", method = RequestMethod.POST)
     public String invitationModalAddGuest(@ModelAttribute Invitation invitation) {
-        if (invitation.getMaxGuests() != null) {
-            if (invitation.getGuestList().size() < invitation.getMaxGuests()) {
-                invitation.getGuestList().add(new Guest());
-            }
+        if (invitation.getMaxGuests() != null && invitation.getGuestList().size() < invitation.getMaxGuests()) {
+            invitation.getGuestList().add(new Guest());
         }
         return generateInvitationModalContentLocator(invitation.getId());
     }
 
     @PreAuthorize("hasRole('ADMIN_EDIT')")
     @RequestMapping(value = "/invitationModal/removeGuest", method = RequestMethod.POST)
-    public String invitationModalRemoveGuest(@ModelAttribute Invitation invitation) {
+    public String invitationModalRemoveGuest(@ModelAttribute Invitation invitation, @RequestParam() Integer removalIndex) {
         int guestSize = invitation.getGuestList().size();
-        if (guestSize > 0 && invitation.getRemovalIndex() != null) {
-            invitation.getGuestList().remove(invitation.getRemovalIndex().intValue());
+        if (guestSize > 0 && removalIndex != null) {
+            invitation.getGuestList().remove(removalIndex.intValue());
         }
-        invitation.setRemovalIndex(null);
         return generateInvitationModalContentLocator(invitation.getId());
     }
 
@@ -193,6 +152,54 @@ public class InvitationAdminController extends BaseAdminController implements Co
             return String.format(INVITATION_MODAL_CONTENT_FRAGMENT, UPDATE_INVITATION_MODAL_TITLE);
         }
         return String.format(INVITATION_MODAL_CONTENT_FRAGMENT, CREATE_INVITATION_MODAL_TITLE);
+    }
+
+    private Invitation createInvitation(Invitation invitation){
+        for (Guest guest : invitation.getGuestList()) {
+            guest.setInvitedPerson(true);
+            guest.setInvitation(invitation);
+        }
+        return invitation;
+    }
+
+    private void updateExistingGuests(List<Guest> pendingGuestList, List<Guest> existingGuestList){
+        Iterator<Guest> existingGuestListIterator = existingGuestList.iterator();
+        while(existingGuestListIterator.hasNext()){
+            Guest existingGuest = existingGuestListIterator.next();
+            List<Guest> filteredGuestList = pendingGuestList.stream().filter(pendingGuest -> existingGuest.getId().equals(pendingGuest.getId())).collect(Collectors.toList());
+            if (!filteredGuestList.isEmpty()) {
+                if (filteredGuestList.size() > 1) {
+                    throw new IllegalStateException("Too Many Items Found");
+                } else {
+                    Guest pendingGuest = filteredGuestList.get(0);
+                    existingGuest.setFirstName(pendingGuest.getFirstName());
+                    existingGuest.setLastName(pendingGuest.getLastName());
+                }
+            } else {
+                logger.info("Removing Guest");
+                existingGuest.setInvitation(null);
+                existingGuestListIterator.remove();
+            }
+        }
+    }
+
+    private void processUnsavedGuests(List<Guest> pendingGuestList, Invitation existingInvitation){
+        List<Guest> unsavedGuests = pendingGuestList.stream().filter(pendingGuest -> pendingGuest.getId() == null).collect(Collectors.toList());
+        if (!unsavedGuests.isEmpty()) {
+            unsavedGuests.stream().forEach(pendingGuest -> { pendingGuest.setInvitation(existingInvitation); pendingGuest.setInvitedPerson(true);});
+            existingInvitation.getGuestList().addAll(unsavedGuests);
+        }
+    }
+
+    private String saveInvitation(Invitation invitation){
+        try {
+            invitationRepository.save(invitation);
+            logger.info("Invitation Saved");
+            return String.format(MODAL_SUCCESS_FRAGMENT_TEMPLATE, INVITATION_FORM_TYPE);
+        } catch (Exception e) {
+            logger.error(e.getMessage(), e);
+            return String.format(MODAL_ERROR_FRAGMENT_TEMPLATE, INVITATION_FORM_TYPE);
+        }
     }
 
 }

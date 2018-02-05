@@ -1,5 +1,6 @@
 package net.ddns.buckeyeflash.controllers.admin;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.module.SimpleModule;
 import net.ddns.buckeyeflash.models.CommonConstants;
@@ -11,11 +12,12 @@ import net.ddns.buckeyeflash.models.modal.AjaxResponse;
 import net.ddns.buckeyeflash.repositories.FoodRepository;
 import net.ddns.buckeyeflash.repositories.GuestRepository;
 import net.ddns.buckeyeflash.serializers.GuestSerializer;
+import net.ddns.buckeyeflash.utilities.PageUtils;
+import net.ddns.buckeyeflash.validators.admin.GuestSaveValidator;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestWrapper;
@@ -32,6 +34,7 @@ import java.util.List;
 @RequestMapping(value = "/admin/guest")
 @SessionAttributes("guest")
 public class GuestAdminController extends BaseAdminController implements CommonConstants {
+    private static final String GUEST_MODAL_TYPE = "Guest";
     private static final String GUEST_ATTRIBUTE_NAME = "guest";
 
     private static final Logger logger = Logger.getLogger(GuestAdminController.class);
@@ -43,9 +46,12 @@ public class GuestAdminController extends BaseAdminController implements CommonC
     @Autowired
     private FoodRepository foodRepository;
 
+    @Autowired
+    private GuestSaveValidator guestSaveValidator;
+
     @PreAuthorize("hasAnyRole('ADMIN_EDIT','ADMIN_READ')")
     @RequestMapping(method = RequestMethod.GET)
-    public String guest(ModelMap modelMap,SecurityContextHolderAwareRequestWrapper securityContextHolderAwareRequestWrapper) {
+    public String guest(ModelMap modelMap, SecurityContextHolderAwareRequestWrapper securityContextHolderAwareRequestWrapper) {
         modelMap.put("canAdminEdit", securityContextHolderAwareRequestWrapper.isUserInRole("ADMIN_EDIT"));
         logger.info("Admin Guest Page Accessed");
         return "pages/admin/guest";
@@ -54,15 +60,14 @@ public class GuestAdminController extends BaseAdminController implements CommonC
     @PreAuthorize("hasAnyRole('ADMIN_EDIT','ADMIN_READ')")
     @RequestMapping(value = "/getGuestData", method = RequestMethod.POST)
     public @ResponseBody
-    String getGuestData(@RequestBody DatatableRequest request) throws Exception {
-        PageRequest pageRequest = new PageRequest((int) Math.floor(request.getStart() / request.getLength()), request.getLength());
+    String getGuestData(@RequestBody DatatableRequest request) throws JsonProcessingException {
         String searchParameter = request.getSearch().getValue().trim();
         String[] splitSearch = StringUtils.split(searchParameter, StringUtils.SPACE, 3);
         Page<Guest> guests;
         if (splitSearch.length > 1) {
-            guests = guestRepository.findByFirstNameStartingWithAndLastNameStartingWithOrFirstNameStartingWithAndLastNameStartingWith(splitSearch[0], splitSearch[1], splitSearch[1], splitSearch[0], pageRequest);
+            guests = guestRepository.findByFirstNameStartingWithAndLastNameStartingWithOrFirstNameStartingWithAndLastNameStartingWith(splitSearch[0], splitSearch[1], splitSearch[1], splitSearch[0], PageUtils.getPageRequest(request.getStart(), request.getLength()));
         } else {
-            guests = guestRepository.findByFirstNameStartingWithOrLastNameStartingWith(searchParameter, searchParameter, pageRequest);
+            guests = guestRepository.findByFirstNameStartingWithOrLastNameStartingWith(searchParameter, searchParameter, PageUtils.getPageRequest(request.getStart(), request.getLength()));
         }
 
         ObjectMapper objectMapper = new ObjectMapper();
@@ -83,7 +88,6 @@ public class GuestAdminController extends BaseAdminController implements CommonC
     public String openGuestnModal(String guestId, ModelMap modelMap) {
         modelMap.clear();
         List<Food> foodList = new ArrayList<>();
-        foodList.add(new Food());
         foodRepository.findAll().forEach(foodList::add);
         if (StringUtils.isNotBlank(guestId)) {
             Guest guest = guestRepository.findById(Integer.parseInt(guestId));
@@ -99,6 +103,7 @@ public class GuestAdminController extends BaseAdminController implements CommonC
     @PreAuthorize("hasRole('ADMIN_EDIT')")
     @RequestMapping(value = "/saveGuest", method = RequestMethod.POST)
     public String saveGuest(@Valid @ModelAttribute Guest guest, Errors errors) {
+        guestSaveValidator.validate(guest,errors);
         if (errors.hasErrors()) {
             return GUEST_MODAL_CONTENT_FRAGMENT;
         }
@@ -116,13 +121,13 @@ public class GuestAdminController extends BaseAdminController implements CommonC
             try {
                 guestRepository.save(storedGuest);
             } catch (Exception e) {
-                return String.format(MODAL_ERROR_FRAGMENT_TEMPLATE, "Guest");
+                return String.format(MODAL_ERROR_FRAGMENT_TEMPLATE, GUEST_MODAL_TYPE);
             }
         } else {
             logger.error("Guest Id Missing");
-            return String.format(MODAL_ERROR_FRAGMENT_TEMPLATE, "Guest");
+            return String.format(MODAL_ERROR_FRAGMENT_TEMPLATE, GUEST_MODAL_TYPE);
         }
-        return String.format(MODAL_SUCCESS_FRAGMENT_TEMPLATE, "Guest");
+        return String.format(MODAL_SUCCESS_FRAGMENT_TEMPLATE, GUEST_MODAL_TYPE);
     }
 
     @PreAuthorize("hasRole('ADMIN_EDIT')")

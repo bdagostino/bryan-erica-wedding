@@ -13,67 +13,43 @@
     </div>
     <div class="modal-body">
       <form id="guestModalForm" method="post" th:action="'javascript:submitGuestForm();'">
-        <div class="form-row">
-          <div class="col mb-3">
-            <label for="inputFirstName">First Name</label>
-            <div class="input-group">
-              <input id="inputFirstName" type="text" class="form-control" readonly="readonly"
-                     th:field="*{guest.firstName}"/>
-            </div>
-          </div>
+        
+        <h3 th:text="${guest.firstName +' ' + guest.lastName}">Guest Name</h3>
+        
+        <label for="attendanceRadioDiv">Attendance</label>
+        <div id="attendanceRadioDiv" class="custom-control custom-radio">
+          <input type="radio" class="custom-control-input" id="attendanceRadioYes" name="radio-stacked"
+                 th:field="${guest.attendance}" th:value="true"/>
+          <label class="custom-control-label" for="attendanceRadioYes">Yes</label>
         </div>
-        <div class="form-row">
-          <div class="col mb-3">
-            <label for="inputLastName">Last Name</label>
-            <div class="input-group">
-              <input id="inputLastName" type="text" class="form-control" readonly="readonly"
-                     th:field="*{guest.lastName}"/>
-            </div>
-          </div>
+        <div class="custom-control custom-radio">
+          <input type="radio" class="custom-control-input" id="attendanceRadioNo" name="radio-stacked"
+                 th:field="${guest.attendance}" th:value="false"/>
+          <label class="custom-control-label" for="attendanceRadioNo">No</label>
         </div>
-        <div class="form-row">
-          <div class="col mb-3">
-            <label for="attendanceRadioDiv">Attendance</label>
-            <div class="form-check" id="attendanceRadioDiv">
-              <label class="form-check-label" for="attendanceRadio1">
-                <input class="form-check-input" type="radio" id="attendanceRadio1"
-                       th:field="*{guest.attendance}" th:value="true"/>Yes</label>
-            </div>
-            <div class="form-check">
-              <label class="form-check-label" for="attendanceRadio2">
-                <input class="form-check-input" type="radio" id="attendanceRadio2"
-                       th:field="*{guest.attendance}" th:value="false"/>No</label>
-            </div>
-          </div>
+        
+        <label for="foodSelect" class="mt-3">Food</label>
+        <select class="custom-select custom-select-md" id="foodSelect" th:field="${guest.food.id}">
+          <option value="">No Food Selected</option>
+          <option th:each="food : ${foodList}" th:text="${food.type}" th:value="${food.id}"></option>
+        </select>
+        
+        <label for="dietaryConcernRadioDiv" class="mt-3">Dietary Concern</label>
+        <div id="dietaryConcernRadioDiv" class="custom-control custom-radio">
+          <input type="radio" class="custom-control-input" id="dietaryConcernRadioYes" name="radio-stacked"
+                 th:field="${guest.dietaryConcerns}" th:value="true"/>
+          <label class="custom-control-label" for="dietaryConcernRadioYes">Yes</label>
         </div>
-        <div class="form-group">
-          <label for="foodSelect">Food</label>
-          <select class="form-control" id="foodSelect" th:field="*{guest.food.id}">
-            <option th:each="food : ${foodList}" th:text="${food.type}" th:value="${food.id}"></option>
-          </select>
+        <div class="custom-control custom-radio">
+          <input type="radio" class="custom-control-input" id="dietaryConcernRadioNo" name="radio-stacked"
+                 th:field="${guest.dietaryConcerns}" th:value="false"/>
+          <label class="custom-control-label" for="dietaryConcernRadioNo">No</label>
         </div>
-        <div class="form-row">
-          <div class="col mb-3">
-            <label for="dietaryConcernRadioDiv">Dietary Concern</label>
-            <div class="form-check" id="dietaryConcernRadioDiv">
-              <label class="form-check-label" for="dietaryConcernRadio1">
-                <input class="form-check-input" type="radio" id="dietaryConcernRadio1"
-                       th:field="*{guest.dietaryConcerns}" th:value="true"/>Yes</label>
-            </div>
-            <div class="form-check">
-              <label class="form-check-label" for="dietaryConcernRadio2">
-                <input class="form-check-input" type="radio" id="dietaryConcernRadio2"
-                       th:field="*{guest.dietaryConcerns}" th:value="false"/>No</label>
-            </div>
-          </div>
-        </div>
-        <div class="form-row">
-          <div class="col mb-3">
-            <label for="inputDietaryComments">Dietary Comments</label>
-            <div class="input-group">
-              <input id="inputDietaryComments" type="text" class="form-control" th:field="*{guest.dietaryComments}"/>
-            </div>
-          </div>
+        
+        <label for="inputDietaryComments" class="mt-3">Dietary Comments</label>
+        <div class="input-group">
+          <input id="inputDietaryComments" type="text" class="form-control" th:field="${guest.dietaryComments}" th:errorclass="is-invalid"/>
+          <div th:errors="${guest.dietaryComments}" class="invalid-feedback"></div>
         </div>
       </form>
     </div>

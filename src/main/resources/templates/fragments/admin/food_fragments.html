@@ -22,7 +22,7 @@
         
         <label for="inputDescription" class="mt-3">Description</label>
         <div class="input-group">
-          <input id="inputDescription" type="text" class="form-control" th:field="*{food.description}"
+          <input id="inputDescription" type="text" class="form-control" th:field="${food.description}"
                  th:errorclass="is-invalid"/>
           <div th:errors="${food.description}" class="invalid-feedback"></div>
         </div>

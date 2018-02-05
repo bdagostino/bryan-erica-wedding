@@ -1,11 +1,13 @@
 package net.ddns.buckeyeflash.controllers.admin;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import net.ddns.buckeyeflash.models.CommonConstants;
 import net.ddns.buckeyeflash.models.Food;
 import net.ddns.buckeyeflash.models.datatable.DatatableRequest;
 import net.ddns.buckeyeflash.models.datatable.DatatableResponse;
 import net.ddns.buckeyeflash.repositories.FoodRepository;
+import net.ddns.buckeyeflash.utilities.PageUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -46,9 +48,8 @@ public class FoodAdminController extends BaseAdminController implements CommonCo
     @PreAuthorize("hasAnyRole('ADMIN_EDIT','ADMIN_READ')")
     @RequestMapping(value = "/getFoodData", method = RequestMethod.POST)
     public @ResponseBody
-    String getFoodData(@RequestBody DatatableRequest request) throws Exception {
-        PageRequest pageRequest = new PageRequest((int) Math.floor(request.getStart() / request.getLength()), request.getLength());
-        Page<Food> foods = foodRepository.findByTypeStartingWith(request.getSearch().getValue(), pageRequest);
+    String getFoodData(@RequestBody DatatableRequest request) throws JsonProcessingException {
+        Page<Food> foods = foodRepository.findByTypeStartingWith(request.getSearch().getValue(), PageUtils.getPageRequest(request.getStart(), request.getLength()));
         ObjectMapper objectMapper = new ObjectMapper();
         DatatableResponse datatableResponse = new DatatableResponse();
         datatableResponse.setDraw(request.getDraw());

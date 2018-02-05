@@ -13,27 +13,25 @@
     </div>
     <div class="modal-body">
       <form id="foodModalForm" method="post" th:action="'javascript:submitFoodForm();'">
-        <div class="form-row">
-          <div class="col mb-3">
-            <label for="inputFoodType">Food Type</label>
-            <div class="input-group">
-              <input id="inputFoodType" type="text" class="form-control" th:field="*{food.type}"/>
-            </div>
-          </div>
+        <label for="inputFoodType">Food Type</label>
+        <div class="input-group">
+          <input id="inputFoodType" type="text" class="form-control" th:field="${food.type}"
+                 th:errorclass="is-invalid"/>
+          <div th:errors="${food.type}" class="invalid-feedback"></div>
         </div>
-        <div class="form-row">
-          <div class="col mb-3">
-            <label for="inputDescription">Description</label>
-            <div class="input-group">
-              <input id="inputDescription" type="text" class="form-control" th:field="*{food.description}"/>
-            </div>
-          </div>
+        
+        <label for="inputDescription" class="mt-3">Description</label>
+        <div class="input-group">
+          <input id="inputDescription" type="text" class="form-control" th:field="*{food.description}"
+                 th:errorclass="is-invalid"/>
+          <div th:errors="${food.description}" class="invalid-feedback"></div>
         </div>
       </form>
     </div>
     <div class="modal-footer">
       <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-      <button id="foodModalSubmitButton" type="submit" class="btn btn-primary" form="foodModalForm">Save changes</button>
+      <button id="foodModalSubmitButton" type="submit" class="btn btn-primary" form="foodModalForm">Save changes
+      </button>
     </div>
   </div>
 </div>

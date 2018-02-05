@@ -26,6 +26,7 @@ import java.util.List;
 @SessionAttributes({"invitation", "foodList"})
 public class RsvpController {
     private static final Logger logger = Logger.getLogger(RsvpController.class);
+    private static final String RSVP_FORM_VIEW = "pages/rsvp/rsvp_form";
 
     @Autowired
     private InvitationRepository invitationRepository;
@@ -58,20 +59,20 @@ public class RsvpController {
         foodRepository.findAll().forEach(foodList::add);
         modelMap.addAttribute("foodList", foodList);
         modelMap.addAttribute("invitation", invitation);
-        return "pages/rsvp/rsvp_form";
+        return RSVP_FORM_VIEW;
 
     }
 
     @RequestMapping(value = "/submit", params = "action=addAdditionalGuest")
     public String addAdditionalGuest(@Valid @ModelAttribute Invitation invitation, Errors errors, ModelMap modelMap) {
         invitation.getGuestList().add(new Guest());
-        return "pages/rsvp/rsvp_form";
+        return RSVP_FORM_VIEW;
     }
 
     @RequestMapping(value = "/submit", params = "action=saveInvitationRsvp")
     public String saveInvitationRsvp(@Valid @ModelAttribute Invitation invitation, Errors errors, ModelMap modelMap) {
         rsvpValidator.validate(invitation, errors);
-        return "pages/rsvp/rsvp_form";
+        return RSVP_FORM_VIEW;
     }
 
 }

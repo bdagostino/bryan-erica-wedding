@@ -4,10 +4,7 @@ package net.ddns.buckeyeflash.serializers;
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.databind.SerializerProvider;
 import com.fasterxml.jackson.databind.ser.std.StdSerializer;
-import net.ddns.buckeyeflash.models.Food;
 import net.ddns.buckeyeflash.models.Guest;
-import org.apache.commons.lang3.BooleanUtils;
-import org.apache.commons.lang3.StringUtils;
 
 import java.io.IOException;
 

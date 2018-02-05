@@ -3,7 +3,6 @@ package net.ddns.buckeyeflash.controllers.admin;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.module.SimpleModule;
-import net.ddns.buckeyeflash.models.CommonConstants;
 import net.ddns.buckeyeflash.models.Food;
 import net.ddns.buckeyeflash.models.Guest;
 import net.ddns.buckeyeflash.models.datatable.DatatableRequest;
@@ -12,6 +11,7 @@ import net.ddns.buckeyeflash.models.modal.AjaxResponse;
 import net.ddns.buckeyeflash.repositories.FoodRepository;
 import net.ddns.buckeyeflash.repositories.GuestRepository;
 import net.ddns.buckeyeflash.serializers.GuestSerializer;
+import net.ddns.buckeyeflash.utilities.CommonConstants;
 import net.ddns.buckeyeflash.utilities.PageUtils;
 import net.ddns.buckeyeflash.validators.admin.GuestSaveValidator;
 import org.apache.commons.lang3.StringUtils;
@@ -33,7 +33,7 @@ import java.util.List;
 @Controller
 @RequestMapping(value = "/admin/guest")
 @SessionAttributes({"guest","canAdminEdit"})
-public class GuestAdminController extends BaseAdminController implements CommonConstants {
+public class GuestAdminController extends BaseAdminController {
     private static final String GUEST_MODAL_TYPE = "Guest";
     private static final String GUEST_ATTRIBUTE_NAME = "guest";
 
@@ -121,13 +121,13 @@ public class GuestAdminController extends BaseAdminController implements CommonC
             try {
                 guestRepository.save(storedGuest);
             } catch (Exception e) {
-                return String.format(MODAL_ERROR_FRAGMENT_TEMPLATE, GUEST_MODAL_TYPE);
+                return String.format(CommonConstants.MODAL_ERROR_FRAGMENT_TEMPLATE, GUEST_MODAL_TYPE);
             }
         } else {
             logger.error("Guest Id Missing");
-            return String.format(MODAL_ERROR_FRAGMENT_TEMPLATE, GUEST_MODAL_TYPE);
+            return String.format(CommonConstants.MODAL_ERROR_FRAGMENT_TEMPLATE, GUEST_MODAL_TYPE);
         }
-        return String.format(MODAL_SUCCESS_FRAGMENT_TEMPLATE, GUEST_MODAL_TYPE);
+        return String.format(CommonConstants.MODAL_SUCCESS_FRAGMENT_TEMPLATE, GUEST_MODAL_TYPE);
     }
 
     @PreAuthorize("hasRole('ADMIN_EDIT')")

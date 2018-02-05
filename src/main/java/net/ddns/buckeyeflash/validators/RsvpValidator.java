@@ -47,10 +47,8 @@ public class RsvpValidator implements Validator {
     }
 
     private void validateDietartComments(Guest guest, int index, Errors errors) {
-        if (BooleanUtils.isTrue(guest.getDietaryConcerns())) {
-            if (StringUtils.isBlank(guest.getDietaryComments())) {
-                errors.rejectValue("guestList[" + index + "].dietaryComments", "D", "Please provide more information regarding your dietary concerns");
-            }
+        if (BooleanUtils.isTrue(guest.getDietaryConcerns()) && StringUtils.isBlank(guest.getDietaryComments())) {
+            errors.rejectValue("guestList[" + index + "].dietaryComments", "D", "Please provide more information regarding your dietary concerns");
         }
     }
 }

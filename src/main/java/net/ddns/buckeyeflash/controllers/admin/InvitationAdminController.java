@@ -3,13 +3,13 @@ package net.ddns.buckeyeflash.controllers.admin;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.module.SimpleModule;
-import net.ddns.buckeyeflash.models.CommonConstants;
 import net.ddns.buckeyeflash.models.Guest;
 import net.ddns.buckeyeflash.models.Invitation;
 import net.ddns.buckeyeflash.models.datatable.DatatableRequest;
 import net.ddns.buckeyeflash.models.datatable.DatatableResponse;
 import net.ddns.buckeyeflash.repositories.InvitationRepository;
 import net.ddns.buckeyeflash.serializers.InvitationSerializer;
+import net.ddns.buckeyeflash.utilities.CommonConstants;
 import net.ddns.buckeyeflash.utilities.InvitationUtils;
 import net.ddns.buckeyeflash.utilities.PageUtils;
 import net.ddns.buckeyeflash.validators.InvitationValidator;
@@ -32,7 +32,7 @@ import java.util.stream.Collectors;
 @Controller
 @RequestMapping(value = "admin/invitation")
 @SessionAttributes({"invitation","canAdminEdit"})
-public class InvitationAdminController extends BaseAdminController implements CommonConstants {
+public class InvitationAdminController extends BaseAdminController {
     private static final Logger logger = Logger.getLogger(InvitationAdminController.class);
     private static final String INVITATION_FORM_TYPE = "Invitation";
     private static final String INVITATION_ATTRIBUTE_NAME = "invitation";
@@ -100,7 +100,7 @@ public class InvitationAdminController extends BaseAdminController implements Co
 
             if (storableInviation.getGuestList().size() != invitation.getGuestList().size()) {
                 logger.error("List Sizes Do Not Match...");
-                return String.format(MODAL_ERROR_FRAGMENT_TEMPLATE, INVITATION_FORM_TYPE);
+                return String.format(CommonConstants.MODAL_ERROR_FRAGMENT_TEMPLATE, INVITATION_FORM_TYPE);
             }
         } else {
             //Create Invitation
@@ -195,10 +195,10 @@ public class InvitationAdminController extends BaseAdminController implements Co
         try {
             invitationRepository.save(invitation);
             logger.info("Invitation Saved");
-            return String.format(MODAL_SUCCESS_FRAGMENT_TEMPLATE, INVITATION_FORM_TYPE);
+            return String.format(CommonConstants.MODAL_SUCCESS_FRAGMENT_TEMPLATE, INVITATION_FORM_TYPE);
         } catch (Exception e) {
             logger.error(e.getMessage(), e);
-            return String.format(MODAL_ERROR_FRAGMENT_TEMPLATE, INVITATION_FORM_TYPE);
+            return String.format(CommonConstants.MODAL_ERROR_FRAGMENT_TEMPLATE, INVITATION_FORM_TYPE);
         }
     }
 

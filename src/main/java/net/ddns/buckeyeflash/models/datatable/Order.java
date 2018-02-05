@@ -5,7 +5,7 @@ import java.io.Serializable;
 public class Order implements Serializable {
     private int column;
     private String dir;
-    private final static long serialVersionUID = -6570706329689737596L;
+    private static final long serialVersionUID = -6570706329689737596L;
 
     public int getColumn() {
         return column;

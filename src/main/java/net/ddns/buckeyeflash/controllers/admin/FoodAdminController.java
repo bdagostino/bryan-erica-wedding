@@ -2,11 +2,11 @@ package net.ddns.buckeyeflash.controllers.admin;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import net.ddns.buckeyeflash.models.CommonConstants;
 import net.ddns.buckeyeflash.models.Food;
 import net.ddns.buckeyeflash.models.datatable.DatatableRequest;
 import net.ddns.buckeyeflash.models.datatable.DatatableResponse;
 import net.ddns.buckeyeflash.repositories.FoodRepository;
+import net.ddns.buckeyeflash.utilities.CommonConstants;
 import net.ddns.buckeyeflash.utilities.PageUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
@@ -24,7 +24,7 @@ import javax.validation.Valid;
 @Controller
 @RequestMapping(value = "/admin/food")
 @SessionAttributes("food")
-public class FoodAdminController extends BaseAdminController implements CommonConstants {
+public class FoodAdminController extends BaseAdminController {
 
     private static final Logger logger = Logger.getLogger(FoodAdminController.class);
 
@@ -86,7 +86,7 @@ public class FoodAdminController extends BaseAdminController implements CommonCo
                 foodRepository.save(storedFood);
             } catch (Exception e) {
                 logger.error(e.getMessage(), e);
-                return String.format(MODAL_ERROR_FRAGMENT_TEMPLATE, "Food");
+                return String.format(CommonConstants.MODAL_ERROR_FRAGMENT_TEMPLATE, "Food");
             }
         } else {
             //Add Food
@@ -94,10 +94,10 @@ public class FoodAdminController extends BaseAdminController implements CommonCo
                 foodRepository.save(food);
             } catch (Exception e) {
                 logger.error(e.getMessage(), e);
-                return String.format(MODAL_ERROR_FRAGMENT_TEMPLATE, "Food");
+                return String.format(CommonConstants.MODAL_ERROR_FRAGMENT_TEMPLATE, "Food");
             }
         }
-        return String.format(MODAL_SUCCESS_FRAGMENT_TEMPLATE, "Food");
+        return String.format(CommonConstants.MODAL_SUCCESS_FRAGMENT_TEMPLATE, "Food");
     }
 
     @PreAuthorize("hasRole('ADMIN_EDIT')")
@@ -109,13 +109,13 @@ public class FoodAdminController extends BaseAdminController implements CommonCo
                 foodRepository.delete(storedFood);
             } catch (Exception e) {
                 logger.error(e.getMessage(), e);
-                return String.format(MODAL_ERROR_FRAGMENT_TEMPLATE, "Food");
+                return String.format(CommonConstants.MODAL_ERROR_FRAGMENT_TEMPLATE, "Food");
             }
         } else {
             logger.error("Food Id missing cannot delete");
-            return String.format(MODAL_ERROR_FRAGMENT_TEMPLATE, "Food");
+            return String.format(CommonConstants.MODAL_ERROR_FRAGMENT_TEMPLATE, "Food");
         }
-        return String.format(MODAL_SUCCESS_FRAGMENT_TEMPLATE, "Food");
+        return String.format(CommonConstants.MODAL_SUCCESS_FRAGMENT_TEMPLATE, "Food");
     }
 
     private String generateFoodModalContentLocator(Integer foodId) {

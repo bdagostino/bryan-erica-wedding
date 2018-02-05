@@ -6,6 +6,9 @@ import org.apache.commons.lang3.RandomStringUtils;
 
 public class InvitationUtils {
 
+    private InvitationUtils(){
+    }
+
     public static synchronized String generateInvitationCode(InvitationRepository invitationRepository) {
 
         String invitationCode;

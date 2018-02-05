@@ -6,6 +6,9 @@ import org.apache.commons.lang3.StringUtils;
 
 public class SerializerUtils {
 
+    private SerializerUtils(){
+    }
+
     public static String convertBoolean(Boolean value) {
         if (BooleanUtils.isTrue(value)) {
             return "Yes";

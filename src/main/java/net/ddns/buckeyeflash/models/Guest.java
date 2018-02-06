@@ -8,8 +8,8 @@ import javax.validation.constraints.Size;
 @Table(name = "guest")
 public class Guest {
 
-    private static final int FIRST_NAME_LENGTH = 50;
-    private static final int LAST_NAME_LENGTH = 50;
+    private static final int FIRST_NAME_LENGTH = 40;
+    private static final int LAST_NAME_LENGTH = 40;
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)

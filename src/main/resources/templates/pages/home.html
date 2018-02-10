@@ -1,86 +1,69 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
+  <link th:href="@{/css/home/homepage.css}" rel="stylesheet"/>
   <div th:replace="fragments/header"/>
 </head>
 
-<body style="min-height: 100vh; background:#0C2449">
-<nav th:replace="fragments/navbar"></nav>
-<div class="container-fluid" style="background-image: url('/images/1000625.png'); background-repeat: repeat-x;">
-  <div class="row">
-    <div class="col-2"></div>
-    <div class="col-8" style="background-color:#D3D3D3;min-height: 100vh;border-radius: 25px; margin: 5em auto">
-      <h1>This is a temp home page</h1>
-      <h1>This is a temp home page</h1>
-      <h1>This is a temp home page</h1>
-      <p>From Wikipedia, the free encyclopedia
-        "Formula 1" redirects here. For the video game, see Formula 1 (video game).
-        "F1" redirects here. For other uses, see F1 (disambiguation) and Formula One (disambiguation).
-        "FIA World Championship" redirects here. For other world championships administered by the FIA, see List of FIA
-        events.
-        Formula One
-        F1 logo.svg
-        Category Single seater
-        Country International
-        Inaugural season 1950[1]
-        Drivers 20
-        Constructors 10
-        Engine suppliers Ferrari · Mercedes · Renault · Honda
-        Tyre suppliers Pirelli
-        Drivers' champion United Kingdom Lewis Hamilton
-        (Mercedes)
-        Constructors' champion Germany Mercedes
-        Official website www.formula1.com
-        Motorsport current event.svg Current season
-        Formula One
-        Current season[show]
-        Related articles[show]
-        Lists[show]
-        Records[show]
-        Organisations[show]
-        v t e
-        Formula One (also Formula 1 or F1 and officially the FIA Formula One World Championship) is the highest class of
-        single-seat auto racing that is sanctioned by the Fédération Internationale de l'Automobile (FIA). The FIA
-        Formula One World Championship has been one of the premier forms of racing around the world since its inaugural
-        season in 1950. The "formula", designated in the name, refers to a set of rules, to which all participants' cars
-        must conform.[2] A Formula One season consists of a series of races, known as Grands Prix (from French, meaning
-        "grand prizes"), which are held worldwide on purpose-built circuits and public roads.
-        
-        The results of each race are evaluated using a points system to determine two annual World Championships, one
-        for drivers, one for constructors. The racing drivers are required to be holders of valid Super Licences, the
-        highest class of racing licence issued by the FIA.[3] The races are required to be held on tracks graded 1
-        (formerly A), the highest grade a track can receive by the FIA.[3] Most events are held in rural locations on
-        purpose-built tracks, but there are several events in city centres throughout the world, with the Monaco Grand
-        Prix being the most well-known.
-        
-        Formula One cars are the fastest road course racing cars in the world, owing to very high cornering speeds
-        achieved through the generation of large amounts of aerodynamic downforce. Formula One cars race at speeds of up
-        to approximately 375 km/h (233 mph) with engines currently limited in performance to a maximum of 15,000 rpm.
-        The cars are capable of lateral acceleration in excess of six g-forces in corners. The cars are very dependent
-        on electronics—although traction control and other driving aids have been banned since 2008—and also on
-        aerodynamics, suspension, and tyres. The formula has radically evolved and changed through the history of the
-        sport.
-        
-        While Europe is the sport's traditional base, and hosts about half of each year's races, the sport's scope has
-        expanded significantly and an increasing number of Grands Prix are held on other continents. Formula One had a
-        total global television audience of 425 million people during the course of the 2014 season. Grand Prix racing
-        began in 1906 and became the most popular type internationally in the second half of the twentieth century. The
-        Formula One Group is the legal holder of the commercial rights.[4]
-        
-        With the cost of designing and building mid-tier cars being of the order of $120 million,[5] Formula One's
-        economic effect and creation of jobs are significant, and its financial and political battles are widely
-        reported. Its high profile and popularity have created a major merchandising environment, which has resulted in
-        large investments from sponsors and budgets in the hundreds of millions for the constructors. Since 2000 the
-        sport's spiralling expenditures and the distribution of prize money favouring established top teams have forced
-        complaints from smaller teams and led several teams to bankruptcy.
-        
-        On 8 September 2016, it was announced that Liberty Media had agreed to buy Delta Topco, the company that
-        controls Formula One, from private equity firm CVC Capital Partners for $4.4 billion in cash, stock and
-        convertible debt.[6] On 23 January 2017, it was confirmed that Liberty Media had completed its $8 billion
-        acquisition of Delta Topco.[7]</p>
+<body>
+<header>
+  <nav th:replace="fragments/navbar"></nav>
+</header>
+<main>
+  <div class="container">
+    <div class="row">
+      <div class="col-xs-1 col-sm-2 col-md-2 col-lg-3"></div>
+      <div class="col-xs-10 col-sm-8 col-md-8 col-lg-6" style="text-align: center;  font-family: cursive;">
+        <h1 style="font-size: 3rem">Bryan and Erica</h1>
+        <p style="font-size: 2rem">Maybe put this in some fancy font or some fun styling</p>
+      </div>
+      <div class="col-xs-1 col-sm-8 col-md-4 col-lg-3">
+      </div>
     </div>
-    <div class="col-2"></div>
+    <div class="row">
+      <div class="col-xs-1 col-sm-2 col-md-2 col-lg-3"></div>
+      <div class="col-xs-10 col-sm-8 col-md-8 col-lg-6">
+        <div id="myCarousel" class="carousel slide mx-auto d-block" data-ride="carousel">
+          <ol class="carousel-indicators">
+            <li data-target="#myCarousel" data-slide-to="0" class="active"></li>
+            <li data-target="#myCarousel" data-slide-to="1"></li>
+            <li data-target="#myCarousel" data-slide-to="2"></li>
+          </ol>
+          <div class="carousel-inner">
+            <div class="carousel-item active">
+              <img class="first-slide mx-auto d-block" th:src="@{images/home/IMG_7329.jpeg}" alt="First slide"/>
+            </div>
+            <div class="carousel-item">
+              <img class="second-slide mx-auto d-block" th:src="@{images/home/P1000238.jpg}" alt="Second slide"/>
+            </div>
+            <div class="carousel-item">
+              <img class="third-slide mx-auto d-block" th:src="@{images/home/P1010144.jpg}" alt="Third slide"/>
+            </div>
+            <a class="carousel-control-prev" href="#myCarousel" role="button" data-slide="prev">
+              <i class="fa fa-chevron-left control-arrow" aria-hidden="true"></i>
+              <!--<span class="carousel-control-prev-icon" aria-hidden="true"></span>-->
+              <!--<span class="sr-only">Previous</span>-->
+            </a>
+            <a class="carousel-control-next" href="#myCarousel" role="button" data-slide="next">
+              <i class="fa fa-chevron-right control-arrow" aria-hidden="true"></i>
+              <!--<span class="carousel-control-next-icon" aria-hidden="true"></span>-->
+              <!--<span class="sr-only">Next</span>-->
+            </a>
+          </div>
+        </div>
+      </div>
+      <div class="col-xs-1 col-sm-2 col-md-2 col-lg-3"></div>
+    </div>
+    <div class="row" style="text-align: center;">
+      <div class="col-xs-1 col-sm-2 col-md-2 col-lg-3"></div>
+      <div class="col-xs-10 col-sm-8 col-md-8 col-lg-6">
+        <h4>Held in Sept 2019 at Some Location</h4>
+        <p th:text="${remainingDays}+' days remaining'">days remaining</p>
+      </div>
+      <div class="col-xs-1 col-sm-2 col-md-2 col-lg-3"></div>
+    </div>
   </div>
-</div>
+
+</main>
 </body>
 </html>

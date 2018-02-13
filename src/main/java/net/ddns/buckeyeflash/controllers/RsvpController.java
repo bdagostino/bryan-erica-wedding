@@ -47,13 +47,14 @@ public class RsvpController {
     @RequestMapping(value = "/search")
     public String test(@Valid @ModelAttribute RsvpSearch rsvpSearch, Errors errors, ModelMap modelMap) {
         if (errors.hasErrors()) {
+            modelMap.addAttribute("errorMessage", "No invitation found for code " + rsvpSearch.getInvitationCode() + ".");
             return "pages/rsvp/rsvp_search";
         }
         modelMap.clear();
         Invitation invitation = invitationRepository.findByInvitationCode(rsvpSearch.getInvitationCode());
         if (invitation == null) {
             modelMap.addAttribute("errorMessage", "No invitation found for code " + rsvpSearch.getInvitationCode() + ".");
-            return "pages/rsvp/rsvp_error";
+            return "pages/rsvp/rsvp_search";
         }
         List<Food> foodList = new ArrayList<>();
         foodRepository.findAll().forEach(foodList::add);

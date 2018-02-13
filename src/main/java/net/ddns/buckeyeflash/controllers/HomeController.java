@@ -16,7 +16,7 @@ public class HomeController {
 
     private static final Logger logger = Logger.getLogger(HomeController.class);
 
-    private static final LocalDate WEDDING_DAY = LocalDate.of(2019,9,15);
+    private static final LocalDate WEDDING_DAY = LocalDate.of(2019,9,14);
 
     @RequestMapping(value = "/", method = RequestMethod.GET)
     public String home(ModelMap modelMap) {

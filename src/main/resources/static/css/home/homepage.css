@@ -1,22 +1,11 @@
-@import "/css/navbar.css";
-
-html, .container{
-    color: white;
-    min-width: 100%;
-    background-color: #1b3e5e;
-    background-image: url(/images/asfalt-light.png);
-}
-
-
+@import "/css/global.css";
 
 /* Carousel */
 .carousel {
-    margin-bottom: 4rem;
-    /*width: 75%;*/
+    margin-bottom: 2rem;
 }
 
 .carousel-item > img {
-    /*height: 38rem;*/
     height: auto;
     width: 90%;
     border-style: solid;
@@ -28,11 +17,26 @@ html, .container{
     color: black;
 }
 
+#titleDiv{
+    text-align: center;
+    font-family: 'Niconne', cursive;
+}
+
+#titleDiv > h1 {
+    font-size: 6rem;
+}
+
+#titleDiv > p {
+    font-size: 3rem;
+}
+
 /* RESPONSIVE CSS
 -------------------------------------------------- */
 
-@media (min-width: 0px) {
-
+@media (min-width: 1200px) {
+    .carousel-item > img {
+        border-width: 3rem;
+    }
 }
 
 @media (min-width: 40rem) {

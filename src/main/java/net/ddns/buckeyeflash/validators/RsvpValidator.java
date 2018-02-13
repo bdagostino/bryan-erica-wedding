@@ -21,10 +21,24 @@ public class RsvpValidator implements Validator {
         Invitation invitation = (Invitation) obj;
         for (int i = 0; i < invitation.getGuestList().size(); i++) {
             Guest guest = invitation.getGuestList().get(i);
+            validateFirstName(guest, i, errors);
+            validateLastName(guest, i, errors);
             validateAttendance(guest, i, errors);
             validateFood(guest, i, errors);
             validateDietaryConcerns(guest, i, errors);
             validateDietartComments(guest, i, errors);
+        }
+    }
+
+    private void validateFirstName(Guest guest, int index, Errors errors) {
+        if (StringUtils.isBlank(guest.getFirstName())) {
+            errors.rejectValue("guestList[" + index + "].firstName", "A", "Please provide guests first name");
+        }
+    }
+
+    private void validateLastName(Guest guest, int index, Errors errors) {
+        if (StringUtils.isBlank(guest.getLastName())) {
+            errors.rejectValue("guestList[" + index + "].lastName", "A", "Please provide guests last name");
         }
     }
 

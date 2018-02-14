@@ -24,9 +24,11 @@ public class RsvpValidator implements Validator {
             validateFirstName(guest, i, errors);
             validateLastName(guest, i, errors);
             validateAttendance(guest, i, errors);
-            validateFood(guest, i, errors);
-            validateDietaryConcerns(guest, i, errors);
-            validateDietartComments(guest, i, errors);
+            if(BooleanUtils.isTrue(guest.getAttendance())) {
+                validateFood(guest, i, errors);
+                validateDietaryConcerns(guest, i, errors);
+                validateDietartComments(guest, i, errors);
+            }
         }
     }
 

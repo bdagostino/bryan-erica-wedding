@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8"/>
+  <title>Title</title>
+</head>
+<body>
+
+<form id="rsvpForm" method="post" th:action="@{/rsvp/saveRsvp}" style="margin-top: 5em" th:fragment="rsvpForm">
+  
+  <h2>Guest List</h2>
+  <th:block th:with="invitedGuestIndicies=${invitation.getInvitedGuestIndicies()}">
+    <th:block th:each="guestIndex,rowStat : ${invitedGuestIndicies}">
+      <div class="row" th:if="(${rowStat.index}%2)==0">
+        <div class="col" th:if="${rowStat.index} lt ${invitedGuestIndicies.size()}">
+          <div class="card" style="color: black">
+            <h5 class="card-header" th:text="${invitation.guestList[__${invitedGuestIndicies[rowStat.index]}__].firstName}+' '+${invitation.guestList[__${invitedGuestIndicies[rowStat.index]}__].lastName}">Guest Name</h5>
+            <div class="card-body">
+              <div th:replace="fragments/rsvp/rsvp_form_content_fragment :: commonRsvpForm(${invitedGuestIndicies[rowStat.index]})"></div>
+            </div>
+          </div>
+        </div>
+        <div class="col" th:if="${rowStat.index+1} lt ${invitedGuestIndicies.size()}">
+          <div class="card" style="color: black">
+            <h5 class="card-header" th:text="${invitation.guestList[__${invitedGuestIndicies[rowStat.index+1]}__].firstName}+' '+${invitation.guestList[__${invitedGuestIndicies[rowStat.index+1]}__].lastName}">Guest Name</h5>
+            <div class="card-body">
+              <div th:replace="fragments/rsvp/rsvp_form_content_fragment :: commonRsvpForm(${invitedGuestIndicies[rowStat.index+1]})"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </th:block>
+  </th:block>
+  
+  <div style="margin-top: 5em">
+    <h4>Additional Guests</h4>
+    
+    <th:block th:with="additionalGuestIndicies=${invitation.getAdditionalGuestIndicies()}">
+      <th:block th:each="guestIndex,rowStat : ${additionalGuestIndicies}">
+        <div class="row" th:if="(${rowStat.index}%2)==0">
+          <div class="col" th:if="${rowStat.index} lt ${additionalGuestIndicies.size()}">
+            <div class="card" style="color: black">
+              <div class="card-header" >
+                <h5 th:text="'Guest '+${rowStat.index+1}">Guest Name</h5>
+                <button type="button" class="btn btn-light btn-sm" th:onclick="'javascript:removeAdditionalGuest('+${additionalGuestIndicies[rowStat.index]}+');'">
+                  <i class="fa fa-times" aria-hidden="true"></i>
+                </button>
+              </div>
+              <div class="card-body">
+                <label th:for="additionalFirstName+${additionalGuestIndicies[rowStat.index]}">First Name</label>
+                <input th:id="additionalFirstName+${additionalGuestIndicies[rowStat.index]}" type="text" class="form-control" th:field="${invitation.guestList[__${additionalGuestIndicies[rowStat.index]}__].firstName}" th:errorclass="is-invalid"/>
+                <div th:errors="${invitation.guestList[__${additionalGuestIndicies[rowStat.index]}__].firstName}" class="invalid-feedback"></div>
+                <label th:for="additionalLastName+${additionalGuestIndicies[rowStat.index]}">Last Name</label>
+                <input th:id="additionalLastName+${additionalGuestIndicies[rowStat.index]}" type="text" class="form-control" th:field="${invitation.guestList[__${additionalGuestIndicies[rowStat.index]}__].lastName}" th:errorclass="is-invalid"/>
+                <div th:errors="${invitation.guestList[__${additionalGuestIndicies[rowStat.index]}__].lastName}" class="invalid-feedback"></div>
+                <div th:replace="fragments/rsvp/rsvp_form_content_fragment :: commonRsvpForm(${additionalGuestIndicies[rowStat.index]})"></div>
+              </div>
+            </div>
+          </div>
+          <div class="col" th:if="${rowStat.index+1} lt ${additionalGuestIndicies.size()}">
+            <div class="card" style="color: black">
+              <div class="card-header">
+              <h5 th:text="'Guest '+${rowStat.index+2}">Guest Name</h5>
+                <button type="button" class="btn btn-light btn-sm" th:onclick="'javascript:removeAdditionalGuest('+${additionalGuestIndicies[rowStat.index+1]}+');'">
+                  <i class="fa fa-times" aria-hidden="true"></i>
+                </button>
+              </div>
+              <div class="card-body">
+                <label th:for="additionalFirstName+${additionalGuestIndicies[rowStat.index+1]}">First Name</label>
+                <input th:id="additionalFirstName+${additionalGuestIndicies[rowStat.index+1]}" type="text" class="form-control" th:field="${invitation.guestList[__${additionalGuestIndicies[rowStat.index+1]}__].firstName}" th:errorclass="is-invalid"/>
+                <div th:errors="${invitation.guestList[__${additionalGuestIndicies[rowStat.index+1]}__].firstName}" class="invalid-feedback"></div>
+                <label th:for="additionalLastName+${additionalGuestIndicies[rowStat.index+1]}">Last Name</label>
+                <input th:id="additionalLastName+${additionalGuestIndicies[rowStat.index+1]}" type="text" class="form-control" th:field="${invitation.guestList[__${additionalGuestIndicies[rowStat.index+1]}__].lastName}" th:errorclass="is-invalid"/>
+                <div th:errors="${invitation.guestList[__${additionalGuestIndicies[rowStat.index+1]}__].lastName}" class="invalid-feedback"></div>
+                <div th:replace="fragments/rsvp/rsvp_form_content_fragment :: commonRsvpForm(${additionalGuestIndicies[rowStat.index+1]})"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </th:block>
+    </th:block>
+  </div>
+</form>
+
+</body>
+</html>

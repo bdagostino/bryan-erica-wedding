@@ -6,16 +6,15 @@ import net.ddns.buckeyeflash.models.Invitation;
 import net.ddns.buckeyeflash.models.RsvpSearch;
 import net.ddns.buckeyeflash.repositories.FoodRepository;
 import net.ddns.buckeyeflash.repositories.InvitationRepository;
+import net.ddns.buckeyeflash.utilities.InvitationUtils;
 import net.ddns.buckeyeflash.validators.RsvpValidator;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
+import org.springframework.util.CollectionUtils;
 import org.springframework.validation.Errors;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.SessionAttributes;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.ArrayList;
@@ -64,16 +63,33 @@ public class RsvpController {
 
     }
 
-    @RequestMapping(value = "/submit", params = "action=addAdditionalGuest")
-    public String addAdditionalGuest(@Valid @ModelAttribute Invitation invitation, Errors errors, ModelMap modelMap) {
-        invitation.getGuestList().add(new Guest());
+    @RequestMapping(value = "/saveRsvp")
+    public String saveInvitationRsvp(@Valid @ModelAttribute Invitation invitation, Errors errors, ModelMap modelMap) {
+        rsvpValidator.validate(invitation, errors);
+        if(errors.hasFieldErrors()){
+            return RSVP_FORM_VIEW;
+        }
+        boolean isSaved = InvitationUtils.saveInvitation(invitationRepository,foodRepository,invitation);
+        if(isSaved){
+            return "redirect:/";
+        }
         return RSVP_FORM_VIEW;
     }
 
-    @RequestMapping(value = "/submit", params = "action=saveInvitationRsvp")
-    public String saveInvitationRsvp(@Valid @ModelAttribute Invitation invitation, Errors errors, ModelMap modelMap) {
-        rsvpValidator.validate(invitation, errors);
-        return RSVP_FORM_VIEW;
+    @RequestMapping(value = "/addAdditionalGuest", method = RequestMethod.POST)
+    public String addAdditionalGuest(@ModelAttribute Invitation invitation){
+        if (invitation.getMaxGuests() != null && invitation.getGuestList().size() < invitation.getMaxGuests()) {
+            invitation.getGuestList().add(new Guest());
+        }
+        return "fragments/rsvp/rsvp_form_fragment :: rsvpForm";
+    }
+
+    @RequestMapping(value = "/removeAdditionalGuest", method = RequestMethod.POST)
+    public String removeAdditionalGuest(@ModelAttribute Invitation invitation, @RequestParam() Integer removalIndex){
+        if(!CollectionUtils.isEmpty(invitation.getGuestList()) && removalIndex != null){
+            invitation.getGuestList().remove(removalIndex.intValue());
+        }
+        return "fragments/rsvp/rsvp_form_fragment :: rsvpForm";
     }
 
 }

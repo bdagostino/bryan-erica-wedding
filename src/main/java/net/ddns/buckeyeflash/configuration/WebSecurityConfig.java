@@ -16,8 +16,9 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-        auth.inMemoryAuthentication().withUser("Bryan").password("secret").roles("ADMIN_EDIT")
-                .and().withUser("Erica").password("secret").roles("ADMIN_READ");
+        auth.inMemoryAuthentication().withUser("Bryan").password("{noop}secret").roles("ADMIN_EDIT")
+                .and().withUser("Erica").password("{noop}secret").roles("ADMIN_READ");
+
     }
 
     @Override
@@ -32,5 +33,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .and().httpBasic()
                 .and().logout().invalidateHttpSession(true).deleteCookies("JSESSIONID")
                 .and().sessionManagement().maximumSessions(1).expiredUrl("/");
+
+//        http.requestMatcher(EndpointRequest.toAnyEndpoint()).authorizeRequests()
+//                .anyRequest().permitAll();
     }
 }

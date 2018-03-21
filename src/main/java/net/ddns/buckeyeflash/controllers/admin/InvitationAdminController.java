@@ -7,7 +7,6 @@ import net.ddns.buckeyeflash.models.Guest;
 import net.ddns.buckeyeflash.models.Invitation;
 import net.ddns.buckeyeflash.models.datatable.DatatableRequest;
 import net.ddns.buckeyeflash.models.datatable.DatatableResponse;
-import net.ddns.buckeyeflash.repositories.FoodRepository;
 import net.ddns.buckeyeflash.repositories.InvitationRepository;
 import net.ddns.buckeyeflash.serializers.InvitationSerializer;
 import net.ddns.buckeyeflash.utilities.CommonConstants;
@@ -15,8 +14,8 @@ import net.ddns.buckeyeflash.utilities.InvitationUtils;
 import net.ddns.buckeyeflash.utilities.PageUtils;
 import net.ddns.buckeyeflash.validators.InvitationValidator;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.log4j.Logger;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.data.domain.Page;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestWrapper;
@@ -26,29 +25,26 @@ import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.util.Iterator;
-import java.util.List;
-import java.util.stream.Collectors;
 
 @Controller
 @RequestMapping(value = "admin/invitation")
 @SessionAttributes({"invitation", "canAdminEdit"})
 public class InvitationAdminController extends BaseAdminController {
-    private static final Logger logger = Logger.getLogger(InvitationAdminController.class);
+    private static final Logger logger = LogManager.getLogger(InvitationAdminController.class);
     private static final String INVITATION_FORM_TYPE = "Invitation";
     private static final String INVITATION_ATTRIBUTE_NAME = "invitation";
     private static final String CREATE_INVITATION_MODAL_TITLE = "Create Invitation";
     private static final String UPDATE_INVITATION_MODAL_TITLE = "Update Invitation";
     private static final String INVITATION_MODAL_CONTENT_FRAGMENT = "fragments/admin/invitation_fragments :: invitationModalContent(title='%s')";
 
-    @Autowired
-    private InvitationRepository invitationRepository;
+    private final InvitationRepository invitationRepository;
 
-    @Autowired
-    private InvitationValidator invitationValidator;
+    private final InvitationValidator invitationValidator;
 
-    @Autowired
-    private FoodRepository foodRepository;
+    public InvitationAdminController(InvitationRepository invitationRepository, InvitationValidator invitationValidator) {
+        this.invitationRepository = invitationRepository;
+        this.invitationValidator = invitationValidator;
+    }
 
     @PreAuthorize("hasAnyRole('ADMIN_EDIT','ADMIN_READ')")
     @RequestMapping(method = RequestMethod.GET)
@@ -75,7 +71,7 @@ public class InvitationAdminController extends BaseAdminController {
         SimpleModule simpleModule = new SimpleModule();
         simpleModule.addSerializer(new InvitationSerializer());
         objectMapper.registerModule(simpleModule);
-        DatatableResponse datatableResponse = new DatatableResponse();
+        DatatableResponse<Invitation> datatableResponse = new DatatableResponse<>();
         datatableResponse.setDraw(request.getDraw());
         datatableResponse.setRecordsFiltered((int) invitations.getTotalElements());
         datatableResponse.setRecordsTotal((int) invitations.getTotalElements());
@@ -92,7 +88,7 @@ public class InvitationAdminController extends BaseAdminController {
             return generateInvitationModalContentLocator(invitation.getId());
         }
 
-        boolean isSaved = InvitationUtils.saveInvitation(invitationRepository, foodRepository,invitation);
+        boolean isSaved = this.invitationRepository.saveInvitation(invitation);
         if (isSaved) {
             return String.format(CommonConstants.MODAL_SUCCESS_FRAGMENT_TEMPLATE, INVITATION_FORM_TYPE);
         } else {

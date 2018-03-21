@@ -4,8 +4,8 @@ import net.ddns.buckeyeflash.models.Guest;
 import net.ddns.buckeyeflash.models.Invitation;
 import net.ddns.buckeyeflash.repositories.InvitationRepository;
 import net.ddns.buckeyeflash.utilities.InvitationUtils;
-import org.apache.log4j.Logger;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -17,10 +17,13 @@ import java.util.Random;
 @Controller
 public class AdminController {
 
-    private static final Logger logger = Logger.getLogger(AdminController.class);
+    private static final Logger logger = LogManager.getLogger(AdminController.class);
 
-    @Autowired
-    private InvitationRepository invitationRepository;
+    private final InvitationRepository invitationRepository;
+
+    public AdminController(InvitationRepository invitationRepository) {
+        this.invitationRepository = invitationRepository;
+    }
 
     @PreAuthorize("hasAnyRole('ADMIN_EDIT','ADMIN_READ')")
     @RequestMapping(value = "/admin", method = RequestMethod.GET)

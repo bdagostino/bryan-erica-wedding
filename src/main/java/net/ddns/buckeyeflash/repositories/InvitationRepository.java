@@ -7,7 +7,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.data.repository.query.Param;
 
-public interface InvitationRepository extends PagingAndSortingRepository<Invitation, Long> {
+public interface InvitationRepository extends PagingAndSortingRepository<Invitation, Long>, CustomInvitationRepository {
 
     @Query(value = "select distinct i from Invitation i join i.guestList l where l.firstName like :guestName% or l.lastName like :guestName%")
     Page<Invitation> findByGuestName(@Param("guestName") String guestName, Pageable pageable);

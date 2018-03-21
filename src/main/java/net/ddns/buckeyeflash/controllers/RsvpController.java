@@ -6,10 +6,9 @@ import net.ddns.buckeyeflash.models.Invitation;
 import net.ddns.buckeyeflash.models.RsvpSearch;
 import net.ddns.buckeyeflash.repositories.FoodRepository;
 import net.ddns.buckeyeflash.repositories.InvitationRepository;
-import net.ddns.buckeyeflash.utilities.InvitationUtils;
 import net.ddns.buckeyeflash.validators.RsvpValidator;
-import org.apache.log4j.Logger;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.util.CollectionUtils;
@@ -24,17 +23,20 @@ import java.util.List;
 @RequestMapping(value = "rsvp")
 @SessionAttributes({"invitation", "foodList"})
 public class RsvpController {
-    private static final Logger logger = Logger.getLogger(RsvpController.class);
+    private static final Logger logger = LogManager.getLogger(RsvpController.class);
     private static final String RSVP_FORM_VIEW = "pages/rsvp/rsvp_form";
 
-    @Autowired
-    private InvitationRepository invitationRepository;
+    private final InvitationRepository invitationRepository;
 
-    @Autowired
-    private FoodRepository foodRepository;
+    private final FoodRepository foodRepository;
 
-    @Autowired
-    private RsvpValidator rsvpValidator;
+    private final RsvpValidator rsvpValidator;
+
+    public RsvpController(InvitationRepository invitationRepository, FoodRepository foodRepository, RsvpValidator rsvpValidator) {
+        this.invitationRepository = invitationRepository;
+        this.foodRepository = foodRepository;
+        this.rsvpValidator = rsvpValidator;
+    }
 
     @RequestMapping(method = RequestMethod.GET)
     public String rsvp(ModelMap modelMap) {
@@ -66,18 +68,18 @@ public class RsvpController {
     @RequestMapping(value = "/saveRsvp")
     public String saveInvitationRsvp(@Valid @ModelAttribute Invitation invitation, Errors errors, ModelMap modelMap) {
         rsvpValidator.validate(invitation, errors);
-        if(errors.hasFieldErrors()){
+        if (errors.hasFieldErrors()) {
             return RSVP_FORM_VIEW;
         }
-        boolean isSaved = InvitationUtils.saveInvitation(invitationRepository,foodRepository,invitation);
-        if(isSaved){
+        boolean isSaved = this.invitationRepository.saveInvitation(invitation);
+        if (isSaved) {
             return "redirect:/";
         }
         return RSVP_FORM_VIEW;
     }
 
     @RequestMapping(value = "/addAdditionalGuest", method = RequestMethod.POST)
-    public String addAdditionalGuest(@ModelAttribute Invitation invitation){
+    public String addAdditionalGuest(@ModelAttribute Invitation invitation) {
         if (invitation.getMaxGuests() != null && invitation.getGuestList().size() < invitation.getMaxGuests()) {
             invitation.getGuestList().add(new Guest());
         }
@@ -85,8 +87,8 @@ public class RsvpController {
     }
 
     @RequestMapping(value = "/removeAdditionalGuest", method = RequestMethod.POST)
-    public String removeAdditionalGuest(@ModelAttribute Invitation invitation, @RequestParam() Integer removalIndex){
-        if(!CollectionUtils.isEmpty(invitation.getGuestList()) && removalIndex != null){
+    public String removeAdditionalGuest(@ModelAttribute Invitation invitation, @RequestParam() Integer removalIndex) {
+        if (!CollectionUtils.isEmpty(invitation.getGuestList()) && removalIndex != null) {
             invitation.getGuestList().remove(removalIndex.intValue());
         }
         return "fragments/rsvp/rsvp_form_fragment :: rsvpForm";

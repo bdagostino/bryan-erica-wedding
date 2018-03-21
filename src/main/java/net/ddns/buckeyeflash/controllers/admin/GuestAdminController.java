@@ -15,8 +15,8 @@ import net.ddns.buckeyeflash.utilities.CommonConstants;
 import net.ddns.buckeyeflash.utilities.PageUtils;
 import net.ddns.buckeyeflash.validators.admin.GuestSaveValidator;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.log4j.Logger;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -32,22 +32,25 @@ import java.util.List;
 
 @Controller
 @RequestMapping(value = "/admin/guest")
-@SessionAttributes({"guest","canAdminEdit"})
+@SessionAttributes({"guest", "canAdminEdit"})
 public class GuestAdminController extends BaseAdminController {
     private static final String GUEST_MODAL_TYPE = "Guest";
     private static final String GUEST_ATTRIBUTE_NAME = "guest";
 
-    private static final Logger logger = Logger.getLogger(GuestAdminController.class);
+    private static final Logger logger = LogManager.getLogger(GuestAdminController.class);
     private static final String GUEST_MODAL_CONTENT_FRAGMENT = "fragments/admin/guest_fragments :: guestModalContent";
 
-    @Autowired
-    private GuestRepository guestRepository;
+    private final GuestRepository guestRepository;
 
-    @Autowired
-    private FoodRepository foodRepository;
+    private final FoodRepository foodRepository;
 
-    @Autowired
-    private GuestSaveValidator guestSaveValidator;
+    private final GuestSaveValidator guestSaveValidator;
+
+    public GuestAdminController(GuestRepository guestRepository, FoodRepository foodRepository, GuestSaveValidator guestSaveValidator) {
+        this.guestRepository = guestRepository;
+        this.foodRepository = foodRepository;
+        this.guestSaveValidator = guestSaveValidator;
+    }
 
     @PreAuthorize("hasAnyRole('ADMIN_EDIT','ADMIN_READ')")
     @RequestMapping(method = RequestMethod.GET)
@@ -74,7 +77,7 @@ public class GuestAdminController extends BaseAdminController {
         SimpleModule simpleModule = new SimpleModule();
         simpleModule.addSerializer(new GuestSerializer());
         objectMapper.registerModule(simpleModule);
-        DatatableResponse datatableResponse = new DatatableResponse();
+        DatatableResponse<Guest> datatableResponse = new DatatableResponse<>();
         datatableResponse.setDraw(request.getDraw());
         datatableResponse.setRecordsFiltered((int) guests.getTotalElements());
         datatableResponse.setRecordsTotal((int) guests.getTotalElements());
@@ -103,7 +106,7 @@ public class GuestAdminController extends BaseAdminController {
     @PreAuthorize("hasRole('ADMIN_EDIT')")
     @RequestMapping(value = "/saveGuest", method = RequestMethod.POST)
     public String saveGuest(@Valid @ModelAttribute Guest guest, Errors errors) {
-        guestSaveValidator.validate(guest,errors);
+        guestSaveValidator.validate(guest, errors);
         if (errors.hasErrors()) {
             return GUEST_MODAL_CONTENT_FRAGMENT;
         }

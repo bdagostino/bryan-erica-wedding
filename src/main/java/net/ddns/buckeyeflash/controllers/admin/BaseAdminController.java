@@ -7,7 +7,7 @@ import org.springframework.validation.FieldError;
 
 public abstract class BaseAdminController {
 
-    protected void processErrors(AjaxResponse ajaxResponse, Errors errors) {
+    void processErrors(AjaxResponse ajaxResponse, Errors errors) {
         for (FieldError fieldError : errors.getFieldErrors()) {
             ajaxResponse.getFieldErrorList().add(new AjaxError(fieldError.getField(), fieldError.getDefaultMessage()));
         }

@@ -9,8 +9,8 @@ import net.ddns.buckeyeflash.repositories.FoodRepository;
 import net.ddns.buckeyeflash.utilities.CommonConstants;
 import net.ddns.buckeyeflash.utilities.PageUtils;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.log4j.Logger;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.data.domain.Page;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestWrapper;
@@ -26,15 +26,18 @@ import javax.validation.Valid;
 @SessionAttributes("food")
 public class FoodAdminController extends BaseAdminController {
 
-    private static final Logger logger = Logger.getLogger(FoodAdminController.class);
+    private static final Logger logger = LogManager.getLogger(FoodAdminController.class);
 
     private static final String FOOD_ATTRIBUTE_NAME = "food";
     private static final String ADD_FOOD_MODAL_TITLE = "Add Food";
     private static final String UPDATE_FOOD_MODAL_TITLE = "Update Food";
     private static final String FOOD_MODAL_CONTENT_FRAGMENT = "fragments/admin/food_fragments :: foodModalContent(title='%s')";
 
-    @Autowired
-    private FoodRepository foodRepository;
+    private final FoodRepository foodRepository;
+
+    public FoodAdminController(FoodRepository foodRepository) {
+        this.foodRepository = foodRepository;
+    }
 
     @PreAuthorize("hasAnyRole('ADMIN_EDIT','ADMIN_READ')")
     @RequestMapping(method = RequestMethod.GET)
@@ -50,7 +53,7 @@ public class FoodAdminController extends BaseAdminController {
     String getFoodData(@RequestBody DatatableRequest request) throws JsonProcessingException {
         Page<Food> foods = foodRepository.findByTypeStartingWith(request.getSearch().getValue(), PageUtils.getPageRequest(request.getStart(), request.getLength()));
         ObjectMapper objectMapper = new ObjectMapper();
-        DatatableResponse datatableResponse = new DatatableResponse();
+        DatatableResponse<Food> datatableResponse = new DatatableResponse<>();
         datatableResponse.setDraw(request.getDraw());
         datatableResponse.setRecordsFiltered((int) foods.getTotalElements());
         datatableResponse.setRecordsTotal((int) foods.getTotalElements());

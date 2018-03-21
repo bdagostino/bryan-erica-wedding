@@ -1,15 +1,15 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
-  <div th:replace="fragments/header"/>
-  <script type="text/javascript" src="../js/admin/food.js"/>
+  <div th:replace="fragments/header"></div>
+  <script type="text/javascript" src="../js/admin/food.js"></script>
 </head>
 
 <body>
 <nav th:replace="fragments/navbar"></nav>
 <div class="container-fluid" style="padding-top: 1em">
   <div class="row">
-    <div class="col-md-2"/>
+    <div class="col-md-2"></div>
     <div class="col-md-8">
       <div style="overflow: auto; margin-bottom:1em">
         <h1 style="float: left">Food</h1>
@@ -28,7 +28,7 @@
         </tbody>
       </table>
     </div>
-    <div class="col-md-2"/>
+    <div class="col-md-2"></div>
   </div>
 </div>
 <input id="canAdminEdit" type="text" th:value="${canAdminEdit}" hidden="hidden"/>

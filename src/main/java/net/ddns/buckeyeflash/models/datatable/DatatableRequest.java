@@ -8,7 +8,6 @@ public class DatatableRequest implements Serializable {
 
     private int draw;
     private List<Column> columns = new ArrayList<>();
-    private List<Order> order = new ArrayList<>();
     private int start;
     private int length;
     private Search search;
@@ -29,14 +28,6 @@ public class DatatableRequest implements Serializable {
 
     public void setColumns(List<Column> columns) {
         this.columns = columns;
-    }
-
-    public List<Order> getOrder() {
-        return order;
-    }
-
-    public void setOrder(List<Order> order) {
-        this.order = order;
     }
 
     public int getStart() {

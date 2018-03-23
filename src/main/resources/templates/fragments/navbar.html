@@ -6,7 +6,16 @@
   </button>
   <div class="collapse navbar-collapse" id="mainNavBar">
     <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
-      <li class="nav-item"><a class="nav-link" href="#">About Us</a></li>
+      <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Stories</a>
+        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+          <a class="dropdown-item" href="#" th:href="@{/stories/our-story}">Our Story</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="#" th:href="@{/stories/bridesmaids}">Bridesmaids</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="#" th:href="@{/stories/groomsmen}">Groomsmen</a>
+        </div>
+      </li>
       <li class="nav-item"><a class="nav-link" href="/rsvp">RSVP</a></li>
       <li class="nav-item"><a class="nav-link" href="#">Location</a></li>
       <li class="nav-item"><a class="nav-link" href="#">Hotel/Reservations</a></li>

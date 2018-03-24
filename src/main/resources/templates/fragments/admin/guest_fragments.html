@@ -15,17 +15,29 @@
       <form id="guestModalForm" method="post" th:action="'javascript:submitGuestForm();'">
         
         <h3 th:text="${guest.firstName +' ' + guest.lastName}">Guest Name</h3>
-        
-        <label for="attendanceRadioDiv">Attendance</label>
-        <div id="attendanceRadioDiv" class="custom-control custom-radio">
-          <input type="radio" class="custom-control-input" id="attendanceRadioYes" name="radio-stacked"
-                 th:field="${guest.attendance}" th:value="true"/>
-          <label class="custom-control-label" for="attendanceRadioYes">Yes</label>
+  
+        <label for="ceremonyAttendanceRadioDiv">Ceremony Attendance</label>
+        <div id="ceremonyAttendanceRadioDiv" class="custom-control custom-radio">
+          <input type="radio" class="custom-control-input" id="ceremonyAttendanceRadioYes" name="radio-stacked"
+                 th:field="${guest.ceremonyAttendance}" th:value="true"/>
+          <label class="custom-control-label" for="ceremonyAttendanceRadioYes">Yes</label>
         </div>
         <div class="custom-control custom-radio">
-          <input type="radio" class="custom-control-input" id="attendanceRadioNo" name="radio-stacked"
-                 th:field="${guest.attendance}" th:value="false"/>
-          <label class="custom-control-label" for="attendanceRadioNo">No</label>
+          <input type="radio" class="custom-control-input" id="ceremonyAttendanceRadioNo" name="radio-stacked"
+                 th:field="${guest.ceremonyAttendance}" th:value="false"/>
+          <label class="custom-control-label" for="ceremonyAttendanceRadioNo">No</label>
+        </div>
+        
+        <label for="receptionAttendanceRadioDiv">Attendance</label>
+        <div id="receptionAttendanceRadioDiv" class="custom-control custom-radio">
+          <input type="radio" class="custom-control-input" id="receptionAttendanceRadioYes" name="radio-stacked"
+                 th:field="${guest.receptionAttendance}" th:value="true"/>
+          <label class="custom-control-label" for="receptionAttendanceRadioYes">Yes</label>
+        </div>
+        <div class="custom-control custom-radio">
+          <input type="radio" class="custom-control-input" id="receptionAttendanceRadioNo" name="radio-stacked"
+                 th:field="${guest.receptionAttendance}" th:value="false"/>
+          <label class="custom-control-label" for="receptionAttendanceRadioNo">No</label>
         </div>
         
         <label for="foodSelect" class="mt-3">Food</label>

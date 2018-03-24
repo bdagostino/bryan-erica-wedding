@@ -120,7 +120,8 @@ public class GuestAdminController extends BaseAdminController {
             }
             storedGuest.setDietaryConcerns(guest.getDietaryConcerns());
             storedGuest.setDietaryComments(guest.getDietaryComments());
-            storedGuest.setAttendance(guest.getAttendance());
+            storedGuest.setCeremonyAttendance(guest.getCeremonyAttendance());
+            storedGuest.setReceptionAttendance(guest.getReceptionAttendance());
             try {
                 guestRepository.save(storedGuest);
             } catch (Exception e) {

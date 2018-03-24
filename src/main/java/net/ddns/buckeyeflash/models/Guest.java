@@ -25,8 +25,11 @@ public class Guest {
     @Size(min = 1, max = LAST_NAME_LENGTH)
     private String lastName;
 
-    @Column(name = "attendance")
-    private Boolean attendance;
+    @Column(name = "ceremony_attendance")
+    private Boolean ceremonyAttendance;
+
+    @Column(name = "reception_attendance")
+    private Boolean receptionAttendance;
 
     @OneToOne(cascade = CascadeType.ALL, targetEntity = Food.class)
     @JoinColumn(name = "food_id")
@@ -76,14 +79,6 @@ public class Guest {
         this.lastName = lastName.trim();
     }
 
-    public Boolean getAttendance() {
-        return attendance;
-    }
-
-    public void setAttendance(Boolean attendance) {
-        this.attendance = attendance;
-    }
-
     public Food getFood() {
         return food;
     }
@@ -114,5 +109,21 @@ public class Guest {
 
     public void setInvitation(Invitation invitation) {
         this.invitation = invitation;
+    }
+
+    public Boolean getCeremonyAttendance() {
+        return ceremonyAttendance;
+    }
+
+    public void setCeremonyAttendance(Boolean ceremonyAttendance) {
+        this.ceremonyAttendance = ceremonyAttendance;
+    }
+
+    public Boolean getReceptionAttendance() {
+        return receptionAttendance;
+    }
+
+    public void setReceptionAttendance(Boolean receptionAttendance) {
+        this.receptionAttendance = receptionAttendance;
     }
 }

@@ -8,49 +8,84 @@
 
 <div th:fragment="commonRsvpForm(index)">
   
-  <label th:for="attendanceRadioDiv+${index}">Attendance</label>
-  <div th:id="attendanceRadioDiv+${index}" class="custom-control custom-radio">
-    <input type="radio" class="custom-control-input" th:id="attendanceRadio+${index}+A" name="radio-stacked"
-           th:field="${invitation.guestList[__${index}__].attendance}" th:value="true"
-           th:errorclass="is-invalid"/>
-    <label class="custom-control-label" th:for="attendanceRadio+${index}+A">Yes</label>
-  </div>
-  <div class="custom-control custom-radio">
-    <input type="radio" class="custom-control-input" th:id="attendanceRadio+${index}+B" name="radio-stacked"
-           th:field="${invitation.guestList[__${index}__].attendance}" th:value="false"
-           th:errorclass="is-invalid"/>
-    <label class="custom-control-label" th:for="attendanceRadio+${index}+B">No</label>
-    <div th:errors="${invitation.guestList[__${index}__].attendance}" class="invalid-feedback"></div>
-  </div>
-  
-  <label th:for="foodSelect+${index}" class="mt-3">Food</label>
-  <select class="custom-select custom-select-md" th:id="foodSelect+${index}"
-          th:field="${invitation.guestList[__${index}__].food.id}" th:errorclass="is-invalid">
-    <option selected="selected" value="" >Please Select A Meal</option>
-    <option th:each="food : ${foodList}" th:text="${food.type}" th:value="${food.id}"></option>
-  </select>
-  <div th:errors="${invitation.guestList[__${index}__].food.id}" class="invalid-feedback"></div>
-  
-  <label th:for="dietaryConcernRadioDiv+${index}" class="mt-3">Dietary Concern</label>
-  <div th:id="dietaryConcernRadioDiv+${index}" class="custom-control custom-radio">
-    <input type="radio" class="custom-control-input" th:id="dietaryConcernRadio+${index}+A" name="radio-stacked"
-           th:field="${invitation.guestList[__${index}__].dietaryConcerns}" th:value="true"
-           th:errorclass="is-invalid"/>
-    <label class="custom-control-label" th:for="dietaryConcernRadio+${index}+A">Yes</label>
-  </div>
-  <div class="custom-control custom-radio">
-    <input type="radio" class="custom-control-input" th:id="dietaryConcernRadio+${index}+B" name="radio-stacked"
-           th:field="${invitation.guestList[__${index}__].dietaryConcerns}" th:value="false"
-           th:errorclass="is-invalid"/>
-    <label class="custom-control-label" th:for="dietaryConcernRadio+${index}+B">No</label>
-    <div th:errors="${invitation.guestList[__${index}__].dietaryConcerns}" class="invalid-feedback"></div>
+  <div class="form-row mb-4">
+    <div class="col">
+      <div><b>Will you be able to attend our ceremony?</b></div>
+      <div th:id="ceremonyAttendanceRadio+${index}+Group" class="btn-group btn-group-toggle" data-toggle="buttons">
+        <label class="btn btn-outline-dark">
+          <input type="radio" class="customRadio" th:id="ceremonyAttendanceRadio+${index}+A"
+                 th:field="${invitation.guestList[__${index}__].ceremonyAttendance}"
+                 th:value="true" th:errorclass="is-invalid"/>Accept
+        </label>
+        <label class="btn btn-outline-dark">
+          <input type="radio" class="customRadio" th:id="ceremonyAttendanceRadio+${index}+B"
+                 th:field="${invitation.guestList[__${index}__].ceremonyAttendance}"
+                 th:value="false" th:errorclass="is-invalid"/>Regret
+        </label>
+      </div>
+      <div th:errors="${invitation.guestList[__${index}__].ceremonyAttendance}" class="invalid-feedback d-block"></div>
+    </div>
   </div>
   
-  <label th:for="inputDietaryComments+${index}" class="mt-3">Dietary Comments</label>
-  <div class="input-group">
-    <input th:id="inputDietaryComments+${index}" type="text" class="form-control"
-           th:field="${invitation.guestList[__${index}__].dietaryComments}" th:errorclass="is-invalid"/>
-    <div th:errors="${invitation.guestList[__${index}__].dietaryComments}" class="invalid-feedback"></div>
+  <div class="form-row mb-4">
+    <div class="col">
+      <div><b>Will you be able to attend our reception?</b></div>
+      <div class="btn-group btn-group-toggle" data-toggle="buttons">
+        <label class="btn btn-outline-dark">
+          <input type="radio" class="form-control-input customRadio" th:id="receptionAttendanceRadio+${index}+A"
+                 th:field="${invitation.guestList[__${index}__].receptionAttendance}"
+                 th:value="true" th:errorclass="is-invalid"/>Accept
+        </label>
+        <label class="btn btn-outline-dark">
+          <input type="radio" class="form-control-input customRadio" th:id="receptionAttendanceRadio+${index}+B"
+                 th:field="${invitation.guestList[__${index}__].receptionAttendance}"
+                 th:value="false" th:errorclass="is-invalid"/>Regret
+        </label>
+      </div>
+      <div th:errors="${invitation.guestList[__${index}__].receptionAttendance}" class="invalid-feedback d-block"></div>
+    </div>
+  </div>
+  
+  <div class="form-row mb-4">
+    <div class="col">
+      <div><b>Meal Options</b></div>
+      <select class="custom-select" th:id="foodSelect+${index}"
+              th:field="${invitation.guestList[__${index}__].food.id}" th:errorclass="is-invalid">
+        <option selected="selected" value="">Please Select A Meal</option>
+        <option th:each="food : ${foodList}" th:text="${food.type}" th:value="${food.id}"></option>
+      </select>
+      <div th:errors="${invitation.guestList[__${index}__].food.id}" class="invalid-feedback"></div>
+    </div>
+  </div>
+  
+  <div class="form-row mb-4">
+    <div class="col">
+      <div><b>Do you have any dietary restrictions?</b></div>
+      <div th:id="receptionAttendanceRadioDiv+${index}" class="btn-group btn-group-toggle" data-toggle="buttons">
+        <label class="btn btn-outline-dark">
+          <input type="radio" class="customRadio" th:id="dietaryConcernRadio+${index}+A"
+                 th:field="${invitation.guestList[__${index}__].dietaryConcerns}" th:value="true"
+                 th:errorclass="is-invalid"/>Yes
+        </label>
+        <label class="btn btn-outline-dark">
+          <input type="radio" class="customRadio" th:id="dietaryConcernRadio+${index}+B"
+                 th:field="${invitation.guestList[__${index}__].dietaryConcerns}" th:value="false"
+                 th:errorclass="is-invalid"/>No
+        </label>
+      </div>
+      <div th:errors="${invitation.guestList[__${index}__].dietaryConcerns}" class="invalid-feedback"></div>
+    </div>
+  </div>
+  
+  <div class="form-row">
+    <div class="col">
+      <div><b>Dietary Comments</b></div>
+      <div class="input-group">
+        <input th:id="inputDietaryComments+${index}" type="text" class="form-control"
+               th:field="${invitation.guestList[__${index}__].dietaryComments}" th:errorclass="is-invalid"/>
+        <div th:errors="${invitation.guestList[__${index}__].dietaryComments}" class="invalid-feedback"></div>
+      </div>
+    </div>
   </div>
 
 </div>

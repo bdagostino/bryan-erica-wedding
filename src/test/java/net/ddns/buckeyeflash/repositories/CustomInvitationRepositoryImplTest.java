@@ -129,7 +129,8 @@ public class CustomInvitationRepositoryImplTest {
         invitation.getGuestList().get(0).setInvitedPerson(false);
         invitation.getGuestList().get(0).setDietaryConcerns(true);
         invitation.getGuestList().get(0).setDietaryComments("Peanut Allergy");
-        invitation.getGuestList().get(0).setAttendance(true);
+        invitation.getGuestList().get(0).setCeremonyAttendance(false);
+        invitation.getGuestList().get(0).setReceptionAttendance(true);
 
         boolean updateStatus = this.invitationRepository.saveInvitation(invitation);
         softly.assertThat(updateStatus).isTrue();
@@ -141,7 +142,8 @@ public class CustomInvitationRepositoryImplTest {
         softly.assertThat(updatedInvitation.getGuestList().get(0).getInvitedPerson()).isFalse();
         softly.assertThat(updatedInvitation.getGuestList().get(0).getDietaryConcerns()).isTrue();
         softly.assertThat(updatedInvitation.getGuestList().get(0).getDietaryComments()).isEqualTo("Peanut Allergy");
-        softly.assertThat(updatedInvitation.getGuestList().get(0).getAttendance()).isTrue();
+        softly.assertThat(updatedInvitation.getGuestList().get(0).getCeremonyAttendance()).isFalse();
+        softly.assertThat(updatedInvitation.getGuestList().get(0).getReceptionAttendance()).isTrue();
     }
 
     @Test

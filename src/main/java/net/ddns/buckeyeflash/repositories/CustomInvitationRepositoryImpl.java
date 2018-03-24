@@ -80,11 +80,14 @@ public class CustomInvitationRepositoryImpl implements CustomInvitationRepositor
                     Guest pendingGuest = filteredGuestList.get(0);
                     existingGuest.setFirstName(pendingGuest.getFirstName());
                     existingGuest.setLastName(pendingGuest.getLastName());
-                    existingGuest.setAttendance(pendingGuest.getAttendance());
+                    existingGuest.setCeremonyAttendance(pendingGuest.getCeremonyAttendance());
+                    existingGuest.setReceptionAttendance(pendingGuest.getReceptionAttendance());
                     existingGuest.setDietaryConcerns(pendingGuest.getDietaryConcerns());
                     existingGuest.setDietaryComments(pendingGuest.getDietaryComments());
-                    if (pendingGuest.getFood() != null) {
+                    if (pendingGuest.getFood() != null && pendingGuest.getFood().getId() != null) {
                         existingGuest.setFood(this.em.find(Food.class, pendingGuest.getFood().getId()));
+                    } else {
+                        existingGuest.setFood(null);
                     }
                 }
             } else {
@@ -105,5 +108,4 @@ public class CustomInvitationRepositoryImpl implements CustomInvitationRepositor
             existingInvitation.getGuestList().addAll(unsavedGuests);
         }
     }
-
 }

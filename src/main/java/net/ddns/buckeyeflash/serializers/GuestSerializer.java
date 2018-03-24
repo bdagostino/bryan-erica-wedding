@@ -20,7 +20,8 @@ public class GuestSerializer extends StdSerializer<Guest> {
         jsonGenerator.writeNumberField("id", guest.getId());
         jsonGenerator.writeStringField("firstName", guest.getFirstName());
         jsonGenerator.writeStringField("lastName", guest.getLastName());
-        jsonGenerator.writeStringField("attendance", SerializerUtils.convertBoolean(guest.getAttendance()));
+        jsonGenerator.writeStringField("ceremonyAttendance", SerializerUtils.convertBoolean(guest.getCeremonyAttendance()));
+        jsonGenerator.writeStringField("receptionAttendance", SerializerUtils.convertBoolean(guest.getReceptionAttendance()));
         jsonGenerator.writeStringField("food", SerializerUtils.convertFood(guest.getFood()));
         jsonGenerator.writeStringField("dietaryConcerns", SerializerUtils.convertBoolean(guest.getDietaryConcerns()));
         jsonGenerator.writeStringField("dietaryComments", guest.getDietaryComments());

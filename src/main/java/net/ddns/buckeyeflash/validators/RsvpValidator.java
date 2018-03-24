@@ -24,7 +24,7 @@ public class RsvpValidator implements Validator {
             validateFirstName(guest, i, errors);
             validateLastName(guest, i, errors);
             validateAttendance(guest, i, errors);
-            if(BooleanUtils.isTrue(guest.getAttendance())) {
+            if (BooleanUtils.isTrue(guest.getReceptionAttendance())) {
                 validateFood(guest, i, errors);
                 validateDietaryConcerns(guest, i, errors);
                 validateDietartComments(guest, i, errors);
@@ -45,8 +45,11 @@ public class RsvpValidator implements Validator {
     }
 
     private void validateAttendance(Guest guest, int index, Errors errors) {
-        if (guest.getAttendance() == null) {
-            errors.rejectValue("guestList[" + index + "].attendance", "A", "Please let us know if you will be joining our special day");
+        if (guest.getCeremonyAttendance() == null) {
+            errors.rejectValue("guestList[" + index + "].ceremonyAttendance", "A", "Please let us know if you will be joining our ceremony");
+        }
+        if (guest.getReceptionAttendance() == null) {
+            errors.rejectValue("guestList[" + index + "].receptionAttendance", "A", "Please let us know if you will be joining our reception");
         }
     }
 
@@ -58,13 +61,16 @@ public class RsvpValidator implements Validator {
 
     private void validateDietaryConcerns(Guest guest, int index, Errors errors) {
         if (guest.getDietaryConcerns() == null) {
-            errors.rejectValue("guestList[" + index + "].dietaryConcerns", "C", "Please let us know if you have any dietary concerns");
+            errors.rejectValue("guestList[" + index + "].dietaryConcerns", "C", "Please let us know if you have any dietary restrictions");
         }
     }
 
     private void validateDietartComments(Guest guest, int index, Errors errors) {
         if (BooleanUtils.isTrue(guest.getDietaryConcerns()) && StringUtils.isBlank(guest.getDietaryComments())) {
-            errors.rejectValue("guestList[" + index + "].dietaryComments", "D", "Please provide more information regarding your dietary concerns");
+            errors.rejectValue("guestList[" + index + "].dietaryComments", "D", "Please provide more information regarding your dietary restrictions");
+        }
+        if (BooleanUtils.isFalse(guest.getDietaryConcerns()) && StringUtils.isNotBlank(guest.getDietaryComments())) {
+            errors.rejectValue("guestList[" + index + "].dietaryComments", "D", "Please remove comments if you do not have any dietary restrictions");
         }
     }
 }

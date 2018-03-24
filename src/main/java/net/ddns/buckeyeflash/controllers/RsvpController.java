@@ -1,6 +1,5 @@
 package net.ddns.buckeyeflash.controllers;
 
-import net.ddns.buckeyeflash.models.Food;
 import net.ddns.buckeyeflash.models.Guest;
 import net.ddns.buckeyeflash.models.Invitation;
 import net.ddns.buckeyeflash.models.RsvpSearch;
@@ -16,8 +15,7 @@ import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Arrays;
 
 @Controller
 @RequestMapping(value = "rsvp")
@@ -46,20 +44,18 @@ public class RsvpController {
     }
 
     @RequestMapping(value = "/search")
-    public String test(@Valid @ModelAttribute RsvpSearch rsvpSearch, Errors errors, ModelMap modelMap) {
+    public String test(@Valid @ModelAttribute final RsvpSearch rsvpSearch, final Errors errors, final ModelMap modelMap) {
         if (errors.hasErrors()) {
             modelMap.addAttribute("errorMessage", "No invitation found for code " + rsvpSearch.getInvitationCode() + ".");
             return "pages/rsvp/rsvp_search";
         }
-        modelMap.clear();
-        Invitation invitation = invitationRepository.findByInvitationCode(rsvpSearch.getInvitationCode());
+        final Invitation invitation = invitationRepository.findByInvitationCode(rsvpSearch.getInvitationCode());
         if (invitation == null) {
             modelMap.addAttribute("errorMessage", "No invitation found for code " + rsvpSearch.getInvitationCode() + ".");
             return "pages/rsvp/rsvp_search";
         }
-        List<Food> foodList = new ArrayList<>();
-        foodRepository.findAll().forEach(foodList::add);
-        modelMap.addAttribute("foodList", foodList);
+        modelMap.clear();
+        modelMap.addAttribute("foodList", Arrays.asList(foodRepository.findAll()));
         modelMap.addAttribute("invitation", invitation);
         return RSVP_FORM_VIEW;
 

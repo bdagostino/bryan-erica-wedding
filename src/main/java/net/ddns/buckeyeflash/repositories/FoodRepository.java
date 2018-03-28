@@ -5,9 +5,13 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.repository.PagingAndSortingRepository;
 
+import java.util.List;
+
 public interface FoodRepository extends PagingAndSortingRepository<Food, Long> {
 
     Page<Food> findByTypeStartingWith(String type, Pageable pageable);
 
     Food findById(Integer id);
+
+    List<Food> findAll();
 }

@@ -15,7 +15,6 @@ import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.util.Arrays;
 
 @Controller
 @RequestMapping(value = "rsvp")
@@ -55,7 +54,7 @@ public class RsvpController {
             return "pages/rsvp/rsvp_search";
         }
         modelMap.clear();
-        modelMap.addAttribute("foodList", Arrays.asList(foodRepository.findAll()));
+        modelMap.addAttribute("foodList", foodRepository.findAll());
         modelMap.addAttribute("invitation", invitation);
         return RSVP_FORM_VIEW;
 

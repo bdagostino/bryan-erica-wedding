@@ -1,5 +1,6 @@
 package net.ddns.buckeyeflash.controllers;
 
+import net.ddns.buckeyeflash.models.Food;
 import net.ddns.buckeyeflash.models.Guest;
 import net.ddns.buckeyeflash.models.Invitation;
 import net.ddns.buckeyeflash.models.RsvpSearch;
@@ -22,6 +23,7 @@ import javax.validation.Valid;
 public class RsvpController {
     private static final Logger logger = LogManager.getLogger(RsvpController.class);
     private static final String RSVP_FORM_VIEW = "pages/rsvp/rsvp_form";
+    private static final String RSVP_SEARCH_VIEW = "pages/rsvp/rsvp_search";
 
     private final InvitationRepository invitationRepository;
 
@@ -39,20 +41,22 @@ public class RsvpController {
     public String rsvp(ModelMap modelMap) {
         logger.info("RSVP Page Accessed");
         modelMap.addAttribute("rsvpSearch", new RsvpSearch());
-        return "pages/rsvp/rsvp_search";
+        return RSVP_SEARCH_VIEW;
     }
 
     @RequestMapping(value = "/search")
     public String test(@Valid @ModelAttribute final RsvpSearch rsvpSearch, final Errors errors, final ModelMap modelMap) {
         if (errors.hasErrors()) {
             modelMap.addAttribute("errorMessage", "No invitation found for code " + rsvpSearch.getInvitationCode() + ".");
-            return "pages/rsvp/rsvp_search";
+            return RSVP_SEARCH_VIEW;
         }
         final Invitation invitation = invitationRepository.findByInvitationCode(rsvpSearch.getInvitationCode());
         if (invitation == null) {
             modelMap.addAttribute("errorMessage", "No invitation found for code " + rsvpSearch.getInvitationCode() + ".");
-            return "pages/rsvp/rsvp_search";
+            return RSVP_SEARCH_VIEW;
         }
+
+        invitation.getGuestList().stream().filter(g -> g.getFood() != null).forEach(g -> g.setFood(new Food(g.getFood().getId())));
         modelMap.clear();
         modelMap.addAttribute("foodList", foodRepository.findAll());
         modelMap.addAttribute("invitation", invitation);

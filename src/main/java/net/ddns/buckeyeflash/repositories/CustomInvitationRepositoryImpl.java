@@ -99,11 +99,17 @@ public class CustomInvitationRepositoryImpl implements CustomInvitationRepositor
     }
 
     private void processUnsavedGuests(List<Guest> pendingGuestList, Invitation existingInvitation) {
-        List<Guest> unsavedGuests = pendingGuestList.stream().filter(pendingGuest -> pendingGuest.getId() == null).collect(Collectors.toList());
+        final List<Guest> unsavedGuests = pendingGuestList.stream().filter(pendingGuest -> pendingGuest.getId() == null).collect(Collectors.toList());
         if (!unsavedGuests.isEmpty()) {
             unsavedGuests.stream().forEach(pendingGuest -> {
                 pendingGuest.setInvitation(existingInvitation);
                 pendingGuest.setInvitedPerson(true);
+                if (pendingGuest.getFood() != null && pendingGuest.getFood().getId() != null) {
+                    final Food food = this.em.find(Food.class, pendingGuest.getFood().getId());
+                    pendingGuest.setFood(food);
+                } else {
+                    pendingGuest.setFood(null);
+                }
             });
             existingInvitation.getGuestList().addAll(unsavedGuests);
         }

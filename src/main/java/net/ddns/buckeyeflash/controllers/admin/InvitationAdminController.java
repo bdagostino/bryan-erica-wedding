@@ -29,7 +29,7 @@ import javax.validation.Valid;
 @Controller
 @RequestMapping(value = "admin/invitation")
 @SessionAttributes({"invitation", "canAdminEdit"})
-public class InvitationAdminController extends BaseAdminController {
+public class InvitationAdminController {
     private static final Logger logger = LogManager.getLogger(InvitationAdminController.class);
     private static final String INVITATION_FORM_TYPE = "Invitation";
     private static final String INVITATION_ATTRIBUTE_NAME = "invitation";

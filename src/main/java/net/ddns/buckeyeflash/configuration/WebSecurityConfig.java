@@ -33,8 +33,5 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .and().httpBasic()
                 .and().logout().invalidateHttpSession(true).deleteCookies("JSESSIONID")
                 .and().sessionManagement().maximumSessions(1).expiredUrl("/");
-
-//        http.requestMatcher(EndpointRequest.toAnyEndpoint()).authorizeRequests()
-//                .anyRequest().permitAll();
     }
 }

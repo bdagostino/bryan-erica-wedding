@@ -24,7 +24,7 @@ import javax.validation.Valid;
 @Controller
 @RequestMapping(value = "/admin/food")
 @SessionAttributes("food")
-public class FoodAdminController extends BaseAdminController {
+public class FoodAdminController {
 
     private static final Logger logger = LogManager.getLogger(FoodAdminController.class);
 

@@ -7,8 +7,8 @@ public class PageUtils {
     private PageUtils() {
     }
 
-    public static PageRequest getPageRequest(int requestIndex, int requestedPageLength){
-        return new PageRequest((requestIndex/requestedPageLength),requestedPageLength);
+    public static PageRequest getPageRequest(int requestIndex, int requestedPageLength) {
+        return PageRequest.of((requestIndex / requestedPageLength), requestedPageLength);
     }
 
 }

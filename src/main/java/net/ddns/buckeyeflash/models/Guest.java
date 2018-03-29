@@ -31,7 +31,7 @@ public class Guest {
     @Column(name = "reception_attendance")
     private Boolean receptionAttendance;
 
-    @OneToOne(cascade = CascadeType.ALL, targetEntity = Food.class)
+    @ManyToOne(targetEntity = Food.class)
     @JoinColumn(name = "food_id")
     private Food food;
 

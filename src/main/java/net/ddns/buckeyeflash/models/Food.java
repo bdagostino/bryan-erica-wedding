@@ -11,6 +11,15 @@ public class Food {
     private static final int TYPE_LENGTH = 25;
     private static final int DESCRIPTION_LENGTH = 150;
 
+    public Food(int id) {
+        this.id = id;
+        this.type = "";
+        this.description = "";
+    }
+
+    public Food() {
+    }
+
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer id;

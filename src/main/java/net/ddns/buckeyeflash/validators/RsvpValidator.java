@@ -11,6 +11,8 @@ import org.springframework.validation.Validator;
 @Component
 public class RsvpValidator implements Validator {
 
+    private static final String GUEST_LIST_FORMAT = "guestList[%d].%s";
+
     @Override
     public boolean supports(Class<?> clazz) {
         return Invitation.class.equals(clazz);
@@ -34,43 +36,43 @@ public class RsvpValidator implements Validator {
 
     private void validateFirstName(Guest guest, int index, Errors errors) {
         if (StringUtils.isBlank(guest.getFirstName())) {
-            errors.rejectValue("guestList[" + index + "].firstName", "A", "Please provide guests first name");
+            errors.rejectValue(String.format(GUEST_LIST_FORMAT, index, "firstName"), "A", "Please provide guests first name");
         }
     }
 
     private void validateLastName(Guest guest, int index, Errors errors) {
         if (StringUtils.isBlank(guest.getLastName())) {
-            errors.rejectValue("guestList[" + index + "].lastName", "A", "Please provide guests last name");
+            errors.rejectValue(String.format(GUEST_LIST_FORMAT, index, "lastName"), "A", "Please provide guests last name");
         }
     }
 
     private void validateAttendance(Guest guest, int index, Errors errors) {
         if (guest.getCeremonyAttendance() == null) {
-            errors.rejectValue("guestList[" + index + "].ceremonyAttendance", "A", "Please let us know if you will be joining our ceremony");
+            errors.rejectValue(String.format(GUEST_LIST_FORMAT, index, "ceremonyAttendance"), "A", "Please let us know if you will be joining our ceremony");
         }
         if (guest.getReceptionAttendance() == null) {
-            errors.rejectValue("guestList[" + index + "].receptionAttendance", "A", "Please let us know if you will be joining our reception");
+            errors.rejectValue(String.format(GUEST_LIST_FORMAT, index, "receptionAttendance"), "A", "Please let us know if you will be joining our reception");
         }
     }
 
     private void validateFood(Guest guest, int index, Errors errors) {
         if (guest.getFood() == null || guest.getFood().getId() == null) {
-            errors.rejectValue("guestList[" + index + "].food.id", "B", "Please select your meal");
+            errors.rejectValue(String.format(GUEST_LIST_FORMAT, index, "food.id"), "B", "Please select your meal");
         }
     }
 
     private void validateDietaryConcerns(Guest guest, int index, Errors errors) {
         if (guest.getDietaryConcerns() == null) {
-            errors.rejectValue("guestList[" + index + "].dietaryConcerns", "C", "Please let us know if you have any dietary restrictions");
+            errors.rejectValue(String.format(GUEST_LIST_FORMAT, index, "dietaryConcerns"), "C", "Please let us know if you have any dietary restrictions");
         }
     }
 
     private void validateDietartComments(Guest guest, int index, Errors errors) {
         if (BooleanUtils.isTrue(guest.getDietaryConcerns()) && StringUtils.isBlank(guest.getDietaryComments())) {
-            errors.rejectValue("guestList[" + index + "].dietaryComments", "D", "Please provide more information regarding your dietary restrictions");
+            errors.rejectValue(String.format(GUEST_LIST_FORMAT, index, "dietaryComments"), "D", "Please provide more information regarding your dietary restrictions");
         }
         if (BooleanUtils.isFalse(guest.getDietaryConcerns()) && StringUtils.isNotBlank(guest.getDietaryComments())) {
-            errors.rejectValue("guestList[" + index + "].dietaryComments", "D", "Please remove comments if you do not have any dietary restrictions");
+            errors.rejectValue(String.format(GUEST_LIST_FORMAT, index, "dietaryComments"), "D", "Please remove comments if you do not have any dietary restrictions");
         }
     }
 }

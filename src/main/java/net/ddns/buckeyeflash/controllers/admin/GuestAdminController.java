@@ -7,7 +7,6 @@ import net.ddns.buckeyeflash.models.Food;
 import net.ddns.buckeyeflash.models.Guest;
 import net.ddns.buckeyeflash.models.datatable.DatatableRequest;
 import net.ddns.buckeyeflash.models.datatable.DatatableResponse;
-import net.ddns.buckeyeflash.models.modal.AjaxResponse;
 import net.ddns.buckeyeflash.repositories.FoodRepository;
 import net.ddns.buckeyeflash.repositories.GuestRepository;
 import net.ddns.buckeyeflash.serializers.GuestSerializer;
@@ -18,7 +17,6 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.data.domain.Page;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestWrapper;
 import org.springframework.stereotype.Controller;
@@ -33,7 +31,7 @@ import java.util.List;
 @Controller
 @RequestMapping(value = "/admin/guest")
 @SessionAttributes({"guest", "canAdminEdit"})
-public class GuestAdminController extends BaseAdminController {
+public class GuestAdminController {
     private static final String GUEST_MODAL_TYPE = "Guest";
     private static final String GUEST_ATTRIBUTE_NAME = "guest";
 
@@ -132,18 +130,5 @@ public class GuestAdminController extends BaseAdminController {
             return String.format(CommonConstants.MODAL_ERROR_FRAGMENT_TEMPLATE, GUEST_MODAL_TYPE);
         }
         return String.format(CommonConstants.MODAL_SUCCESS_FRAGMENT_TEMPLATE, GUEST_MODAL_TYPE);
-    }
-
-    @PreAuthorize("hasRole('ADMIN_EDIT')")
-    @RequestMapping(value = "/addGuest", method = RequestMethod.POST)
-    public ResponseEntity<AjaxResponse> addGuest(@Valid @RequestBody Guest guest, Errors errors) {
-        if (errors.hasErrors()) {
-            AjaxResponse guestAjaxResponse = new AjaxResponse();
-            processErrors(guestAjaxResponse, errors);
-            return ResponseEntity.badRequest().body(guestAjaxResponse);
-        }
-        guestRepository.save(guest);
-        logger.info("Guest Saved");
-        return ResponseEntity.ok(null);
     }
 }

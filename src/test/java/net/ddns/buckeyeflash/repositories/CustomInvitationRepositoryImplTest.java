@@ -72,14 +72,14 @@ public class CustomInvitationRepositoryImplTest {
         this.entityManager.persistAndFlush(invitation);
         this.entityManager.detach(invitation);
 
-        final Invitation savedInvitation = this.invitationRepository.findById(invitation.getId());
+        final Invitation savedInvitation = this.invitationRepository.findById(invitation.getId()).get();
         softly.assertThat(savedInvitation.getGuestList()).hasSize(0);
 
         invitation.getGuestList().add(createGuest("John", "Doe"));
         boolean updateStatus = this.invitationRepository.saveInvitation(invitation);
         softly.assertThat(updateStatus).isTrue();
 
-        Invitation updatedInvitation = this.invitationRepository.findById(invitation.getId());
+        Invitation updatedInvitation = this.invitationRepository.findById(invitation.getId()).get();
         softly.assertThat(updatedInvitation.getGuestList()).hasSize(1);
         Guest updatedGuest = updatedInvitation.getGuestList().get(0);
         softly.assertThat(updatedGuest.getId()).isNotNull();
@@ -98,14 +98,14 @@ public class CustomInvitationRepositoryImplTest {
         this.entityManager.persistAndFlush(invitation);
         this.entityManager.detach(invitation);
 
-        final Invitation savedInvitation = this.invitationRepository.findById(invitation.getId());
+        final Invitation savedInvitation = this.invitationRepository.findById(invitation.getId()).get();
         softly.assertThat(savedInvitation.getGuestList()).hasSize(1);
 
         invitation.getGuestList().remove(0);
         boolean updateStatus = this.invitationRepository.saveInvitation(invitation);
         softly.assertThat(updateStatus).isTrue();
 
-        final Invitation updatedInvitation = this.invitationRepository.findById(invitation.getId());
+        final Invitation updatedInvitation = this.invitationRepository.findById(invitation.getId()).get();
         softly.assertThat(updatedInvitation.getGuestList()).hasSize(0);
     }
 
@@ -119,7 +119,7 @@ public class CustomInvitationRepositoryImplTest {
         this.entityManager.persistAndFlush(invitation);
         this.entityManager.detach(invitation);
 
-        final Invitation savedInvitation = this.invitationRepository.findById(invitation.getId());
+        final Invitation savedInvitation = this.invitationRepository.findById(invitation.getId()).get();
         softly.assertThat(savedInvitation.getGuestList()).hasSize(1);
         softly.assertThat(savedInvitation.getGuestList().get(0).getFirstName()).isEqualTo("Hello");
         softly.assertThat(savedInvitation.getGuestList().get(0).getLastName()).isEqualTo("World");
@@ -135,7 +135,7 @@ public class CustomInvitationRepositoryImplTest {
         boolean updateStatus = this.invitationRepository.saveInvitation(invitation);
         softly.assertThat(updateStatus).isTrue();
 
-        final Invitation updatedInvitation = this.invitationRepository.findById(invitation.getId());
+        final Invitation updatedInvitation = this.invitationRepository.findById(invitation.getId()).get();
         softly.assertThat(updatedInvitation.getGuestList()).hasSize(1);
         softly.assertThat(updatedInvitation.getGuestList().get(0).getFirstName()).isEqualTo("Ohio");
         softly.assertThat(updatedInvitation.getGuestList().get(0).getLastName()).isEqualTo("State");
@@ -154,7 +154,7 @@ public class CustomInvitationRepositoryImplTest {
         this.entityManager.persistAndFlush(invitation);
         this.entityManager.detach(invitation);
 
-        final Invitation savedInvitation = this.invitationRepository.findById(invitation.getId());
+        final Invitation savedInvitation = this.invitationRepository.findById(invitation.getId()).get();
         softly.assertThat(savedInvitation.getMaxGuests()).isEqualTo(originalMaxGuestCount);
 
         final int modifiedMaxGuestCount = 5;
@@ -162,7 +162,7 @@ public class CustomInvitationRepositoryImplTest {
         boolean updateStatus = this.invitationRepository.saveInvitation(invitation);
         softly.assertThat(updateStatus).isTrue();
 
-        final Invitation updatedInvitation = this.invitationRepository.findById(invitation.getId());
+        final Invitation updatedInvitation = this.invitationRepository.findById(invitation.getId()).get();
         softly.assertThat(updatedInvitation.getMaxGuests()).isEqualTo(modifiedMaxGuestCount);
     }
 
@@ -182,22 +182,22 @@ public class CustomInvitationRepositoryImplTest {
         Invitation invitation = createInvitation(3, invitationCode, createGuest("John", "Doe"));
         for (Guest guest : invitation.getGuestList()) {
             guest.setInvitation(invitation);
-            guest.setFood(this.foodRepository.findById(chickenOptionId));
+            guest.setFood(this.foodRepository.findById(chickenOptionId).get());
         }
         this.entityManager.persistAndFlush(invitation);
         this.entityManager.detach(invitation);
 
-        final Invitation savedInvitation = this.invitationRepository.findById(invitation.getId());
+        final Invitation savedInvitation = this.invitationRepository.findById(invitation.getId()).get();
         softly.assertThat(savedInvitation.getGuestList()).hasSize(1);
         final Food savedGuestFoodOption = savedInvitation.getGuestList().get(0).getFood();
         softly.assertThat(savedGuestFoodOption).isNotNull();
         softly.assertThat(savedGuestFoodOption.getType()).isEqualTo("Chicken");
 
-        invitation.getGuestList().get(0).setFood(this.foodRepository.findById(steakOptionId));
+        invitation.getGuestList().get(0).setFood(this.foodRepository.findById(steakOptionId).get());
         boolean updateStatus = this.invitationRepository.saveInvitation(invitation);
         softly.assertThat(updateStatus).isTrue();
 
-        final Invitation updatedInvitation = this.invitationRepository.findById(invitation.getId());
+        final Invitation updatedInvitation = this.invitationRepository.findById(invitation.getId()).get();
         softly.assertThat(savedInvitation.getGuestList()).hasSize(1);
         softly.assertThat(updatedInvitation.getGuestList().get(0).getFood().getType()).isEqualTo("Steak");
     }

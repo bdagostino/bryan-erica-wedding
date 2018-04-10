@@ -57,7 +57,7 @@ public class RsvpValidator implements Validator {
 
     private void validateFood(Guest guest, int index, Errors errors) {
         if (guest.getFood() == null || guest.getFood().getId() == null) {
-            errors.rejectValue(String.format(GUEST_LIST_FORMAT, index, "food.id"), "B", "Please select your meal");
+            errors.rejectValue(String.format(GUEST_LIST_FORMAT, index, "food"), "B", "Please select your meal");
         }
     }
 

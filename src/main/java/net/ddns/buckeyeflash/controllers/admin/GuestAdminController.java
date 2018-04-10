@@ -91,9 +91,8 @@ public class GuestAdminController {
         List<Food> foodList = new ArrayList<>();
         foodRepository.findAll().forEach(foodList::add);
         if (StringUtils.isNotBlank(guestId)) {
-            Guest guest = guestRepository.findById(Integer.parseInt(guestId));
+            Guest guest = guestRepository.findById(Integer.parseInt(guestId)).orElse(new Guest());
             modelMap.addAttribute(GUEST_ATTRIBUTE_NAME, guest);
-
         } else {
             modelMap.addAttribute(GUEST_ATTRIBUTE_NAME, new Guest());
         }
@@ -109,9 +108,10 @@ public class GuestAdminController {
             return GUEST_MODAL_CONTENT_FRAGMENT;
         }
         if (guest.getId() != null) {
-            Guest storedGuest = guestRepository.findById(guest.getId());
+            Guest storedGuest = guestRepository.findById(guest.getId()).get();
+
             if (guest.getFood() != null) {
-                Food storedFood = foodRepository.findById(guest.getFood().getId());
+                Food storedFood = foodRepository.findById(guest.getFood().getId()).get();
                 storedGuest.setFood(storedFood);
             } else {
                 storedGuest.setFood(null);

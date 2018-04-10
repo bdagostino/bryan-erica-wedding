@@ -100,14 +100,16 @@ public class InvitationAdminController {
     @RequestMapping(value = "/openInvitationModal", method = RequestMethod.POST)
     public String openInvitationModal(String invitationId, ModelMap modelMap) {
         modelMap.clear();
+        final Invitation invitation;
         if (StringUtils.isNotBlank(invitationId)) {
-            Invitation invitation = invitationRepository.findById(Integer.parseInt(invitationId));
-            modelMap.addAttribute(INVITATION_ATTRIBUTE_NAME, invitation);
+            invitation = invitationRepository.findById(Integer.parseInt(invitationId)).orElse(new Invitation());
         } else {
-            Invitation invitation = new Invitation();
-            invitation.setInvitationCode(InvitationUtils.generateInvitationCode(invitationRepository));
-            modelMap.addAttribute(INVITATION_ATTRIBUTE_NAME, invitation);
+            invitation = new Invitation();
         }
+        if(StringUtils.isBlank(invitation.getInvitationCode())){
+            invitation.setInvitationCode(InvitationUtils.generateInvitationCode(invitationRepository));
+        }
+        modelMap.addAttribute(INVITATION_ATTRIBUTE_NAME, invitation);
         return generateInvitationModalContentLocator(invitationId);
     }
 

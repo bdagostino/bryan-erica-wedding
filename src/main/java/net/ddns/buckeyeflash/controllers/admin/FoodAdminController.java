@@ -67,7 +67,7 @@ public class FoodAdminController {
     public String openInvitationModal(String foodId, ModelMap modelMap) {
         modelMap.clear();
         if (StringUtils.isNotBlank(foodId)) {
-            Food food = foodRepository.findById(Integer.parseInt(foodId));
+            Food food = foodRepository.findById(Integer.parseInt(foodId)).orElse(new Food());
             modelMap.addAttribute(FOOD_ATTRIBUTE_NAME, food);
         } else {
             modelMap.addAttribute(FOOD_ATTRIBUTE_NAME, new Food());
@@ -82,7 +82,7 @@ public class FoodAdminController {
             return generateFoodModalContentLocator(food.getId());
         }
         if (food.getId() != null) {
-            Food storedFood = foodRepository.findById(food.getId());
+            Food storedFood = foodRepository.findById(food.getId()).get();
             storedFood.setType(food.getType());
             storedFood.setDescription(food.getDescription());
             try {
@@ -107,7 +107,7 @@ public class FoodAdminController {
     @RequestMapping(value = "/removeFood", method = RequestMethod.POST)
     public String removeFood(String foodId) {
         if (StringUtils.isNotBlank(foodId)) {
-            Food storedFood = foodRepository.findById(Integer.parseInt(foodId));
+            Food storedFood = foodRepository.findById(Integer.parseInt(foodId)).get();
             try {
                 foodRepository.delete(storedFood);
             } catch (Exception e) {

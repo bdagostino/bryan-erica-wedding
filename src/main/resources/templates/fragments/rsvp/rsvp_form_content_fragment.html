@@ -50,11 +50,11 @@
     <div class="col">
       <div><b>Meal Options</b></div>
       <select class="custom-select" th:id="foodSelect+${index}"
-              th:field="${invitation.guestList[__${index}__].food.id}" th:errorclass="is-invalid">
+              th:field="${invitation.guestList[__${index}__].food}" th:errorclass="is-invalid">
         <option selected="selected" value="">Please Select A Meal</option>
         <option th:each="food : ${foodList}" th:text="${food.type}" th:value="${food.id}"></option>
       </select>
-      <div th:errors="${invitation.guestList[__${index}__].food.id}" class="invalid-feedback"></div>
+      <div th:errors="${invitation.guestList[__${index}__].food}" class="invalid-feedback"></div>
     </div>
   </div>
   

@@ -1,6 +1,5 @@
 package net.ddns.buckeyeflash.controllers;
 
-import net.ddns.buckeyeflash.models.Food;
 import net.ddns.buckeyeflash.models.Guest;
 import net.ddns.buckeyeflash.models.Invitation;
 import net.ddns.buckeyeflash.models.RsvpSearch;
@@ -55,8 +54,6 @@ public class RsvpController {
             modelMap.addAttribute("errorMessage", "No invitation found for code " + rsvpSearch.getInvitationCode() + ".");
             return RSVP_SEARCH_VIEW;
         }
-
-        invitation.getGuestList().stream().filter(g -> g.getFood() != null).forEach(g -> g.setFood(new Food(g.getFood().getId())));
         modelMap.clear();
         modelMap.addAttribute("foodList", foodRepository.findAll());
         modelMap.addAttribute("invitation", invitation);

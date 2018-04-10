@@ -7,11 +7,9 @@ import org.springframework.data.repository.PagingAndSortingRepository;
 
 import java.util.List;
 
-public interface FoodRepository extends PagingAndSortingRepository<Food, Long> {
+public interface FoodRepository extends PagingAndSortingRepository<Food, Integer> {
 
     Page<Food> findByTypeStartingWith(String type, Pageable pageable);
-
-    Food findById(Integer id);
 
     List<Food> findAll();
 }

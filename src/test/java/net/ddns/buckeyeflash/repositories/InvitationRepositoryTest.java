@@ -12,6 +12,8 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import java.util.NoSuchElementException;
+
 @RunWith(SpringRunner.class)
 @DataJpaTest(showSql = false)
 @AutoConfigureTestDatabase(connection = EmbeddedDatabaseConnection.HSQL)
@@ -33,10 +35,17 @@ public class InvitationRepositoryTest {
         invitation.setInvitationCode("ABCD");
         int id = (int) entityManager.persistAndGetId(invitation);
         Invitation savedInvitation;
-        savedInvitation = invitationRepository.findById(id);
+        savedInvitation = invitationRepository.findById(id).get();
         softly.assertThat(savedInvitation).isEqualToComparingFieldByField(invitation);
-        savedInvitation = invitationRepository.findById(id + 2);
-        softly.assertThat(savedInvitation).isNull();
+    }
+
+    @Test(expected = NoSuchElementException.class)
+    public void testNoIdFinddById(){
+        final Invitation invitation = new Invitation();
+        invitation.setMaxGuests(1);
+        invitation.setInvitationCode("ABCD");
+        int id = (int) entityManager.persistAndGetId(invitation);
+        invitationRepository.findById(id + 2).get();
     }
 
     @Test

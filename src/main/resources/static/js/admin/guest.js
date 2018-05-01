@@ -9,7 +9,7 @@ $(document).ready(function () {
     ajax: {
       url: "/admin/guest/getGuestData",
       type: "POST",
-      headers:getCsrfRequestHeader(),
+      headers: getCsrfRequestHeader(),
       contentType: "application/json; charset=utf-8",
       data: function (d) {
         return JSON.stringify(d);
@@ -28,42 +28,59 @@ $(document).ready(function () {
       {data: "food"},
       {data: "dietaryConcerns"},
       {data: "dietaryComments"},
-      {data: null, defaultContent: "<button>Edit</button>", visible: ($("#canAdminEdit").val()==='true')}
+      {
+        data: null,
+        defaultContent: "<button class='btn btn-outline-dark mr-2 edit-button'>Edit</button>",
+        visible: ($("#canAdminEdit").val() === 'true')
+      }
     ]
   });
 
-  $('#guestTable tbody').on('click', 'button', function () {
+  $('#guestTable tbody').on('click', '.edit-button', function () {
     var data = table.row($(this).parents('tr')).data();
     openGuestModal(data.id);
   });
+
+  $('#guestModal').on('shown.bs.modal', function () {
+    var guestModalForm = document.getElementById('guestModalForm');
+    guestModalForm.addEventListener('submit', function (event) {
+      dietaryCommentsCustomValidation();
+      if (guestModalForm.checkValidity() === false) {
+        event.preventDefault();
+        event.stopPropagation();
+      }
+      guestModalForm.classList.add('was-validated');
+    });
+  });
+
+  if ($('#alertStatus').val() === 'success') {
+    $('#success-alert').fadeIn(1000).delay(2000).fadeOut(1000);
+  } else if ($('#alertStatus').val() === 'error') {
+    $('#failed-alert').fadeIn(1000).delay(2000).fadeOut(1000);
+  }
 
 });
 
 function openGuestModal(guestId) {
   $.ajax({
     type: "POST",
-    headers:getCsrfRequestHeader(),
+    headers: getCsrfRequestHeader(),
     url: OPEN_GUEST_MODAL_URL,
     data: {guestId: guestId},
     success: function (data) {
-      $("#guestModal").html(data);
-      $("#guestModal").modal('show');
+      $("#guestModal").html(data).modal('show');
     }
   });
 }
 
-function submitGuestForm(){
-  $.ajax({
-    type: "POST",
-    headers:getCsrfRequestHeader(),
-    url: SAVE_GUEST_URL,
-    data: $("#guestModalForm").serialize(),
-    success: function (data) {
-      $("#guestModal").html(data);
-    },
-    error: function () {
-      alert("Error Saving Guest");
+function dietaryCommentsCustomValidation() {
+  if (document.getElementById('dietaryConcernRadioYes').checked) {
+    var dietaryCommentsInput = document.getElementById('inputDietaryComments');
+    if (!dietaryCommentsInput.value) {
+      dietaryCommentsInput.setCustomValidity('Error');
+    }else{
+      dietaryCommentsInput.setCustomValidity('');
     }
-  });
+  }
 }
 

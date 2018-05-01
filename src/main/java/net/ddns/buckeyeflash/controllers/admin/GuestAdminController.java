@@ -10,7 +10,6 @@ import net.ddns.buckeyeflash.models.datatable.DatatableResponse;
 import net.ddns.buckeyeflash.repositories.FoodRepository;
 import net.ddns.buckeyeflash.repositories.GuestRepository;
 import net.ddns.buckeyeflash.serializers.GuestSerializer;
-import net.ddns.buckeyeflash.utilities.CommonConstants;
 import net.ddns.buckeyeflash.utilities.PageUtils;
 import net.ddns.buckeyeflash.validators.admin.GuestSaveValidator;
 import org.apache.commons.lang3.StringUtils;
@@ -27,11 +26,15 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Controller
 @RequestMapping(value = "/admin/guest")
-@SessionAttributes({"guest", "canAdminEdit"})
+@SessionAttributes("guest")
 public class GuestAdminController {
+    private static final String REDIRECT = "redirect:";
+    private static final String GUEST_ERROR_URL = "/admin/guest?status=error";
+    private static final String GUEST_SUCCESS_URL = "/admin/guest?status=success";
     private static final String GUEST_MODAL_TYPE = "Guest";
     private static final String GUEST_ATTRIBUTE_NAME = "guest";
 
@@ -52,8 +55,9 @@ public class GuestAdminController {
 
     @PreAuthorize("hasAnyRole('ADMIN_EDIT','ADMIN_READ')")
     @RequestMapping(method = RequestMethod.GET)
-    public String guest(ModelMap modelMap, SecurityContextHolderAwareRequestWrapper securityContextHolderAwareRequestWrapper) {
+    public String guest(@RequestParam(required = false) String status, final ModelMap modelMap, final SecurityContextHolderAwareRequestWrapper securityContextHolderAwareRequestWrapper) {
         modelMap.put("canAdminEdit", securityContextHolderAwareRequestWrapper.isUserInRole("ADMIN_EDIT"));
+        modelMap.put("alertStatus", status);
         logger.info("Admin Guest Page Accessed");
         return "pages/admin/guest";
     }
@@ -62,20 +66,19 @@ public class GuestAdminController {
     @RequestMapping(value = "/getGuestData", method = RequestMethod.POST)
     public @ResponseBody
     String getGuestData(@RequestBody DatatableRequest request) throws JsonProcessingException {
-        String searchParameter = request.getSearch().getValue().trim();
-        String[] splitSearch = StringUtils.split(searchParameter, StringUtils.SPACE, 3);
-        Page<Guest> guests;
+        final String searchParameter = request.getSearch().getValue().trim();
+        final String[] splitSearch = StringUtils.split(searchParameter, StringUtils.SPACE, 3);
+        final Page<Guest> guests;
         if (splitSearch.length > 1) {
             guests = guestRepository.findByFirstNameStartingWithAndLastNameStartingWithOrFirstNameStartingWithAndLastNameStartingWith(splitSearch[0], splitSearch[1], splitSearch[1], splitSearch[0], PageUtils.getPageRequest(request.getStart(), request.getLength()));
         } else {
             guests = guestRepository.findByFirstNameStartingWithOrLastNameStartingWith(searchParameter, searchParameter, PageUtils.getPageRequest(request.getStart(), request.getLength()));
         }
-
-        ObjectMapper objectMapper = new ObjectMapper();
-        SimpleModule simpleModule = new SimpleModule();
+        final ObjectMapper objectMapper = new ObjectMapper();
+        final SimpleModule simpleModule = new SimpleModule();
         simpleModule.addSerializer(new GuestSerializer());
         objectMapper.registerModule(simpleModule);
-        DatatableResponse<Guest> datatableResponse = new DatatableResponse<>();
+        final DatatableResponse<Guest> datatableResponse = new DatatableResponse<>();
         datatableResponse.setDraw(request.getDraw());
         datatableResponse.setRecordsFiltered((int) guests.getTotalElements());
         datatableResponse.setRecordsTotal((int) guests.getTotalElements());
@@ -88,14 +91,21 @@ public class GuestAdminController {
     @RequestMapping(value = "/openGuestModal", method = RequestMethod.POST)
     public String openGuestnModal(String guestId, ModelMap modelMap) {
         modelMap.clear();
-        List<Food> foodList = new ArrayList<>();
+        final List<Food> foodList = new ArrayList<>();
         foodRepository.findAll().forEach(foodList::add);
+        Guest guest = null;
         if (StringUtils.isNotBlank(guestId)) {
-            Guest guest = guestRepository.findById(Integer.parseInt(guestId)).orElse(new Guest());
-            modelMap.addAttribute(GUEST_ATTRIBUTE_NAME, guest);
-        } else {
-            modelMap.addAttribute(GUEST_ATTRIBUTE_NAME, new Guest());
+            final Optional<Guest> optionalGuest = guestRepository.findById(Integer.parseInt(guestId));
+            if (optionalGuest.isPresent()) {
+                guest = optionalGuest.get();
+            } else {
+                logger.error("Id %s could not be retrieved from the database", guestId);
+            }
         }
+        if (guest == null) {
+            return REDIRECT + GUEST_ERROR_URL;
+        }
+        modelMap.addAttribute(GUEST_ATTRIBUTE_NAME, guest);
         modelMap.addAttribute("foodList", foodList);
         return GUEST_MODAL_CONTENT_FRAGMENT;
     }
@@ -105,30 +115,38 @@ public class GuestAdminController {
     public String saveGuest(@Valid @ModelAttribute Guest guest, Errors errors) {
         guestSaveValidator.validate(guest, errors);
         if (errors.hasErrors()) {
-            return GUEST_MODAL_CONTENT_FRAGMENT;
+            return REDIRECT + GUEST_ERROR_URL;
         }
         if (guest.getId() != null) {
-            Guest storedGuest = guestRepository.findById(guest.getId()).get();
-
-            if (guest.getFood() != null) {
-                Food storedFood = foodRepository.findById(guest.getFood().getId()).get();
-                storedGuest.setFood(storedFood);
-            } else {
-                storedGuest.setFood(null);
+            logger.info("Searching for guestId: {}", guest.getId());
+            final Optional<Guest> optionalGuest = guestRepository.findById(guest.getId());
+            if (optionalGuest.isPresent()) {
+                final Guest storedGuest = optionalGuest.get();
+                if (guest.getFood() != null && guest.getFood().getId() != null) {
+                    final Optional<Food> optionalFood = foodRepository.findById(guest.getFood().getId());
+                    if (optionalFood.isPresent()) {
+                        storedGuest.setFood(optionalFood.get());
+                    } else {
+                        logger.error("Food information could not be found while saving guest");
+                        return REDIRECT + GUEST_ERROR_URL;
+                    }
+                } else {
+                    storedGuest.setFood(null);
+                }
+                storedGuest.setDietaryConcerns(guest.getDietaryConcerns());
+                storedGuest.setDietaryComments(guest.getDietaryComments());
+                storedGuest.setCeremonyAttendance(guest.getCeremonyAttendance());
+                storedGuest.setReceptionAttendance(guest.getReceptionAttendance());
+                try {
+                    guestRepository.save(storedGuest);
+                    return REDIRECT + GUEST_SUCCESS_URL;
+                } catch (Exception e) {
+                    logger.error(e.getMessage(), e);
+                    return REDIRECT + GUEST_ERROR_URL;
+                }
             }
-            storedGuest.setDietaryConcerns(guest.getDietaryConcerns());
-            storedGuest.setDietaryComments(guest.getDietaryComments());
-            storedGuest.setCeremonyAttendance(guest.getCeremonyAttendance());
-            storedGuest.setReceptionAttendance(guest.getReceptionAttendance());
-            try {
-                guestRepository.save(storedGuest);
-            } catch (Exception e) {
-                return String.format(CommonConstants.MODAL_ERROR_FRAGMENT_TEMPLATE, GUEST_MODAL_TYPE);
-            }
-        } else {
-            logger.error("Guest Id Missing");
-            return String.format(CommonConstants.MODAL_ERROR_FRAGMENT_TEMPLATE, GUEST_MODAL_TYPE);
         }
-        return String.format(CommonConstants.MODAL_SUCCESS_FRAGMENT_TEMPLATE, GUEST_MODAL_TYPE);
+        logger.error("Guest information could not be found");
+        return REDIRECT + GUEST_ERROR_URL;
     }
 }

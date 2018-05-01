@@ -11,6 +11,12 @@
   <div class="row">
     <div class="col-md-2"></div>
     <div class="col-md-8">
+      <div class="alert alert-success" id="success-alert" style="display:none; text-align: center;">
+        <strong>Success! </strong>Guest Saved.
+      </div>
+      <div class="alert alert-danger" id="failed-alert" style="display:none; text-align: center;">
+        <strong>Error! </strong>Could not save guest.
+      </div>
       <div style="overflow: auto; margin-bottom:1em">
         <h1 style="float:left">Guests</h1>
       </div>
@@ -35,7 +41,8 @@
     <div class="col-md-2"></div>
   </div>
 </div>
-<input id="canAdminEdit" type="text" th:value="${canAdminEdit}" hidden="hidden"/>
 <div class="modal fade" id="guestModal" tabindex="-1" role="dialog" aria-labelledby="guestModal" aria-hidden="true"></div>
+<input id="canAdminEdit" type="text" th:value="${canAdminEdit}" hidden="hidden"/>
+<input id="alertStatus" type="text" th:value="${alertStatus}" hidden="hidden"/>
 </body>
 </html>

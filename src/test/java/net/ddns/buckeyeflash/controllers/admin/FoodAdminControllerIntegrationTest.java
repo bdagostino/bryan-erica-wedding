@@ -138,7 +138,8 @@ public class FoodAdminControllerIntegrationTest {
     @Test
     @WithMockUser(roles = "ADMIN_EDIT")
     public void testOpenFoodModalAdminEditRoleUpdateFood() throws Exception {
-        this.mockMvc.perform(post("/admin/food/openFoodModal").param("foodId", "1").with(csrf()))
+        when(foodRepository.findById(22)).thenReturn(Optional.of(new Food(22)));
+        this.mockMvc.perform(post("/admin/food/openFoodModal").param("foodId", "22").with(csrf()))
                 .andExpect(view().name("fragments/admin/food_fragments :: foodModalContent(title='Update Food')"));
     }
 

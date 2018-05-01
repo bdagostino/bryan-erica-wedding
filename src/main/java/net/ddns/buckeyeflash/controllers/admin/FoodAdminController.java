@@ -76,6 +76,9 @@ public class FoodAdminController {
             Optional<Food> optionalFood = foodRepository.findById(Integer.parseInt(foodId));
             if (optionalFood.isPresent()) {
                 food = optionalFood.get();
+            } else {
+                logger.error("Id %s could not be retrieved from the database", foodId);
+                return REDIRECT + FOOD_ERROR_URL;
             }
         }
         modelMap.addAttribute("food", food);

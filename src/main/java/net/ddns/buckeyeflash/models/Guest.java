@@ -11,6 +11,16 @@ public class Guest {
     private static final int FIRST_NAME_LENGTH = 40;
     private static final int LAST_NAME_LENGTH = 40;
 
+    public Guest() {
+
+    }
+
+    public Guest(final int id, final String firstName, final String lastName) {
+        this.id = id;
+        this.firstName = firstName;
+        this.lastName = lastName;
+    }
+
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer id;

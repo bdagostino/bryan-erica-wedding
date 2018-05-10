@@ -7,7 +7,7 @@
   <div class="collapse navbar-collapse" id="mainNavBar">
     <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
       <li class="nav-item dropdown">
-        <a class="nav-link dropdown-toggle" href="#" id="storiesDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Stories</a>
+        <a class="nav-link dropdown-toggle" href="/" id="storiesDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Stories</a>
         <div class="dropdown-menu" aria-labelledby="storiesDropdown">
           <a class="dropdown-item" href="#" th:href="@{/stories/our-story}">Our Story</a>
           <div class="dropdown-divider"></div>
@@ -16,9 +16,15 @@
           <a class="dropdown-item" href="#" th:href="@{/stories/groomsmen}">Groomsmen</a>
         </div>
       </li>
-      <li class="nav-item"><a class="nav-link" href="/rsvp">RSVP</a></li>
-      <li class="nav-item"><a class="nav-link" href="#">Location</a></li>
-      <li class="nav-item"><a class="nav-link" href="#">Hotel/Reservations</a></li>
+      <li class="nav-item"><a class="nav-link" th:href="@{/rsvp}">RSVP</a></li>
+      <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle" href="/" id="detailsDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Details</a>
+        <div class="dropdown-menu" aria-labelledby="detailsDropdown">
+          <a class="dropdown-item" th:href="@{/details/accommodations}">Accommodations</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" th:href="@{/details/location}">Location</a>
+        </div>
+      </li>
       <li class="nav-item"><a class="nav-link" href="#">Registry</a></li>
       <li sec:authorize="hasAnyRole('ADMIN_EDIT','ADMIN_READ')" class="nav-item dropdown">
         <a class="nav-link dropdown-toggle" href="#" id="adminDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Admin</a>

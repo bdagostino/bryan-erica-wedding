@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <link th:href="@{/css/details/location.css}" rel="stylesheet"/>
+  <div th:replace="fragments/header"></div>
+</head>
+
+<body id="body">
+<header>
+  <nav th:replace="fragments/navbar"></nav>
+</header>
+<main>
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col"></div>
+      <div id="titleDiv" class="col-xs-10 col-sm-8 col-md-8 col-lg-6">
+        <h1>Wedding Accommodations</h1>
+      </div>
+      <div class="col"></div>
+    </div>
+    <div class="row">
+      <div class="col"></div>
+      <div class="col-xs-10 col-sm-8 col-md-8 col-lg-6">
+        <p>Right next to Landerhaven is Staybridge Suites. We will have a discounted room rate the night of the wedding for those who wish to stay and party with us.</p>
+      </div>
+      <div class="col"></div>
+    </div>
+    <div class="row">
+      <div class="col"></div>
+      <iframe
+          width="600"
+          height="450"
+          frameborder="0" style="border:0"
+          th:src="@{'https://www.google.com/maps/embed/v1/place?key='+${googleEmbeddedApiKey}+'&q='+${staybridgeHotelAddress}}" allowfullscreen>
+      </iframe>
+      <div class="col"></div>
+    </div>
+  </div>
+</main>
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+

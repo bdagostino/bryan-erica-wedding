@@ -17,12 +17,12 @@ public class HomeController {
 
     private static final Logger logger = LogManager.getLogger(HomeController.class);
 
-    private static final LocalDate WEDDING_DAY = LocalDate.of(2019, 9, 14);
+    private static final LocalDate WEDDING_DAY = LocalDate.of(2019, 9, 20);
 
     @RequestMapping(value = "/", method = RequestMethod.GET)
     public String home(ModelMap modelMap) {
-
-        modelMap.addAttribute("remainingDays", DAYS.between(LocalDate.now(), WEDDING_DAY));
+        final long dateDifference = DAYS.between(LocalDate.now(), WEDDING_DAY);
+        modelMap.addAttribute("remainingDays", dateDifference > 0 ? dateDifference : 0);
         logger.info("Home Page Accessed");
         return "pages/home";
     }

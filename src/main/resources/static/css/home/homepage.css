@@ -13,21 +13,25 @@
     border-color: silver;
 }
 
-.control-arrow{
+.control-arrow {
     color: black;
 }
 
-#titleDiv{
-    text-align: center;
+.welcomeText {
+    font-size: 4rem;
+}
+
+#titleDiv > h1{
+    font-size: 8rem;
+}
+
+#daysRemainingText{
+    font-size: 2rem;
+}
+
+#titleDiv, .welcomeText, #daysRemainingText {
     font-family: 'Niconne', cursive;
-}
-
-#titleDiv > h1 {
-    font-size: 6rem;
-}
-
-#titleDiv > p {
-    font-size: 3rem;
+    text-align: center;
 }
 
 /* RESPONSIVE CSS

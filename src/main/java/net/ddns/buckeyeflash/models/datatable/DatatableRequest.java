@@ -7,12 +7,11 @@ import java.util.List;
 public class DatatableRequest implements Serializable {
 
     private int draw;
-    private List<Column> columns = new ArrayList<Column>();
-    private List<Order> order = new ArrayList<Order>();
+    private List<Column> columns = new ArrayList<>();
     private int start;
     private int length;
     private Search search;
-    private final static long serialVersionUID = -1677715404926581308L;
+    private static final long serialVersionUID = -1677715404926581308L;
 
 
     public int getDraw() {
@@ -29,14 +28,6 @@ public class DatatableRequest implements Serializable {
 
     public void setColumns(List<Column> columns) {
         this.columns = columns;
-    }
-
-    public List<Order> getOrder() {
-        return order;
-    }
-
-    public void setOrder(List<Order> order) {
-        this.order = order;
     }
 
     public int getStart() {

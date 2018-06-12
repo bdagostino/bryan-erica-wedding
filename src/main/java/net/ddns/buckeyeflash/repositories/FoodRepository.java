@@ -5,10 +5,10 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.repository.PagingAndSortingRepository;
 
-import javax.persistence.Cacheable;
+import java.util.List;
 
-public interface FoodRepository extends PagingAndSortingRepository<Food, Long> {
+public interface FoodRepository extends PagingAndSortingRepository<Food, Integer> {
 
-    Page<Food> findByTypeStartingWith(String type,Pageable pageable);
+    Page<Food> findByTypeStartingWith(String type, Pageable pageable);
 
 }

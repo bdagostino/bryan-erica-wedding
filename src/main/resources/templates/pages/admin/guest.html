@@ -1,21 +1,24 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
-  <div th:replace="fragments/header"/>
-  <script type="text/javascript" src="../js/admin/guest.js"/>
+  <meta th:replace="fragments/header" />
+  <script type="text/javascript" th:src="@{/js/admin/guest.js}"></script>
 </head>
 
 <body>
 <nav th:replace="fragments/navbar"></nav>
-<div class="container-fluid">
+<div class="container-fluid" style="padding-top: 1em">
   <div class="row">
-    <div class="col-md-2"/>
+    <div class="col-md-2"></div>
     <div class="col-md-8">
+      <div class="alert alert-success" id="success-alert" style="display:none; text-align: center;">
+        <strong>Success! </strong>Guest Saved.
+      </div>
+      <div class="alert alert-danger" id="failed-alert" style="display:none; text-align: center;">
+        <strong>Error! </strong>Could not save guest.
+      </div>
       <div style="overflow: auto; margin-bottom:1em">
         <h1 style="float:left">Guests</h1>
-        <button type="button" class="btn btn-primary" style="float:right" data-toggle="modal" data-target="#guestModal">
-          Add
-        </button>
       </div>
       <table id="guestTable" class="table table-striped table-bordered" cellspacing="0" width="100%">
         <thead>
@@ -23,64 +26,23 @@
           <th>Id</th>
           <th>First Name</th>
           <th>Last Name</th>
-          <th>Attendance</th>
+          <th>Ceremony Attendance</th>
+          <th>Reception Attendance</th>
           <th>Food</th>
           <th>Dietary Concerns</th>
           <th>Dietary Comments</th>
+          <th>Actions</th>
         </tr>
         </thead>
         <tbody>
         </tbody>
       </table>
     </div>
-    <div class="col-md-2"/>
+    <div class="col-md-2"></div>
   </div>
 </div>
-<div class="modal fade" id="guestModal" tabindex="-1" role="dialog">
-  <div class="modal-dialog modal-lg" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h3>Add Guest</h3>
-      </div>
-      <div class="modal-body">
-        <form id="guestModalForm" th:action="@{/admin/guest/addGuest}" th:object="${guest}" method="post">
-          <div class="row">
-            <div class="col-md-8">
-              <div class="input-group">
-                <span class="input-group-addon">Text</span>
-                <input type="text" class="form-control" th:field="*{firstName}" placeholder="First Name"/>
-              </div>
-            </div>
-            <div class="col-md-4">
-              <span class="label label-danger" style="font-size:12px" th:if="${#fields.hasErrors('firstName')}" th:errors="*{firstName}">Errors</span>
-            </div>
-          </div>
-          <div class="row">
-            <div class="col-md-8">
-              <div class="input-group">
-                <span class="input-group-addon">Text</span>
-                <input type="text" class="form-control" th:field="*{lastName}" placeholder="Last Name"/>
-              </div>
-            </div>
-            <div class="col-md-4">
-              <span class="label label-danger" style="font-size:12px" th:if="${#fields.hasErrors('lastName')}" th:errors="*{lastName}">Errors</span>
-            </div>
-          </div>
-          <div th:if="${#fields.hasErrors('firstName')} or ${#fields.hasErrors('lastName')}">
-            <script>
-              $(document).ready(function () {
-                $('#guestModal').modal('show');
-              });
-            </script>
-          </div>
-        </form>
-      </div>
-    </div>
-    <div class="modal-footer">
-      <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-      <button type="submit" class="btn btn-primary" form="guestModalForm">Save changes</button>
-    </div>
-  </div>
-</div>
+<div class="modal fade" id="guestModal" tabindex="-1" role="dialog" aria-labelledby="guestModal" aria-hidden="true"></div>
+<input id="canAdminEdit" type="text" th:value="${canAdminEdit}" hidden="hidden"/>
+<input id="alertStatus" type="text" th:value="${alertStatus}" hidden="hidden"/>
 </body>
 </html>

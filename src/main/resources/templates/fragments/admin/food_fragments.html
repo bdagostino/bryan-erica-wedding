@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8"/>
+  <title>Title</title>
+</head>
+<body>
+
+<div class="modal-dialog modal-lg" role="document" th:fragment="foodModalContent(title)">
+  <div class="modal-content">
+    <div class="modal-header">
+      <h3 class="modal-title" th:text="${title}">Food</h3>
+    </div>
+    <div class="modal-body">
+      <form id="foodModalForm" class="needs-validation" method="post" th:action="@{/admin/food/saveFood}"  novalidate>
+        <label for="inputFoodType">Food Type</label>
+        <div class="input-group">
+          <input id="inputFoodType" type="text" class="form-control" th:field="${food.type}"
+                 required pattern="\S(.*\S)?"/>
+          <div class="invalid-feedback">Please enter the food type</div>
+        </div>
+        
+        <label for="inputDescription" class="mt-3">Description</label>
+        <div class="input-group">
+          <input id="inputDescription" type="text" class="form-control" th:field="${food.description}"
+                 required pattern="\S(.*\S)?"/>
+          <div class="invalid-feedback">Please enter the food description</div>
+        </div>
+      </form>
+    </div>
+    <div class="modal-footer">
+      <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+      <button id="foodModalSubmitButton" type="submit" class="btn btn-primary" form="foodModalForm">Save changes
+      </button>
+    </div>
+  </div>
+</div>
+
+</body>
+</html>

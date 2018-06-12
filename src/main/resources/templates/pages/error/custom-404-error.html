@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <link th:href="@{/css/error/custom-404-error.css}" rel="stylesheet"/>
+  <div th:replace="fragments/header"/>
+</head>
+
+<body id="body">
+<header>
+  <nav th:replace="fragments/navbar"></nav>
+</header>
+<main>
+  
+  <div class="row">
+    <div class="col-sm-0 col-md-1 col-lg-2 col-xl-3"></div>
+    <div class="col">
+      <div th:if="${imageIndex==0}">
+        <img class="mx-auto d-block" th:src="@{/images/error/404-monkey.jpg}" alt="404-Monkey">
+      </div>
+      <div th:if="${imageIndex==1}">
+        <img class="mx-auto d-block" th:src="@{/images/error/404-panda.jpg}" alt="404-Panda">
+      </div>
+      <div th:if="${imageIndex==2}">
+        <img class="mx-auto d-block" th:src="@{/images/error/404-turtle.jpg}" alt="404-Turtle">
+      </div>
+      <div th:if="${imageIndex==3}">
+        <img class="mx-auto d-block" th:src="@{/images/error/404-bear.jpg}" alt="404-Bear">
+      </div>
+    </div>
+    <div class="col-sm-0 col-md-1 col-lg-2 col-xl-3"></div>
+  </div>
+</main>
+</body>
+</html>

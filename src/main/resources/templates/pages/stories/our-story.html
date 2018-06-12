@@ -4,20 +4,65 @@
   <link th:href="@{/css/stories/stories.css}" rel="stylesheet"/>
   <div th:replace="fragments/header"></div>
 </head>
-<body  id="body">
+<body id="body">
 <header>
   <nav th:replace="fragments/navbar"></nav>
 </header>
 <main>
-<p>Our story began in the Spring of 2011 at a restaurant in Solon, Ohio. Bryan was home for the summer from The Ohio
-  State University to work and Erica had been working as a hostess. Over the next 6 months we became closer friends
-  until we had our first date on November 26th. They maintained a long distance relationship while Erica was getting her
-  Bachelor and Master degrees in Cleveland and Bryan graduating then obtaining a job in Columbus. There have been many
-  weekend commutes and Skype dates throughout the years but then in October of 2017 Bryan and Erica planned a weekend
-  getaway to Niagara Falls. On the second day of our trip we had an adventurous morning exploring and in the afternoon
-  went to view the rapids of the falls where Bryan popped the question! It was a beautiful view and unforgettable
-  moment.
-</p>
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-xs-1 col-sm-2 col-md-2 col-lg-3"></div>
+      <div class="col">
+        <img class="img-fluid mx-auto story-image" src="" th:src="@{/images/stories/our-story.png}"
+             alt="Generic placeholder image" style="max-height: 25rem">
+      </div>
+      <div class="col-xs-1 col-sm-2 col-md-2 col-lg-3"></div>
+    </div>
+    <div class="row">
+      <div class="col-xs-1 col-sm-2 col-md-2 col-lg-3"></div>
+      <div class="col">
+        <h3>How we met:</h3>
+        <p>In the Spring of 2011 I was working as a hostess at Applebees in Solon, Ohio. Bryan was on summer break from
+          The Ohio State University and he came back to work. It felt like everyone at Applebees already knew who he was
+          except for me. Throughout the summer we worked many shifts together and I even went to visit him a few times
+          on my days off. Over the next 6 months we became closer friends and we made sure that we stayed in touch even
+          after he went back to college. On November 26th 2011 we went on our first date.
+        </p>
+        <h3 class="mt-5">Our Journey:</h3>
+        <p>Over the next 6 years we had to work through the struggles of a long-distance relationship. I was in
+          Cleveland taking classes to obtain my Bachelors at Kent State University and my Masters at John Carroll
+          University while Bryan finished his bachelors and began working at JPMorgan Chase. At first, we did not see
+          each other for months at a time but as our relationship grew stronger we did our best to see each other every
+          two weeks. Either I would make a trip to Columbus or Bryan would come back to Cleveland for the weekend. Since
+          we lived miles apart we had many long skype dates where we would talk and laugh all night until I just
+          couldn’t stay awake any longer.</p>
+        <h3 class="mt-5">Our Engagement:</h3>
+        <p>In October of 2017 we planned a weekend vacation to Niagara Falls. On the second day of the trip we had an
+          adventurous morning exploring the area. Every time we stopped to take a photo or get water Bryan would place
+          the drawstring bag on the ground and kneel down to get items from the bag. I was wondering why he was going
+          through all that effort instead of just reaching into the bag. Then the afternoon came and we went on the
+          White Water Walk to see the rapids down river. We walked back and forth between the overlooks until Bryan asked
+          if we could take a photo together. Again, he set the bag down to get out the camera but to my surprise a
+          camera did not come out of the bag. He pulled out a ring box and popped the question!! It was such an
+          unforgettable moment and we had a beautiful view of the rapids in the background. We even had an audience on
+          the boardwalk above who all clapped and congratulated us on our engagement.</p>
+      </div>
+      <div class="col-xs-1 col-sm-2 col-md-2 col-lg-3"></div>
+      
+    </div>
+    <div class="row">
+      <div class="col-xs-1 col-sm-2 col-md-2 col-lg-3"></div>
+      <div class="col">
+        <img  th:src="@{/}" alt="Photo 1"/>
+      </div>
+      <div class="col">
+        <img th:src="@{/}" alt="Photo 2"/>
+      </div>
+      <div class="col-xs-1 col-sm-2 col-md-2 col-lg-3"></div>
+    </div>
+  </div>
+
+
 </main>
 </body>
 </html>

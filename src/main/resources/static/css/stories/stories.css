@@ -1,0 +1,16 @@
+@import "/css/global.css";
+
+.story {
+    margin: 2rem auto;
+}
+
+.story-image{
+    max-height: 500px;
+    margin: auto;
+    display: block;
+}
+
+.story-text{
+    margin: auto;
+    text-align: left;
+}

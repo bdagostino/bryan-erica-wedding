@@ -5,7 +5,7 @@ import java.io.Serializable;
 public class Search implements Serializable {
     private String value;
     private boolean regex;
-    private final static long serialVersionUID = -8617835832252967105L;
+    private static final long serialVersionUID = -8617835832252967105L;
 
     public String getValue() {
         return value;

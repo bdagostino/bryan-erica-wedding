@@ -1,0 +1,1 @@
+INSERT INTO WEDDING.FOOD VALUES (1,'chicken','chicken');

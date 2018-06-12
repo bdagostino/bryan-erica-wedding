@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8"/>
+  <title>Title</title>
+</head>
+<body>
+
+<div class="modal-dialog modal-lg" role="document" th:fragment="guestModalContent">
+  <div class="modal-content">
+    <div class="modal-header">
+      <h3 class="modal-title">Update Guest</h3>
+    </div>
+    <div class="modal-body">
+      <form id="guestModalForm" class="needs-validation" method="post" th:action="@{/admin/guest/saveGuest}" novalidate>
+        
+        <h3 th:text="${guest.firstName +' ' + guest.lastName}">Guest Name</h3>
+  
+        <label for="ceremonyAttendanceRadioDiv">Ceremony Attendance</label>
+        <div id="ceremonyAttendanceRadioDiv" class="custom-control custom-radio">
+          <input type="radio" class="custom-control-input" id="ceremonyAttendanceRadioYes" name="radio-stacked"
+                 th:field="${guest.ceremonyAttendance}" value="true"/>
+          <label class="custom-control-label" for="ceremonyAttendanceRadioYes">Yes</label>
+        </div>
+        <div class="custom-control custom-radio">
+          <input type="radio" class="custom-control-input" id="ceremonyAttendanceRadioNo" name="radio-stacked"
+                 th:field="${guest.ceremonyAttendance}" value="false"/>
+          <label class="custom-control-label" for="ceremonyAttendanceRadioNo">No</label>
+        </div>
+        
+        <label for="receptionAttendanceRadioDiv">Reception Attendance</label>
+        <div id="receptionAttendanceRadioDiv" class="custom-control custom-radio">
+          <input type="radio" class="custom-control-input" id="receptionAttendanceRadioYes" name="radio-stacked"
+                 th:field="${guest.receptionAttendance}" value="true"/>
+          <label class="custom-control-label" for="receptionAttendanceRadioYes">Yes</label>
+        </div>
+        <div class="custom-control custom-radio">
+          <input type="radio" class="custom-control-input" id="receptionAttendanceRadioNo" name="radio-stacked"
+                 th:field="${guest.receptionAttendance}" value="false"/>
+          <label class="custom-control-label" for="receptionAttendanceRadioNo">No</label>
+        </div>
+        
+        <label for="foodSelect" class="mt-3">Food</label>
+        <select class="custom-select custom-select-md" id="foodSelect" th:field="${guest.food.id}">
+          <option value="">No Food Selected</option>
+          <option th:each="food : ${foodList}" th:text="${food.type}" th:value="${food.id}"></option>
+        </select>
+        
+        <label for="dietaryConcernRadioDiv" class="mt-3">Dietary Concern</label>
+        <div id="dietaryConcernRadioDiv" class="custom-control custom-radio">
+          <input type="radio" class="custom-control-input" id="dietaryConcernRadioYes" name="radio-stacked"
+                 th:field="${guest.dietaryConcerns}" value="true"/>
+          <label class="custom-control-label" for="dietaryConcernRadioYes">Yes</label>
+        </div>
+        <div class="custom-control custom-radio">
+          <input type="radio" class="custom-control-input" id="dietaryConcernRadioNo" name="radio-stacked"
+                 th:field="${guest.dietaryConcerns}" value="false"/>
+          <label class="custom-control-label" for="dietaryConcernRadioNo">No</label>
+        </div>
+        
+        <label for="inputDietaryComments" class="mt-3">Dietary Comments</label>
+        <div class="input-group">
+          <input id="inputDietaryComments" type="text" class="form-control" th:field="${guest.dietaryComments}" pattern="\S(.*\S)?"/>
+          <div class="invalid-feedback">Dietary comments are required</div>
+        </div>
+      </form>
+    </div>
+    <div class="modal-footer">
+      <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+      <button id="guestModalSubmitButton" type="submit" class="btn btn-primary" form="guestModalForm">Save
+        changes
+      </button>
+    </div>
+  </div>
+</div>
+</body>
+</html>

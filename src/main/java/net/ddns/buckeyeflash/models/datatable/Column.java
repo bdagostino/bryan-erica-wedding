@@ -8,7 +8,7 @@ public class Column implements Serializable {
     private boolean searchable;
     private boolean orderable;
     private Search search;
-    private final static long serialVersionUID = -8199389606567493567L;
+    private static final long serialVersionUID = -8199389606567493567L;
 
     public String getData() {
         return data;

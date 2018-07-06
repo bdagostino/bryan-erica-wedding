@@ -1,1 +1,1 @@
-web: java $JAVA_OPTS -Dspring.profiles.active=local -Dserver.port=$PORT -jar ./target/bryan-erica-wedding.jar
+web: java $JAVA_OPTS -Dspring.profiles.active=dev -Dserver.port=$PORT -jar ./target/bryan-erica-wedding.jar

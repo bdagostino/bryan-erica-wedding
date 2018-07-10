@@ -2,6 +2,7 @@ package net.ddns.buckeyeflash.configuration;
 
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
+import org.apache.commons.lang3.StringUtils;
 import org.postgresql.ds.PGSimpleDataSource;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -17,18 +18,15 @@ public class Datasource {
 
     @Bean
     public DataSource pooledDataSource() throws URISyntaxException {
-        URI dbUri = new URI(System.getenv("DATABASE_URL"));
-
-        String username = dbUri.getUserInfo().split(":")[0];
-        String password = dbUri.getUserInfo().split(":")[1];
-        String dbUrl = "jdbc:postgresql://" + dbUri.getHost() + ':' + dbUri.getPort() + dbUri.getPath() + "?sslmode=require";
-
+        final URI dbUri = new URI(System.getenv("DATABASE_URL"));
+        final String[] userInfoArray = StringUtils.split(dbUri.getUserInfo(),':');
+        final String dbUrl = "jdbc:postgresql://" + dbUri.getHost() + ':' + dbUri.getPort() + dbUri.getPath() + "?sslmode=require";
 
         final PGSimpleDataSource pgSimpleDataSource = new PGSimpleDataSource();
         pgSimpleDataSource.setUrl(dbUrl);
         pgSimpleDataSource.setConnectTimeout(2000);
-        pgSimpleDataSource.setUser(username);
-        pgSimpleDataSource.setPassword(password);
+        pgSimpleDataSource.setUser(userInfoArray[0]);
+        pgSimpleDataSource.setPassword(userInfoArray[1]);
 
         final HikariConfig hikariConfig = new HikariConfig();
         hikariConfig.setDataSource(pgSimpleDataSource);

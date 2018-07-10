@@ -35,7 +35,6 @@ public class GuestAdminController {
     private static final String REDIRECT = "redirect:";
     private static final String GUEST_ERROR_URL = "/admin/guest?status=error";
     private static final String GUEST_SUCCESS_URL = "/admin/guest?status=success";
-    private static final String GUEST_MODAL_TYPE = "Guest";
     private static final String GUEST_ATTRIBUTE_NAME = "guest";
 
     private static final Logger logger = LogManager.getLogger(GuestAdminController.class);

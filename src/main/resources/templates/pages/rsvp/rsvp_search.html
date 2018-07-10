@@ -10,28 +10,34 @@
   <nav th:replace="fragments/navbar"></nav>
 </header>
 <main>
-<div class="container-fluid">
-  <div class="row">
-    <div class="col-2"></div>
-    <div class="col-8">
-      <form id="rsvpSearchForm" method="post" th:action="@{/rsvp/search}" style="margin-top: 5em">
-        <input id="rsvpSearchField" type="text" class="form-control" placeholder="Invitation Code"
-               th:field="${rsvpSearch.invitationCode}"/>
-      </form>
-      <button type="submit" class="btn btn-primary" form="rsvpSearchForm" style="float: right; margin: 1em auto">Next
-      </button>
-      <p>The code can be found on the bottom of your invitation</p>
-  
-      <div class="alert alert-danger" role="alert" th:if="${errorMessage}!=null" style="margin-top: 3rem;">
-        <div style="padding: 0 50%"><i class="fa fa-exclamation-triangle fa-3x"></i></div>
-        <strong th:text="'Oh snap! '+${errorMessage}">Oh snap!</strong>
-        <p>Please check your Invitation and try again. If the problem persists please call and let one of us know.</p>
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-xs-1 col-sm-2 col-md-2 col-lg-4"></div>
+      <div class="col">
+        <h1 class="mt-4" style="font-family: 'Niconne', cursive; text-align: center; font-size: 4rem">RSVP</h1>
+        
+        <form id="rsvpSearchForm" method="post" th:action="@{/rsvp/search}">
+          <div class="input-group">
+            <input id="rsvpSearchField" type="text" class="form-control" placeholder="Invitation Code"
+                   th:field="${rsvpSearch.invitationCode}"/>
+            <button type="submit" class="btn btn-primary ml-2" form="rsvpSearchForm">Next</button>
+          </div>
+        </form>
+        <p>Enter the code which can be found on the bottom of your invitation</p>
+        <div class="alert alert-danger" role="alert" th:if="${errorMessage}!=null" style="margin-top: 3rem;">
+          <div style="padding: 0 50%"><i class="fa fa-exclamation-triangle fa-3x"></i></div>
+          <strong th:text="'Oh snap! '+${errorMessage}">Oh snap!</strong>
+          <p>Please check your Invitation and try again. If the problem persists please call and let one of us know.</p>
+        </div>
+        <div style="text-align: center">
+          <img th:src="@{/images/getting-married-wedding-badge-grey.svg}" alt="We are getting married"
+               style="height: 300px"/>
+        </div>
       </div>
+      <div class="col-xs-1 col-sm-2 col-md-2 col-lg-4"></div>
     </div>
-    <div class="col-2"></div>
+  
   </div>
-
-</div>
 </main>
 <footer></footer>
 </body>

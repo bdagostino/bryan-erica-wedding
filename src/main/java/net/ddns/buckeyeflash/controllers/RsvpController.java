@@ -13,11 +13,13 @@ import org.springframework.ui.ModelMap;
 import org.springframework.util.CollectionUtils;
 import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.view.RedirectView;
 
 import javax.validation.Valid;
 
 @Controller
-@RequestMapping(value = "rsvp")
+@RequestMapping(value = "/rsvp")
 @SessionAttributes({"invitation", "foodList"})
 public class RsvpController {
     private static final Logger logger = LogManager.getLogger(RsvpController.class);
@@ -30,60 +32,61 @@ public class RsvpController {
 
     private final RsvpValidator rsvpValidator;
 
-    public RsvpController(InvitationRepository invitationRepository, FoodRepository foodRepository, RsvpValidator rsvpValidator) {
+    public RsvpController(final InvitationRepository invitationRepository, final FoodRepository foodRepository, final RsvpValidator rsvpValidator) {
         this.invitationRepository = invitationRepository;
         this.foodRepository = foodRepository;
         this.rsvpValidator = rsvpValidator;
     }
 
-    @RequestMapping(method = RequestMethod.GET)
-    public String rsvp(ModelMap modelMap) {
+    @GetMapping
+    public ModelAndView rsvp(final ModelMap modelMap) {
         logger.info("RSVP Page Accessed");
+        modelMap.clear();
         modelMap.addAttribute("rsvpSearch", new RsvpSearch());
-        return RSVP_SEARCH_VIEW;
+        return new ModelAndView(RSVP_SEARCH_VIEW, modelMap);
     }
 
-    @RequestMapping(value = "/search")
-    public String test(@Valid @ModelAttribute final RsvpSearch rsvpSearch, final Errors errors, final ModelMap modelMap) {
+    @GetMapping(value = "/view")
+    public ModelAndView rsvpView(@RequestParam(value = "invitationCode") final String invitationCode, final ModelMap modelMap) {
+        modelMap.clear();
+        modelMap.addAttribute("foodList", this.foodRepository.findAll());
+        modelMap.addAttribute("invitation", this.invitationRepository.findByInvitationCode(invitationCode));
+        return new ModelAndView(RSVP_FORM_VIEW, modelMap);
+    }
+
+    @PostMapping(value = "/search")
+    public ModelAndView rsvpSearch(@Valid @ModelAttribute final RsvpSearch rsvpSearch, final Errors errors, final ModelMap modelMap) {
         if (errors.hasErrors()) {
             modelMap.addAttribute("errorMessage", "No invitation found for code " + rsvpSearch.getInvitationCode() + ".");
-            return RSVP_SEARCH_VIEW;
+            return new ModelAndView(RSVP_SEARCH_VIEW, modelMap);
         }
-        final Invitation invitation = invitationRepository.findByInvitationCode(rsvpSearch.getInvitationCode());
-        if (invitation == null) {
+        if (!invitationRepository.existsByInvitationCode(rsvpSearch.getInvitationCode())) {
             modelMap.addAttribute("errorMessage", "No invitation found for code " + rsvpSearch.getInvitationCode() + ".");
-            return RSVP_SEARCH_VIEW;
+            return new ModelAndView(RSVP_SEARCH_VIEW, modelMap);
         }
-        modelMap.clear();
-        modelMap.addAttribute("foodList", foodRepository.findAll());
-        modelMap.addAttribute("invitation", invitation);
-        return RSVP_FORM_VIEW;
+        return new ModelAndView(new RedirectView("/rsvp/view?invitationCode=" + rsvpSearch.getInvitationCode()), modelMap);
 
     }
 
-    @RequestMapping(value = "/saveRsvp")
-    public String saveInvitationRsvp(@Valid @ModelAttribute Invitation invitation, Errors errors, ModelMap modelMap) {
+    @PostMapping(value = "/saveRsvp")
+    public ModelAndView saveInvitationRsvp(@Valid @ModelAttribute final Invitation invitation, final Errors errors) {
         rsvpValidator.validate(invitation, errors);
-        if (errors.hasFieldErrors()) {
-            return RSVP_FORM_VIEW;
+        if (!errors.hasFieldErrors() && this.invitationRepository.saveInvitation(invitation)) {
+            return new ModelAndView(new RedirectView("/"));
         }
-        boolean isSaved = this.invitationRepository.saveInvitation(invitation);
-        if (isSaved) {
-            return "redirect:/";
-        }
-        return RSVP_FORM_VIEW;
+        return new ModelAndView(RSVP_FORM_VIEW);
     }
 
-    @RequestMapping(value = "/addAdditionalGuest", method = RequestMethod.POST)
-    public String addAdditionalGuest(@ModelAttribute Invitation invitation) {
+    @PostMapping(value = "/addAdditionalGuest")
+    public String addAdditionalGuest(@ModelAttribute final Invitation invitation) {
         if (invitation.getMaxGuests() != null && invitation.getGuestList().size() < invitation.getMaxGuests()) {
             invitation.getGuestList().add(new Guest());
         }
         return "fragments/rsvp/rsvp_form_fragment :: rsvpForm";
     }
 
-    @RequestMapping(value = "/removeAdditionalGuest", method = RequestMethod.POST)
-    public String removeAdditionalGuest(@ModelAttribute Invitation invitation, @RequestParam() Integer removalIndex) {
+    @PostMapping(value = "/removeAdditionalGuest")
+    public String removeAdditionalGuest(@ModelAttribute final Invitation invitation, @RequestParam() final Integer removalIndex) {
         if (!CollectionUtils.isEmpty(invitation.getGuestList()) && removalIndex != null) {
             invitation.getGuestList().remove(removalIndex.intValue());
         }

@@ -24,10 +24,12 @@
           </div>
         </form>
         <p>Enter the code which can be found on the bottom of your invitation</p>
-        <div class="alert alert-danger" role="alert" th:if="${errorMessage}!=null" style="margin-top: 3rem;">
-          <div style="padding: 0 50%"><i class="fa fa-exclamation-triangle fa-3x"></i></div>
+        <div class="alert alert-danger" role="alert" th:if="${errorMessage}!=null"
+             style="margin-top: 3rem; text-align: center;">
+          <div><i class="fa fa-exclamation-triangle fa-3x"></i></div>
           <strong th:text="'Oh snap! '+${errorMessage}">Oh snap!</strong>
-          <p>Please check your Invitation and try again. If the problem persists please call and let one of us know.</p>
+          <p style="text-align: justify">Please check your Invitation and try again. If the problem persists please call
+            and let one of us know.</p>
         </div>
         <div style="text-align: center">
           <img th:src="@{/images/getting-married-wedding-badge-grey.svg}" alt="We are getting married"

@@ -1,6 +1,3 @@
-const OPEN_GUEST_MODAL_URL = "/admin/guest/openGuestModal";
-const SAVE_GUEST_URL = "/admin/guest/saveGuest";
-
 $(document).ready(function () {
   var table = $('#guestTable').DataTable({
     paging: true,
@@ -65,7 +62,7 @@ function openGuestModal(guestId) {
   $.ajax({
     type: "POST",
     headers: getCsrfRequestHeader(),
-    url: OPEN_GUEST_MODAL_URL,
+    url: "/admin/guest/openGuestModal",
     data: {guestId: guestId},
     success: function (data) {
       $("#guestModal").html(data).modal('show');

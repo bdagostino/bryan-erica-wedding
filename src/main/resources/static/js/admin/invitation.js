@@ -1,7 +1,3 @@
-const ADD_GUEST_URL = "/admin/invitation/invitationModal/addGuest";
-const REMOVE_GUEST_URL = "/admin/invitation/invitationModal/removeGuest?removalIndex=";
-
-
 $(document).ready(function () {
   var table = $('#invitationTable').DataTable({
     paging: true,
@@ -67,7 +63,7 @@ function submitInvitationForm() {
 function addGuest() {
   $.ajax({
     type: "POST",
-    url: ADD_GUEST_URL,
+    url: "/admin/invitation/invitationModal/addGuest",
     headers:getCsrfRequestHeader(),
     data: $("#invitationModalForm").serialize(),
     success: function (data) {
@@ -83,7 +79,7 @@ function removeGuest(removalIndex) {
   $.ajax({
     type: "POST",
     headers:getCsrfRequestHeader(),
-    url: REMOVE_GUEST_URL+removalIndex,
+    url: "/admin/invitation/invitationModal/removeGuest?removalIndex="+removalIndex,
     data: $("#invitationModalForm").serialize(),
     success: function (data) {
       $("#invitationModal").html(data);

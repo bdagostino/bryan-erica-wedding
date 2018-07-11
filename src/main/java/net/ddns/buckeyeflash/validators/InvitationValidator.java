@@ -19,18 +19,22 @@ public class InvitationValidator implements Validator {
     @Override
     public void validate(Object obj, Errors errors) {
         Invitation invitation = (Invitation) obj;
-        if (invitation.getMaxGuests() > 0 && invitation.getGuestList().isEmpty()) {
-            errors.rejectValue(MAX_GUESTS_FIELD, "invitation.guestList.min", "At least One Guest is Required below");
-        }
-
-        if (invitation.getMaxGuests() != null) {
+        if(invitation.getMaxGuests() !=null){
+            if (invitation.getMaxGuests() > 0 && invitation.getGuestList().isEmpty()) {
+                errors.rejectValue(MAX_GUESTS_FIELD, "INV_GL_SM", "At least One Guest is Required below");
+            }
             if (invitation.getGuestList().size() > invitation.getMaxGuests()) {
-                errors.rejectValue(MAX_GUESTS_FIELD, "invitation.guestList.max", "Too many guests below");
+                errors.rejectValue(MAX_GUESTS_FIELD, "INV_GL_LG", "Too many guests below");
             }
-        } else {
+        }else{
+            rejectValue(MAX_GUESTS_FIELD, "INV_MAX_NULL","Enter max guest count",errors);
             if (!invitation.getGuestList().isEmpty()) {
-                errors.rejectValue(MAX_GUESTS_FIELD, "invitation.guestList.max", "Too many guests below");
+                errors.rejectValue(MAX_GUESTS_FIELD, "INV_GL_LG", "Too many guests below");
             }
         }
+    }
+
+    private void rejectValue(final String field, final String errorCode, final String defaultMessage,final Errors errors){
+        errors.rejectValue(field, errorCode, defaultMessage);
     }
 }

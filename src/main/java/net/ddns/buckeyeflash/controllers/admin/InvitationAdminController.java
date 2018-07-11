@@ -9,10 +9,9 @@ import net.ddns.buckeyeflash.models.datatable.DatatableRequest;
 import net.ddns.buckeyeflash.models.datatable.DatatableResponse;
 import net.ddns.buckeyeflash.repositories.InvitationRepository;
 import net.ddns.buckeyeflash.serializers.InvitationSerializer;
-import net.ddns.buckeyeflash.utilities.CommonConstants;
 import net.ddns.buckeyeflash.utilities.InvitationUtils;
 import net.ddns.buckeyeflash.utilities.PageUtils;
-import net.ddns.buckeyeflash.validators.InvitationValidator;
+import net.ddns.buckeyeflash.validators.admin.InvitationValidator;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -90,9 +89,9 @@ public class InvitationAdminController {
 
         boolean isSaved = this.invitationRepository.saveInvitation(invitation);
         if (isSaved) {
-            return String.format(CommonConstants.MODAL_SUCCESS_FRAGMENT_TEMPLATE, INVITATION_FORM_TYPE);
+            return String.format("fragments/admin/common_modal_fragments :: modalSuccess(type='%s')", INVITATION_FORM_TYPE);
         } else {
-            return String.format(CommonConstants.MODAL_ERROR_FRAGMENT_TEMPLATE, INVITATION_FORM_TYPE);
+            return String.format("fragments/admin/common_modal_fragments :: modalError(type='%s')", INVITATION_FORM_TYPE);
         }
     }
 

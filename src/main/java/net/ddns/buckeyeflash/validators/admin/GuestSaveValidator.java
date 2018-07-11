@@ -10,24 +10,20 @@ import org.springframework.validation.Validator;
 @Component
 public class GuestSaveValidator implements Validator {
     @Override
-    public boolean supports(Class<?> clazz) {
+    public boolean supports(final Class<?> clazz) {
         return Guest.class.equals(clazz);
     }
 
     @Override
-    public void validate(Object obj, Errors errors) {
-        Guest guest = (Guest) obj;
-        validateDietartComments(guest, errors);
-    }
-
-    private void validateDietartComments(Guest guest, Errors errors) {
+    public void validate(final Object obj, final Errors errors) {
+        final Guest guest = (Guest) obj;
         if (BooleanUtils.isTrue(guest.getDietaryConcerns())) {
             if (StringUtils.isBlank(guest.getDietaryComments())) {
-                errors.rejectValue("dietaryComments", "error.dietaryComments","Must provide comments if the guest has a dietary concern");
+                errors.rejectValue("dietaryComments", "GUEST-DECOM-ADD", "Must provide comments if the guest has a dietary concern");
             }
-        }else{
-            if (StringUtils.isNotBlank(guest.getDietaryComments())){
-                errors.rejectValue("dietaryComments","error.dietaryComments","Remove comments if the guest does not have a dietary concern");
+        } else {
+            if (StringUtils.isNotBlank(guest.getDietaryComments())) {
+                errors.rejectValue("dietaryComments", "GUEST-DECOM-REM", "Remove comments if the guest does not have a dietary concern");
             }
         }
     }

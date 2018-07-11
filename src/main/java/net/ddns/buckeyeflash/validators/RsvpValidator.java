@@ -12,12 +12,12 @@ import org.springframework.validation.Validator;
 public class RsvpValidator implements Validator {
 
     @Override
-    public boolean supports(Class<?> clazz) {
+    public boolean supports(final Class<?> clazz) {
         return Invitation.class.equals(clazz);
     }
 
     @Override
-    public void validate(Object obj, Errors errors) {
+    public void validate(final Object obj, final Errors errors) {
         final Invitation invitation = (Invitation) obj;
         for (int i = 0; i < invitation.getGuestList().size(); i++) {
             final Guest guest = invitation.getGuestList().get(i);

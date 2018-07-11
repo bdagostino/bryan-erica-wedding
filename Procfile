@@ -1,1 +1,1 @@
-web: java $JAVA_OPTS -Dspring.profiles.active=dev -Dserver.port=$PORT -agentlib:jdwp=transport=dt_socket,server=y,address=9090,suspend=n -jar ./target/bryan-erica-wedding.jar
+web: java $JAVA_OPTS -Dspring.profiles.active=dev -Dserver.port=$PORT -jar ./target/bryan-erica-wedding.jar

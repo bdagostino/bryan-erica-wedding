@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org" style="height: 100%">
 <head>
   <meta charset="UTF-8">
   <title>Title</title>
@@ -18,12 +18,20 @@
   <script type="text/javascript" th:src="@{/js/lib/bootstrap/bootstrap-4.1.2.bundle.min.js}"></script>
   <script type="text/javascript" th:src="@{/js/lib/datatables/jquery.dataTables-1.10.18.min.js}"></script>
   <script type="text/javascript" th:src="@{/js/lib/datatables/dataTables-1.10.18.bootstrap4.min.js}"></script>
-  <script type="text/javascript" th:src="@{/js/global.js}"></script>
-</head>
-<body>
-<header>
+  <style>
+    header {background-color: #1b3e5e;}
+    .navbar, .navbar-light, .navbar-brand, .navbar-toggler, .navbar-nav, .nav-link {color: silver!important;}
+  </style>
+<body style="background: linear-gradient(to bottom, silver 0%, #1b3e5e 100%); background-repeat: no-repeat;">
+<header >
   <nav th:replace="fragments/navbar"></nav>
 </header>
+
+<main>
+  <div>
+    <p>This is a text box</p>
+  </div>
+</main>
 
 </body>
 </html>

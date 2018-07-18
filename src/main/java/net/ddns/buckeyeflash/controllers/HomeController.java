@@ -26,4 +26,19 @@ public class HomeController {
         modelAndView.addObject("remainingDays", dateDifference > 0 ? dateDifference : 0);
         return modelAndView;
     }
+
+    @GetMapping(path = "/bgAttempt1")
+    public ModelAndView bgAttempt1(){
+        return new ModelAndView("pages/background_attempt1");
+    }
+
+    @GetMapping(path = "/bgAttempt2")
+    public ModelAndView bgAttempt2(){
+        return new ModelAndView("pages/background_attempt2");
+    }
+
+    @GetMapping(path = "/bgAttempt3")
+    public ModelAndView bgAttempt3(){
+        return new ModelAndView("pages/background_attempt3");
+    }
 }

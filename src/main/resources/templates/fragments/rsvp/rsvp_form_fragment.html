@@ -49,7 +49,7 @@
                 <div class="card-header">
                   <button type="button" class="btn btn-light btn-sm"
                           th:onclick="'javascript:removeAdditionalGuest('+${additionalGuestIndicies[rowStat.index]}+');'">
-                    <i class="fa fa-times" aria-hidden="true"></i>
+                    <i class="fas fa-window-close" aria-hidden="true"></i>
                   </button>
                   <h3 style="display: inline-block;" th:text="'Guest '+${rowStat.index+1}">Guest Name</h3>
                 </div>
@@ -80,7 +80,7 @@
                 <div class="card-header">
                   <button type="button" class="btn btn-light btn-sm"
                           th:onclick="'javascript:removeAdditionalGuest('+${additionalGuestIndicies[rowStat.index+1]}+');'">
-                    <i class="fa fa-times" aria-hidden="true"></i>
+                    <i class="fas fa-window-close" aria-hidden="true"></i>
                   </button>
                   <h3 style="display: inline-block;" th:text="'Guest '+${rowStat.index+2}">Guest Name</h3>
                 </div>

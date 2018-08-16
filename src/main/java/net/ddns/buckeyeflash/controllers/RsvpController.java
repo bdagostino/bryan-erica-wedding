@@ -6,6 +6,7 @@ import net.ddns.buckeyeflash.models.RsvpSearch;
 import net.ddns.buckeyeflash.repositories.FoodRepository;
 import net.ddns.buckeyeflash.repositories.InvitationRepository;
 import net.ddns.buckeyeflash.validators.RsvpValidator;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.stereotype.Controller;
@@ -25,6 +26,7 @@ public class RsvpController {
     private static final Logger logger = LogManager.getLogger(RsvpController.class);
     private static final String RSVP_FORM_VIEW = "pages/rsvp/rsvp_form";
     private static final String RSVP_SEARCH_VIEW = "pages/rsvp/rsvp_search";
+    private static final String ERROR_MESSAGE_ATTRIBUTE = "errorMessage";
 
     private final InvitationRepository invitationRepository;
 
@@ -39,10 +41,13 @@ public class RsvpController {
     }
 
     @GetMapping
-    public ModelAndView rsvp(final ModelMap modelMap) {
+    public ModelAndView rsvp(@RequestParam(value = ERROR_MESSAGE_ATTRIBUTE, required = false) final String errorMessageAttribute, final ModelMap modelMap) {
         logger.info("RSVP Page Accessed");
         modelMap.clear();
         modelMap.addAttribute("rsvpSearch", new RsvpSearch());
+        if (StringUtils.isNotEmpty(errorMessageAttribute)) {
+            modelMap.addAttribute(ERROR_MESSAGE_ATTRIBUTE, errorMessageAttribute);
+        }
         return new ModelAndView(RSVP_SEARCH_VIEW, modelMap);
     }
 
@@ -56,13 +61,10 @@ public class RsvpController {
 
     @PostMapping(value = "/search")
     public ModelAndView rsvpSearch(@Valid @ModelAttribute final RsvpSearch rsvpSearch, final Errors errors, final ModelMap modelMap) {
-        if (errors.hasErrors()) {
-            modelMap.addAttribute("errorMessage", "No invitation found for code " + rsvpSearch.getInvitationCode() + ".");
-            return new ModelAndView(RSVP_SEARCH_VIEW, modelMap);
-        }
-        if (!invitationRepository.existsByInvitationCode(rsvpSearch.getInvitationCode())) {
-            modelMap.addAttribute("errorMessage", "No invitation found for code " + rsvpSearch.getInvitationCode() + ".");
-            return new ModelAndView(RSVP_SEARCH_VIEW, modelMap);
+        if (errors.hasErrors() || !invitationRepository.existsByInvitationCode(rsvpSearch.getInvitationCode())) {
+            modelMap.clear();
+            modelMap.addAttribute(ERROR_MESSAGE_ATTRIBUTE, "No invitation found for code " + rsvpSearch.getInvitationCode() + ".");
+            return new ModelAndView(new RedirectView("/rsvp"), modelMap);
         }
         return new ModelAndView(new RedirectView("/rsvp/view?invitationCode=" + rsvpSearch.getInvitationCode()), modelMap);
 

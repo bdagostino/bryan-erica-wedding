@@ -1,0 +1,22 @@
+@import "/css/global.css";
+
+h1 {
+    font-family: 'Niconne', cursive;
+    text-align: center;
+    font-size: 4rem;
+}
+
+h2 {
+    font-family: 'Niconne', cursive;
+    text-align: center;
+    font-size: 2.5rem;
+}
+
+.alert.alert-danger {
+    margin-top: 3rem;
+    text-align: center;
+}
+
+div.alert p {
+    text-align: center;
+}

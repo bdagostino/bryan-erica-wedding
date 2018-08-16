@@ -2,7 +2,8 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
   <div th:replace="fragments/header"></div>
-  <link th:href="@{/css/rsvp/rsvp.css}" rel="stylesheet"/>
+  <link th:href="@{/css/rsvp/rsvp_search.css}" rel="stylesheet"/>
+  <script type="text/javascript" th:src="@{/js/rsvp/rsvp_search.js}"></script>
 </head>
 
 <body>
@@ -14,32 +15,29 @@
     <div class="row">
       <div class="col-xs-1 col-sm-2 col-md-2 col-lg-4"></div>
       <div class="col">
-        <h1 class="mt-4" style="font-family: 'Niconne', cursive; text-align: center; font-size: 4rem">R.S.V.P</h1>
-        
-        <form id="rsvpSearchForm" method="post" th:action="@{/rsvp/search}">
+        <h1 class="mt-4">R.S.V.P</h1>
+        <form id="rsvpSearchForm" method="post" th:action="@{/rsvp/search}" novalidate>
           <div class="input-group">
             <input id="rsvpSearchField" type="text" class="form-control" placeholder="Invitation Code"
-                   th:field="${rsvpSearch.invitationCode}"/>
+                   th:field="${rsvpSearch.invitationCode}" required/>
             <button type="submit" class="btn btn-primary ml-2" form="rsvpSearchForm">Next</button>
+            <div class="invalid-tooltip">Please provide the invitation code from you invitation</div>
+            <div class="valid-tooltip">Looks Good!</div>
           </div>
         </form>
         <p>Enter the code which can be found on the bottom of your invitation</p>
-        <div class="alert alert-danger" role="alert" th:if="${errorMessage}!=null"
-             style="margin-top: 3rem; text-align: center;">
+        <div class="alert alert-danger" role="alert" th:if="${errorMessage}!=null">
           <div><i class="fa fa-exclamation-triangle fa-3x"></i></div>
           <strong th:text="'Oh snap! '+${errorMessage}">Oh snap!</strong>
-          <p style="text-align: justify">Please check your Invitation and try again. If the problem persists please call
+          <p>Please check your Invitation and try again. If the problem persists please call
             and let one of us know.</p>
         </div>
         <div style="text-align: center">
-          <!--<img th:src="@{/images/getting-married-wedding-badge-grey.svg}" alt="We are getting married"-->
-               <!--style="height: 300px"/>-->
-          <h2 class="mt-4" style="font-family: 'Niconne', cursive; text-align: center; font-size: 2.5rem">Hope you can join us!</h2>
+          <h2 class="mt-4">Hope you can join us!</h2>
         </div>
       </div>
       <div class="col-xs-1 col-sm-2 col-md-2 col-lg-4"></div>
     </div>
-  
   </div>
 </main>
 <footer></footer>
